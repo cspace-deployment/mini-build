@@ -1,0 +1,59 @@
+<instances>
+	<!--
+	<instance id="vocab-annotationtype">
+		<web-url>annotationtype</web-url>
+		<title-ref>annotationtype</title-ref>
+		<title>Annotation Type</title>
+		<options>
+			<option id="anatomy">anatomy</option>
+			<option id="annotation_history">annotation history</option>
+			<option id="associated_species">associated species</option>
+			<option id="biotic_environment__inactive_7_93">biotic environment -inactive 7/93</option>
+			<option id="biotic_interactions">biotic interactions</option>
+			<option id="bryoflorulae">bryoflorulae</option>
+			<option id="color">color</option>
+			<option id="common_name">common name</option>
+			<option id="cytology">cytology</option>
+			<option id="data_in_packet">data in packet</option>
+			<option id="deaccession">deaccession</option>
+			<option id="embryology">embryology</option>
+			<option id="ethnobotany">ethnobotany</option>
+			<option id="Expedition">Expedition</option>
+			<option id="fruit_removal">fruit removal</option>
+			<option id="genbank_code">genbank code</option>
+			<option id="habitat">habitat</option>
+			<option id="horticulture">horticulture</option>
+			<option id="illustration">illustration</option>
+			<option id="image_made">image made</option>
+			<option id="Insect_damage">Insect damage</option>
+			<option id="macromorphology">macromorphology</option>
+			<option id="map">map</option>
+			<option id="material_removed">material removed</option>
+			<option id="micromorphology">micromorphology</option>
+			<option id="nomenclature">nomenclature</option>
+			<option id="none">none</option>
+			<option id="nucleic_acids">nucleic acids</option>
+			<option id="number_collision">number collision</option>
+			<option id="odor">odor</option>
+			<option id="other">other</option>
+			<option id="other_label_numbers">other label numbers</option>
+			<option id="phenology">phenology</option>
+			<option id="photograph">photograph</option>
+			<option id="physical_enviroment">physical enviroment</option>
+			<option id="physical_environment">physical environment</option>
+			<option id="physical_environment__inactive_7_93">physical environment -inactive 7/93</option>
+			<option id="population_biology">population biology</option>
+			<option id="Primary_Label_Header">Primary Label Header</option>
+			<option id="publication">publication</option>
+			<option id="reference_used_for_determination">reference used for determination</option>
+			<option id="reproductive_biology">reproductive biology</option>
+			<option id="Secondary_Label_Header">Secondary Label Header</option>
+			<option id="secondary_product_chemistry">secondary product chemistry</option>
+			<option id="SEM__Scanning_Electron_Micrograph_">SEM [Scanning Electron Micrograph]</option>
+			<option id="type">type</option>
+			<option id="U_C__Botanical_Garden">U.C. Botanical Garden</option>
+			<option id="Vegetation_Type_Map_Project">Vegetation Type Map Project</option>
+		</options>
+	</instance>
+	-->
+</instances>

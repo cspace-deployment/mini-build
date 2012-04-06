@@ -1,0 +1,22 @@
+<root>
+	<services-record-path id="ucjeps">media_ucjeps:http://collectionspace.org/services/media/local/ucjeps,media_ucjeps</services-record-path>
+
+	<section id="mediaInformationExtensions">
+		<field id="handwritten" section="ucjeps" ui-search="single">
+			<options>
+				<option id="" default="yes">Unknown</option>
+				<option id="yes">Yes</option>
+				<option id="no">No</option>
+			</options>
+		</field>
+		<field id="postToPublic" section="ucjeps" ui-search="single">
+			<options>
+				<option id="no" default="yes">No</option>
+				<option id="yes">Yes</option>
+			</options>
+		</field>
+		<field id="scientificTaxonomy" in-title="yes" mini="summary,search,list,relate" section="ucjeps" autocomplete="taxon-taxon" ui-search="single">
+			<title-selector>titleBar-media-scientificTaxonomy</title-selector>
+		</field>
+	</section>
+</root>
