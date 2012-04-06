@@ -35,7 +35,7 @@ cspace = cspace || {};
             var comp;
             if (key === "number") {
                 comp = {
-                    target: "${searchModel.recordType}.html?csid=${*.csid}",
+                    target: "${*.recordtype}.html?csid=${*.csid}",
                     linktext: "${*.number}"
                 };
             } else if (key !== "csid") {
@@ -45,7 +45,7 @@ cspace = cspace || {};
                 key: key,
                 valuebinding: "*." + key,
                 components: comp,
-                sortable: key !== "recordtype" && key !== "summary",
+                sortable: key !== "recordtype",
                 label: labels[key]
             };
         });
@@ -113,7 +113,7 @@ cspace = cspace || {};
             // but pager does not give us a more suitable event to listen to
             that.resultsPager.events.onModelChange.addListener(function (newModel, oldModel) {
                 $("a.link", that.container).click(function (event) {
-                    event.stopPropagation();
+                    event.preventDefault();
                 });
                 that.locate("resultsRow").click(function (event) {
                     var index = that.locate("resultsRow").index($(event.currentTarget));
@@ -127,6 +127,13 @@ cspace = cspace || {};
                             csid: record.csid
                         }
                     });
+                    if (that.searchReferenceStorage) {
+                        that.searchReferenceStorage.set({
+                            token: that.model.pagination.traverser,
+                            index: index + newModel.pageSize * newModel.pageIndex,
+                            source: that.options.source
+                        });
+                    }
                     window.location = expander(that.options.urls.pivot);
                     return false;
                 });
@@ -180,12 +187,16 @@ cspace = cspace || {};
         events: {
             modelChanged: null,
             onSearch: null,
+            onInitialSearch: null,
             afterSearch: null,
             onError: null,
             ready: null
         },
         columnList: ["number", "summary", "recordtype", "summarylist.updatedAt"],
         resultsSelectable: false,
+        listeners: {
+            onInitialSearch: "{cspace.search.searchView}.onInitialSearchHandler"
+        },
         invokers: {
             buildUrl: "cspace.search.searchView.buildUrl",
             hideResults: {
@@ -204,7 +215,8 @@ cspace = cspace || {};
             applyResults: {
                 funcName: "cspace.search.searchView.applyResults",
                 args: ["{searchView}", "{arguments}.0"]
-            }
+            },
+            onInitialSearch: "cspace.search.searchView.onInitialSearch"
         },
         components: {
             messageBar: "{messageBar}",
@@ -217,7 +229,7 @@ cspace = cspace || {};
                         }
                     },
                     selfRender: true,
-                    related: "all"
+                    related: ["allCategory", "cataloging", "procedures", "vocabularies"]
                 }
             },
             resultsPager: {
@@ -267,8 +279,25 @@ cspace = cspace || {};
             sort: "&sortDir=%sortDir&sortKey=%sortKey",
             defaultUrl: "%tenant/%tname/%recordType/search?query=%keywords%pageNum%pageSize%sort",
             localUrl: "%tenant/%tname/data/%recordType/search.json"
-        })
+        }),
+        preInitFunction: "cspace.search.searchView.preInit"
     });
+
+    cspace.search.updateSearchHistory = function (storage, searchModel, hashtoken) {
+        // NOTE: The empty line token is a temporary hack to save search history.
+        hashtoken = hashtoken || "";
+        var history = storage.get() || {},
+            searchToSave = {
+                hashtoken: hashtoken,
+                model: searchModel
+            };
+        if (!history) {
+            storage.set([searchToSave]);
+            return;
+        }
+        history = [searchToSave].concat(fluid.makeArray(history));
+        storage.set(history.slice(0, 10));
+    };
     
     cspace.search.searchView.handleAdvancedSearch = function (searchModel, that) {
         that.messageBar.hide();
@@ -296,6 +325,15 @@ cspace = cspace || {};
                 that.handleAdvancedSearch(searchModel);
             }
         });
+        that.onInitialSearchHandler = function () {
+            that.onInitialSearch();
+        };
+    };
+
+    cspace.search.searchView.preInit = function (that) {
+        that.onInitialSearchHandler = function () {
+            that.onInitialSearch();
+        };
     };
     
     cspace.search.searchView.updateSearch = function (currentSearch, search) {
@@ -338,7 +376,7 @@ cspace = cspace || {};
             that.searchResultsResolver.resolve(that.model);
         }
         that.locate("resultsContainer").show();
-        that.events.afterSearch.fire();
+        that.events.afterSearch.fire(that.model.searchModel);
     };
     
     cspace.search.searchView.updateModel = function (applier, newModel) {
@@ -348,16 +386,47 @@ cspace = cspace || {};
     };
     
     cspace.search.searchView.finalInit = function (that) {
-        that.updateModel({
-            keywords: decodeURI(cspace.util.getUrlParameter("keywords")),
-            recordType: cspace.util.getUrlParameter("recordtype")
-        });
+        var hashtoken = cspace.util.getUrlParameter("hashtoken");
+        if (hashtoken) {
+            // Only present on findedit and advanced search pages.
+            var searchData;
+            fluid.each([that.searchHistoryStorage, that.findeditHistoryStorage], function (storage) {
+                if (storage.options.source !== that.options.source) {
+                    return;
+                }
+                var history = storage.get();
+                if (!history) {return;}
+                searchData = fluid.find(history, function (search) {
+                    if (search.hashtoken === hashtoken) {return search.model;}
+                });
+            });
+            if (searchData) {
+                that.updateModel(searchData);
+            }
+        } else {
+            that.updateModel({
+                keywords: decodeURI(cspace.util.getUrlParameter("keywords")),
+                recordType: cspace.util.getUrlParameter("recordtype")
+            });
+        }
         that.hideResults();
         bindEventHandlers(that);
         if (that.model.searchModel.recordType) {
-            that.search();
+            that.events.onInitialSearch.fire();
+        } else {
+            that.events.ready.fire();
         }
-        that.events.ready.fire();
+    };
+
+    cspace.search.searchView.onInitialSearch = function (that) {
+        that.mainSearch.refreshView();
+        that.search();
+    };
+
+    cspace.search.searchView.onInitialSearchAdvanced = function (that) {
+        var searchModel = that.model.searchModel;
+        that.updateSearch(searchModel);
+        that.handleAdvancedSearch(searchModel);
     };
     
     cspace.search.searchView.advancedSearch = function (newPagerModel, that) {

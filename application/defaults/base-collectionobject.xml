@@ -1,3 +1,4 @@
+
             <record id="collection-object" in-findedit="yes">
                 <services-url>collectionobjects</services-url>
                 <services-tenant-singular>CollectionObject</services-tenant-singular>
@@ -40,10 +41,10 @@
                         </repeat>
                     </structure>
                 </structures>
-				
-				<include src="domain-collectionobject.xml"  strip-root="yes"/>
-				
-				
+                
+                <include src="domain-collectionobject.xml"  strip-root="yes"/>
+                
+                
                 <section>
                     <field id="tenantID" section="collectionspace_core" attributes="GET"></field>
                     <field id="createdAt" section="collectionspace_core" attributes="GET"></field>
@@ -152,19 +153,19 @@
                             </enum>
                             <selector>object-identification-object-title-language</selector>
                         </field>
-						
-	                    <repeat id="titleTranslationSubGroupList/titleTranslationSubGroup">
-	                    	<field id="titleTranslation">
-	                            <selector>object-identification-object-title-translation</selector>
-	                        </field>
-	                        <field id="titleTranslationLanguage" autocomplete="vocab-languages" ui-type="enum">
-	                            <enum>
-	                                <default>eng</default>
-	                                <blank-value>Please select a value</blank-value>
-	                            </enum>
-	                        </field>
-						</repeat>
-						
+                        
+                        <repeat id="titleTranslationSubGroupList/titleTranslationSubGroup">
+                            <field id="titleTranslation">
+                                <selector>object-identification-object-title-translation</selector>
+                            </field>
+                            <field id="titleTranslationLanguage" autocomplete="vocab-languages" ui-type="enum">
+                                <enum>
+                                    <default>eng</default>
+                                    <blank-value>Please select a value</blank-value>
+                                </enum>
+                            </field>
+                        </repeat>
+                        
                         <field id="titleType" seperate_ui_container="true">
                             <selector>object-identification-object-title-type</selector>
                             <options>
@@ -373,9 +374,9 @@
                             </options>
                         </field>
                     </repeat>
-					<field id="dimension" ui-type="groupfield/dimension/selfrenderer"  ui-func="cspace.dimension"  ></field>
+                    <field id="dimension" ui-type="groupfield/dimension/selfrenderer"  ui-func="cspace.dimension"  ></field>
                     
-					<section id="contentInformation">
+                    <section id="contentInformation">
                         <field id="contentDescription">
                             <selector>object-description-content-description</selector>
                         </field>
@@ -399,15 +400,15 @@
                             </field>
                         </repeat>
 
-                        <field id="contentDate" ui-type="groupfield/structureddate" primarykey="contentDate.dateDisplayDate" ui-func="cspace.structuredDate"  >
+                        <field id="contentDate" ui-search="range" ui-type="groupfield/structureddate" primarykey="contentDate.dateDisplayDate" ui-func="cspace.structuredDate"  >
                             <services-tag>contentDateGroup</services-tag>
                             <selector>object-description-content-date</selector>
                         </field>
-					<!--	
-                    <field id="objectContentDate" ui-search="repeatable" ui-type="groupfield/structureddate" primarykey="objectContentDate.dateDisplayDate" ui-func="cspace.structuredDate"  >
-                    	<services-tag>objectContentDateGroup</services-tag>
-                    </field>
-						-->
+                        <!--    
+                        <field id="objectContentDate" ui-search="repeatable" ui-type="groupfield/structureddate" primarykey="objectContentDate.dateDisplayDate" ui-func="cspace.structuredDate"  >
+                            <services-tag>objectContentDateGroup</services-tag>
+                        </field>
+                        -->
                         <repeat id="contentPositions">
                             <field id="contentPosition" seperate_ui_container="true">
                                 <selector>object-description-content-position</selector>
@@ -514,9 +515,9 @@
                                 </enum>
                                 <selector>object-description-inscription-content-language</selector>
                             </field>
-                            <field id="inscriptionContentDate" ui-type="date">
-                                <selector>object-description-inscription-content-date</selector>
-                            </field>
+                            <group id="inscriptionContentDateGroup" ui-type="groupfield/structureddate" primarykey="dateDisplayDate" ui-func="cspace.structuredDate">
+                                <selector>object-description-inscription-content-date</selector>                                
+                            </group>
                             <field id="inscriptionContentPosition" seperate_ui_container="true">
                                 <selector>object-description-inscription-content-position</selector>
                                 <options>
@@ -582,9 +583,10 @@
                             <field id="inscriptionDescriptionInscriber" ui-search="repeatable" autocomplete="person-person,organization-organization">
                                 <selector>object-description-inscription-description-inscriber</selector>
                             </field>
-                            <field id="inscriptionDescriptionDate" ui-type="date">
-                                <selector>object-description-inscription-description-date</selector>
-                            </field>
+                            <!-- CSPACE-4894: inscriptionDescriptionDateGroup isn't actually searchable, but need ui-search="range" to prevent uispec generation from erroring. -->
+                            <group id="inscriptionDescriptionDateGroup" ui-search="range" ui-type="groupfield/structureddate" primarykey="dateDisplayDate" ui-func="cspace.structuredDate">
+                                <selector>object-description-inscription-description-date</selector>    
+                            </group>
                             <field id="inscriptionDescriptionPosition" seperate_ui_container="true">
                                 <selector>object-description-inscription-description-position</selector>
                                 <options>
@@ -625,10 +627,10 @@
                     </section>
                 </section>
                 <section id="objectProductionInformation">
-                	
+                    
                     <repeat id="objectProductionDateGroupList/objectProductionDateGroup">
                         <group id="objectProductionDate" xxx-services-no-repeat="true"  ui-type="groupfield/structureddate" primarykey="dateDisplayDate" ui-func="cspace.structuredDate"></group>
-					</repeat>
+                    </repeat>
                     <repeat id="techniqueGroupList/techniqueGroup">
                         <!-- selector>csc-collection-object-techniqueGroup</selector -->
                         <field id="technique" ui-search="repeatable">
@@ -806,10 +808,9 @@
                         <field id="assocEventNote"></field>
                         <repeat id="assocDateGroupList/assocDateGroup">
                             <selector>object-history-association-assocDateGroup</selector>
-                            <field id="assocDate" ui-type="date">
-                                <!-- Experimenting with explicitly naming the selector to get container behavior working -->
-                                <selector>object-history-association-assocDate</selector>
-                            </field>
+                            <group id="assocStructuredDateGroup" ui-type="groupfield/structureddate" primarykey="dateDisplayDate" ui-func="cspace.structuredDate">
+                                <selector>object-history-association-assocDate</selector>                               
+                            </group>
                             <field id="assocDateType"></field>
                             <field id="assocDateNote"></field>
                         </repeat>
@@ -858,7 +859,10 @@
                     </repeat>
                 </section>
                 <section id="objectCollectionInformation">
-                    <field id="fieldCollectionDate" ui-type="date"></field>
+                    <field id="fieldCollectionDate" ui-search="repeatable" ui-type="groupfield/structureddate" primarykey="fieldCollectionDate.dateDisplayDate" ui-func="cspace.structuredDate">
+                        <services-tag>fieldCollectionDateGroup</services-tag>
+                        <selector>collection-object-fieldCollectionDate</selector>
+                    </field>
                     <repeat id="fieldCollectionMethods">
                         <field id="fieldCollectionMethod" autocomplete="vocab-collectionmethod" ui-type="enum"></field>
                     </repeat>

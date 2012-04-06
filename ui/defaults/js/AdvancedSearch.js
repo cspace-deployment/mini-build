@@ -22,7 +22,7 @@ cspace = cspace || {};
             recordTypeSelector: {
                 type: "cspace.util.recordTypeSelector",
                 options: {
-                    related: "all",
+                    related: ["cataloging", "procedures", "vocabularies"],
                     dom: "{advancedSearch}.dom",
                     componentID: "recordTypeSelect",
                     selector: "recordTypeSelect",
@@ -51,6 +51,7 @@ cspace = cspace || {};
             afterFetch: null,
             afterSearchFieldsInit: null,
             onSearch: null,
+            afterSearch: null,
             afterToggle: null
         },
         model: {
@@ -136,10 +137,7 @@ cspace = cspace || {};
                 funcName: "cspace.advancedSearch.toggle",
                 args: ["{advancedSearch}.toggleControls", "{advancedSearch}.events.afterToggle"]
             },
-            updateSearchHistory: {
-                funcName: "cspace.advancedSearch.updateSearchHistory",
-                args: ["{advancedSearch}.searchHistoryStorage", "{arguments}.0"]
-            }
+            updateSearchHistory: "cspace.advancedSearch.updateSearchHistory"
         },
         strings: {},
         parentBundle: "{globalBundle}",
@@ -147,16 +145,6 @@ cspace = cspace || {};
         postInitFunction: "cspace.advancedSearch.postInit",
         preInitFunction: "cspace.advancedSearch.preInit"
     });
-    
-    cspace.advancedSearch.updateSearchHistory = function (storage, searchModel) {
-        var history = storage.get();
-        if (!history) {
-            storage.set([searchModel]);
-            return;
-        }
-        history = [searchModel].concat(fluid.makeArray(history));
-        storage.set(history.slice(0, 5));
-    };
     
     cspace.advancedSearch.toggle = function (toggleControls, event) {
         toggleControls(false);
@@ -225,6 +213,8 @@ cspace = cspace || {};
             },
             onSearch: function (searchModel) {
                 that.toggleControls(true);
+            },
+            afterSearch: function (searchModel) {
                 that.updateSearchHistory(searchModel);
             }
         });
@@ -335,7 +325,8 @@ cspace = cspace || {};
             that.applier.requestChange("recordType", tree.recordTypeSelect.selection);
         }
         tree.recordTypeSelect.selection = "${recordType}";
-        tree.recordTypeSelect.decorators = {"addClass": "{styles}.recordTypeSelect"};
+        tree.recordTypeSelect.decorators = tree.recordTypeSelect.decorators ?
+            tree.recordTypeSelect.decorators.concat([{"addClass": "{styles}.recordTypeSelect"}]) : [{"addClass": "{styles}.recordTypeSelect"}];
         return tree;
     };
     

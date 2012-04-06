@@ -349,6 +349,10 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
     
     cspace.includeDemands = function () {
         
+        fluid.demands("cspace.recordTraverser", "cspace.recordEditor", {
+            container: "{cspace.recordEditor}.dom.recordTraverser"
+        });
+
         fluid.demands("cspace.dimension", "cspace.recordEditor", {
             container: "{arguments}.0",
             mergeAllOptions: [{
@@ -421,7 +425,21 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
                 recordType: "{pageBuilderIO}.options.recordType"
             }
         });
-        
+
+        // Pagebuilder
+        fluid.demands("cspace.pageBuilder", ["cspace.debug", "cspace.record"], {
+            options: {
+                components: {
+                    uispecVerifier: {
+                        type: "cspace.uispecVerifier"
+                    }
+                }
+            }
+        });
+        fluid.demands("cspace.pageBuilder", "cspace.pageBuilderIO", {
+            options: fluid.COMPONENT_OPTIONS
+        });
+
         // Pagebuilder renderer
         fluid.demands("cspace.pageBuilder.renderer", ["cspace.pageBuilderIO", "cspace.pageBuilder"], {
             options: {
@@ -930,6 +948,24 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
         fluid.demands("recordEditor", "cspace.pageBuilder", {
             container: "{pageBuilder}.options.selectors.recordEditor",
             options: {
+                components: {
+                    recordTraverser: {
+                        type: "cspace.recordTraverser",
+                        createOnEvent: "afterRender",
+                        options: {
+                            events: {
+                                onSave: "{cspace.recordEditor}.events.onSave"
+                            },
+                            listeners: {
+                                onSave: {
+                                    namespace: "recordTraverser",
+                                    listener: "{cspace.recordTraverser}.save",
+                                    priority: "last"
+                                }
+                            }
+                        }
+                    }
+                },
                 listeners: {
                     afterRender: "{loadingIndicator}.events.hideOn.fire",
                     cancelSave: "{loadingIndicator}.events.hideOn.fire",
@@ -1786,6 +1822,7 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
         fluid.demands("search", "cspace.pageBuilder", {
             container: "{pageBuilder}.options.selectors.search",
             options: {
+                source: "findedit",
                 strings: {
                     errorMessage: "{globalBundle}.messageBase.search-errorMessage",
                     resultsCount: "{globalBundle}.messageBase.search-resultsCount",
@@ -1801,13 +1838,78 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
                     afterSearch: "{loadingIndicator}.events.hideOn.fire",
                     onError: "{loadingIndicator}.events.hideOn.fire",
                     onSearch: "{loadingIndicator}.events.showOn.fire"
+                },
+                components: {
+                    searchReferenceStorage: {
+                        type: "cspace.util.localStorageDataSource",
+                        options: {
+                            elPath: "searchReference"
+                        }
+                    },
+                    searchHistoryStorage: {
+                        type: "cspace.util.localStorageDataSource",
+                        options: {
+                            elPath: "searchHistory",
+                            source: "advancedsearch"
+                       }
+                    },
+                    findeditHistoryStorage: {
+                        type: "cspace.util.localStorageDataSource",
+                        options: {
+                            elPath: "findeditHistory",
+                            source: "findedit"
+                        }
+                    },
+                    mainSearch: {
+                        options: {
+                            components: {
+                                findeditHistoryStorage: {
+                                    type: "cspace.util.localStorageDataSource",
+                                    options: {
+                                        elPath: "findeditHistory"
+                                    }
+                                }
+                            },
+                            events: {
+                                afterSearch: "{searchView}.events.afterSearch"
+                            },
+                            preInitFunction: {
+                                namespace: "preInitSearch",
+                                listener: "cspace.searchBox.preInitSearch"
+                            },
+                            invokers: {
+                                updateSearchHistory: "cspace.searchBox.updateSearchHistory"
+                            }
+                        }
+                    }
                 }
             }
         });
-        
+
+        fluid.demands("cspace.advancedSearch.updateSearchHistory", ["cspace.advancedSearch", "cspace.search.searchView"], {
+            funcName: "cspace.search.updateSearchHistory",
+            args: ["{advancedSearch}.searchHistoryStorage", "{arguments}.0", "{cspace.search.searchView}.model.pagination.traverser"]
+        });
+
+        fluid.demands("cspace.searchBox.updateSearchHistory", ["cspace.searchBox", "cspace.search.searchView"], {
+            funcName: "cspace.search.updateSearchHistory",
+            args: ["{searchBox}.findeditHistoryStorage", "{arguments}.0", "{cspace.search.searchView}.model.pagination.traverser"]
+        });
+
+        fluid.demands("cspace.search.searchView.onInitialSearch", ["cspace.advancedSearch", "cspace.search.searchView"], {
+            funcName: "cspace.search.searchView.onInitialSearchAdvanced",
+            args: "{cspace.search.searchView}"
+        });
+
+        fluid.demands("cspace.search.searchView.onInitialSearch", ["cspace.search.searchView"], {
+            funcName: "cspace.search.searchView.onInitialSearch",
+            args: "{cspace.search.searchView}"
+        });
+
         fluid.demands("search", ["cspace.pageBuilder", "cspace.advancedSearch"], {
             container: "{pageBuilder}.options.selectors.search",
             options: {
+                source: "advancedsearch",
                 strings: {
                     errorMessage: "{globalBundle}.messageBase.search-errorMessage",
                     resultsCount: "{globalBundle}.messageBase.search-resultsCount",
@@ -1844,10 +1946,31 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
                     }
                 },
                 components: {
+                    searchReferenceStorage: {
+                        type: "cspace.util.localStorageDataSource",
+                        options: {
+                            elPath: "searchReference"
+                        }
+                    },
+                    searchHistoryStorage: {
+                        type: "cspace.util.localStorageDataSource",
+                        options: {
+                            elPath: "searchHistory",
+                            source: "advancedsearch"
+                       }
+                    },
+                    findeditHistoryStorage: {
+                        type: "cspace.util.localStorageDataSource",
+                        options: {
+                            elPath: "findeditHistory",
+                            source: "findedit"
+                        }
+                    },
                     mainSearch: {
                         type: "cspace.advancedSearch",
                         options: {
                             events: {
+                                afterSearch: "{searchView}.events.afterSearch",
                                 onSearch: "{searchView}.events.onAdvancedSearch",
                                 afterToggle: "{searchView}.events.hideResults"
                             },
@@ -2277,6 +2400,16 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
         });
         
         fluid.demands("cspace.advancedSearch.fetcher", "cspace.advancedSearch", "{options}");
+
+        fluid.demands("cspace.advancedSearch.searchFields", "cspace.debug", {
+            options: {
+                components: {
+                    uispecVerifier: {
+                        type: "cspace.uispecVerifier"
+                    }
+                }
+            }
+        });
     };
     
     fluid.demands("cspace.localDemands", "cspace.localData", {
