@@ -1,0 +1,14 @@
+<root>
+	<services-record-path id="anthropology">movements_anthropology:http://collectionspace.org/services/movement/domain/anthropology,movements_anthropology</services-record-path>
+
+	<section id="domaindata">
+
+		<repeat id="locationHandlers" section="anthropology">
+			<selector>movement-locationHandler</selector>
+			<field id="locationHandler" ui-search="repeatable" autocomplete="person-person" section="anthropology">
+				<selector>movement-locationHandler</selector>
+			</field>
+		</repeat>
+
+	</section>
+</root>

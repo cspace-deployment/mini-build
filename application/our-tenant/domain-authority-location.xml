@@ -1,0 +1,10 @@
+<root>
+	<services-record-path id="anthropology">locations_anthropology:http://collectionspace.org/services/location/domain/anthropology,locations_anthropology</services-record-path>
+
+	<section id="domaindata">
+		<field id="locNote" section="anthropology">
+			<selector>locationAuthority-locNote</selector>
+		</field>
+		<field id="moveableContainer" section="anthropology" datatype="boolean"></field>
+	</section>
+</root>

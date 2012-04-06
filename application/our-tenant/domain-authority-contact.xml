@@ -1,0 +1,7 @@
+<root>
+	<services-record-path id="anthropology">contacts_anthropology:http://collectionspace.org/services/contact/domain/anthropology,contacts_anthropology</services-record-path>
+
+	<section id="domaindata">
+        <field id="addressNote" section="anthropology"/>		
+	</section>
+</root>

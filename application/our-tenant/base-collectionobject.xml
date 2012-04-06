@@ -1,0 +1,1324 @@
+<record id="collection-object" in-findedit="yes">
+    <services-url>collectionobjects</services-url>
+    <services-tenant-singular>CollectionObjectTenant15</services-tenant-singular>
+    <services-list-path>abstract-common-list/list-item</services-list-path>
+    <services-record-path id="common">collectionobjects_common:http://collectionspace.org/services/collectionobject,collectionobjects_common</services-record-path>
+    <services-record-path id="collectionspace_core">collectionspace_core:http://collectionspace.org/collectionspace_core/,collectionspace_core</services-record-path>
+    <web-url>cataloging</web-url>
+    <tab-url>cataloging-tab</tab-url>
+    <number-selector>.csc-entry-number</number-selector>
+    <row-selector>.csc-recordList-row:</row-selector>
+    <list-key>cataloging</list-key>
+    <hassoftdelete>true</hassoftdelete>
+    <structures>
+        <structure id="search">
+            <view>
+                <label-section id="messagekeys" show="true"></label-section>
+            </view>
+        </structure>
+        <structure id="screen">
+            <view>
+                <label-section id="messagekeys" show="true"></label-section>
+            </view>
+        </structure>
+        <structure id="tab">
+            <view>
+                <titlebar show="false"></titlebar>
+                <sidebar show="false"></sidebar>
+                <edit-section id="details" show="true"></edit-section>
+                <list-section id="list" show="false"></list-section>
+                <label-section id="messagekeys" show="true"></label-section>
+            </view>
+            <repeat id="list" asSibling="true">
+                <selector>recordList-row:</selector>
+                <field id="summary" ui-type="list">
+                    <selector>related-summary</selector>
+                </field>
+                <field id="number" ui-type="list">
+                    <selector>related-number</selector>
+                </field>
+            </repeat>
+        </structure>
+    </structures>
+				
+	<include src="domain-collectionobject.xml"  strip-root="yes"/>
+				
+    <section>
+        <field id="tenantID" section="collectionspace_core" attributes="GET"></field>
+        <field id="createdAt" section="collectionspace_core" attributes="GET"></field>
+        <field id="updatedAt" ui-search="range" ui-type="date" section="collectionspace_core" attributes="GET" mini="search,list,relate"></field>
+	    <field id="createdBy" section="collectionspace_core" attributes="GET"></field>
+	    <field id="updatedBy" ui-search="repeatable" section="collectionspace_core" attributes="GET"></field>
+        <field id="nametitle" mini="summary,search,list,relate" exists-in-services="false">
+            <selector>object-identification-object-nametitle</selector>
+        	<title-selector>titleBar-object-identification-object-nametitle</title-selector>
+            <merges>
+            	<!--<merge id="comments" rank="1" />
+            	<merge id="collection" rank="2" />
+            	<merge id="recordStatus" rank="3" />
+            	<merge id="sex" rank="4" />-->
+            	<merge id="objectName" rank="1" />
+            	<merge id="title" rank="2" />
+            	<merge id="taxon" rank="3" />
+            </merges>
+        </field>
+    </section>
+    <section id="identificationInformation">
+        <field id="objectNumber" ui-search="repeatable" chooser="yes" in-title="yes" in-tab="yes" mini="number,search,list,relate" seperate_ui_container="true">
+            <selector>object-identification-object-number</selector>
+            <title-selector>titleBar-object-identification-object-number</title-selector>
+            <options>
+                <option id="intake" sample="IN2011.1.1">Object entry (Doorbook entry)</option>
+                <option id="accession" sample="2011.1.1">Cataloged object</option>
+                <option id="loanin" sample="LI2011.1.1">In-loan object (Borrowed object)</option>
+            </options>
+        </field>
+        <field id="numberOfObjects" ui-type="validated" datatype="integer">
+            <selector>object-identification-number-objects</selector>
+        </field>
+    	<!--<repeat id="otherNumberList/otherNumber">
+    		<selector>object-identification-otherNumbers</selector> <!-\- WHY ARE MANY GROUP SELECTORS MISSING OR COMMENTED OUT, BUT THIS ONE IS NOT? -\->
+    		<field id="numberValue" in-tab="yes">
+    			<selector>object-identification-other-number</selector>
+    		</field>
+    		<field id="numberType" in-tab="yes" seperate_ui_container="true">
+    			<selector>object-identification-other-number-type</selector>
+    			<options>
+    				<option id="notStated" default="yes">(none selected)</option>
+    				<option id="previousMuseumNumber">previous Museum number</option>
+    				<option id="previousOwnersNumber">previous owner's number</option>
+    				<option id="fieldNumber">field number</option>
+    				<option id="burialNumber">burial number</option>
+    				<option id="previousNumber">previous number</option>
+    				<option id="unknown">unknown</option>
+    			</options>
+    		</field>
+    	</repeat>-->
+    	
+        <repeat id="responsibleDepartments" has-primary="yes">
+            <selector>object-identification-responsible-department</selector>
+            <field id="responsibleDepartment" ui-search="repeatable" mini="search" seperate_ui_container="true">
+                <selector>object-identification-responsible-department</selector>
+            	<options>
+            		<option id="" default="yes">(none selected)</option>
+					<option id="Natasha Johnson">Natasha Johnson</option>
+					<option id="Leslie Freund">Leslie Freund</option>
+					<option id="Victoria Bradshaw">Victoria Bradshaw</option>
+					<option id="Alicja Egbert">Alicja Egbert</option>
+					<option id="No collection manager (Registration)">No collection manager (Registration)</option>
+					<option id="uncertain">uncertain</option>
+            	</options>
+            </field>
+        </repeat>
+        <field id="collection" ui-search="repeatable" seperate_ui_container="true">
+            <selector>object-identification-collection</selector>
+            <options>
+                <option id="">(none selected)</option>
+                <option id="archaeology">archaeology</option>
+                <option id="ethnography">ethnography</option>
+                <option id="documentation">documentation</option>
+                <option id="sample">sample</option>
+            	<option id="indeterminate">indeterminate</option>
+            	<option id="unknown">unknown</option>
+            </options>
+        </field>
+    	<field id="recordStatus" ui-search="repeatable" seperate_ui_container="true">
+    		<selector>object-identification-record-status</selector>
+    		<options>
+    			<option id="minimalInProgress" default="yes">minimal (in progress)</option>
+    			<option id="minimal">minimal</option>
+    			<option id="basicInProgess">basic (in progress)</option>
+    			<option id="basic">basic</option>
+    			<option id="fullInProgess">full/curatorial (in progress)</option>
+    			<option id="full">full/curatorial</option>
+    		</options>
+    	</field>
+        <repeat id="briefDescriptions" has-primary="yes">
+            <selector>object-identification-brief-description</selector>
+            <field id="briefDescription" datatype="largetext">
+                <selector>object-identification-brief-description</selector>
+            </field>
+        </repeat>
+        <field id="distinguishingFeatures">
+            <selector>object-identification-distinguishing-features</selector>
+        </field>
+        <repeat id="comments">
+            <field id="comment" datatype="largetext">
+                <selector>object-identification-comments</selector>
+            </field>
+        </repeat>
+        <repeat id="titleGroupList/titleGroup">
+            <!-- selector>collection-object-titleGroup</selector -->
+        	<field id="title" ui-search="repeatable" in-title="yes" mini="summary,search,list,relate">
+        		<title-selector>titleBar-object-identification-object-title</title-selector>
+        		<selector>object-identification-object-title</selector>
+            </field>
+			<field id="titleLanguage" autocomplete="vocab-languages" ui-type="enum">
+				<enum has-blank="true">
+					<default>urn:cspace:pahma.cspace.berkeley.edu:vocabularies:name(languages):item:name(eng)'English'</default>
+					<blank-value>(none selected)</blank-value>
+				</enum>
+                <selector>object-identification-object-title-language</selector>
+            </field>
+						
+            <repeat id="titleTranslationSubGroupList/titleTranslationSubGroup">
+	            <field id="titleTranslation">
+	                <selector>object-identification-object-title-translation</selector>
+	            </field>
+	            <field id="titleTranslationLanguage" autocomplete="vocab-languages" ui-type="enum">
+					<enum has-blank="true">
+						<default>urn:cspace:pahma.cspace.berkeley.edu:vocabularies:name(languages):item:name(eng)'English'</default>
+						<blank-value>(none selected)</blank-value>
+					</enum>
+	            </field>
+	    	</repeat>
+            <field id="titleType" seperate_ui_container="true">
+                <selector>object-identification-object-title-type</selector>
+                <options>
+                    <option id="">(none selected)</option>
+<!--
+                    <option id="assignedByArtist">artist</option>
+                    <option id="assignedByAuthority">authority</option>
+                    <option id="collection">collection</option>
+                    <option id="descriptive">descriptive</option>
+                    <option id="generic">generic</option>
+                    <option id="popular">popular</option>
+                    <option id="series">series</option>
+                    <option id="trade">trade</option>
+-->
+					<option id="Artist's Label">Artist's Label</option>
+					<option id="Culture Groups on Tape">Culture Groups on Tape</option>
+					<option id="Inventory Name">Inventory Name</option>
+					<option id="Title">Title</option>
+					<option id="Title Subject">Title Subject</option>
+                </options>
+            </field>
+        </repeat>
+        <repeat id="objectNameList/objectNameGroup">
+        	<field id="objectName" ui-search="repeatable" in-title="yes" mini="summary,search,list,relate">
+        		<title-selector>titleBar-object-identification-object-name</title-selector>
+        		<selector>object-identification-object-name</selector>
+        	</field>
+        	<field id="objectNameCurrency" seperate_ui_container="true">
+                <selector>object-identification-object-currency</selector>
+                <options>
+                    <option id="current" default="yes">current</option>
+                    <option id="outOfDate">out of date</option>
+                    <option id="unknown">unknown</option>
+                </options>
+            </field>
+            <field id="objectNameLevel" seperate_ui_container="true">
+                <selector>object-identification-object-level</selector>
+                <options>
+                    <option id="wholeObject" default="yes">whole object</option>
+                    <option id="damagedWhole">damaged whole</option>
+                	<option id="incomplete">incomplete</option>
+                	<option id="broken">broken</option>
+                    <option id="partOfAnObject">part of an object</option>
+                    <option id="fragment">fragment</option>
+                    <option id="shardSherd">shard/sherd</option>
+                    <option id="chip">chip</option>
+                    <option id="dust">dust</option>
+                    <option id="residue">residue</option>
+                    <option id="unknown">unknown</option>
+                </options>
+            </field>
+            <field id="objectNameSystem" seperate_ui_container="true">
+                <selector>object-identification-object-system</selector>
+                <options>
+                    <option id="" default="yes">(none selected)</option>
+                    <option id="aaslhNomenclature">AASLH Nomenclature</option>
+                    <option id="bennyhoffOlivellaBeads">Bennyhoff Olivella bead typology</option>
+                    <option id="artAndArchitectureThesaurus">Getty Art &amp; Architecture Thesaurus</option>
+                    <option id="giffordWorkedBone">Gifford worked bone typology</option>
+                    <option id="giffordWorkedShell">Gifford worked shell typology</option>
+                    <option id="heizerProjectilePoint">Heizer projectile point typology</option>
+                    <option id="justiceProjectilePoint">Justice projectile point typology</option>
+                    <option id="meighanHistoricGlass">Meighan historic glass bead typology</option>
+                    <option id="pahmaObjectNames">PAHMA object names</option>
+                    <option id="treganzaClayArtifact">Treganza clay artifact typology</option>
+                    <option id="noSystem">no system</option>
+                </options>
+            </field>
+            <field id="objectNameType" seperate_ui_container="true">
+                <selector>object-identification-object-type</selector>
+                <options>
+                    <option id="classificatory">classificatory</option>
+                    <option id="denomination">denomination</option>
+                    <option id="simple" default="yes">simple</option>
+                    <option id="taxonomic">taxonomic</option>
+                    <option id="typological">typological</option>
+                </options>
+            </field>
+            <field id="objectNameLanguage" autocomplete="vocab-languages" ui-type="enum">
+				<enum has-blank="true">
+					<default>urn:cspace:pahma.cspace.berkeley.edu:vocabularies:name(languages):item:name(eng)'English'</default>
+					<blank-value>(none selected)</blank-value>
+				</enum>
+                <selector>object-identification-object-language</selector>
+            </field>
+            <field id="objectNameNote">
+                <selector>object-identification-object-note</selector>
+            </field>
+        </repeat>
+    </section>
+    <section id="descriptionInformation">
+        <field id="copyNumber" ui-search="repeatable">
+            <selector>object-description-copy-number</selector>
+        </field>
+        <repeat id="objectStatusList">
+            <field id="objectStatus" ui-search="repeatable" seperate_ui_container="true">
+                <selector>object-description-object-status</selector>
+                <options>
+                    <option id="">(none selected)</option>
+                    <option id="copy">copy</option>
+                    <option id="forgery">forgery</option>
+                    <option id="holotype">holotype</option>
+                    <option id="lectotype">lectotype</option>
+                    <option id="paralectotype">paralectotype</option>
+                    <option id="paratype">paratype</option>
+                    <option id="type">type</option>
+                </options>
+            </field>
+        </repeat>
+        <field id="sex" ui-search="repeatable" seperate_ui_container="true">
+            <selector>object-description-sex</selector>
+            <options>
+                <option id="">(none selected)</option>
+                <option id="male">male</option>
+                <option id="probable-male">probable male</option>
+                <option id="possible-male">possible male</option>
+                <option id="female">female</option>
+                <option id="probable-female">probable female</option>
+                <option id="possible-female">possible female</option>
+                <option id="asexual">asexual</option>
+                <option id="hermaphrodite">hermaphrodite</option>
+                <option id="multiple">multiple</option>
+                <option id="indeterminate">indeterminate</option>
+                <option id="not-applicable">not applicable</option>
+                <option id="unknown">unknown</option>
+            </options>
+        </field>
+        <field id="phase" ui-search="repeatable" seperate_ui_container="true">
+            <selector>object-description-phase</selector>
+            <options>
+                <option id="">(none selected)</option>
+                <option id="adult-mature">adult/mature</option>
+                <option id="subadult-immature">subadult/immature</option>
+                <option id="egg">egg</option>
+                <option id="larva">larva</option>
+                <option id="seed">seed</option>
+            	<option id="indeterminate">indeterminate</option>
+            	<option id="multiple">multiple</option>
+                <option id="unknown">unknown</option>
+            </options>
+        </field>
+        <repeat id="forms">
+            <field id="form" ui-search="repeatable" seperate_ui_container="true">
+                <selector>object-description-form</selector>
+                <options>
+                    <option id="" default="yes">(none selected)</option>
+                    <option id="bagged">bagged</option>
+                    <option id="bottled">bottled</option>
+                    <option id="boxed">boxed</option>
+                    <option id="in-can-or-tin">in can or tin</option>
+                    <option id="in-drum">in drum</option>
+                    <option id="dry">dry</option>
+                    <option id="ground">ground</option>
+                    <option id="mounted">mounted</option>
+                    <option id="pinned">pinned</option>
+                    <option id="thin-section">thin section</option>
+                    <option id="wet">wet</option>
+                    <option id="wrapped">wrapped</option>
+                    <option id="unknown">unknown</option>
+                </options>
+            </field>
+        </repeat>
+        <field id="editionNumber" ui-search="repeatable">
+            <selector>object-description-edition-number</selector>
+        </field>
+        <field id="age" ui-type="validated" datatype="integer">
+            <selector>object-description-age</selector>
+        </field>
+        <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+        <!--<field id="ageQualifier" autocomplete="vocab-agequalifier" ui-type="enum">
+            <enum>
+                <blank-value>(none selected)</blank-value>
+            </enum>
+            <selector>object-description-age-qualifier</selector>
+        </field>-->
+        <field id="ageQualifier">
+            <selector>object-description-age-qualifier</selector>
+            <options>
+            	<option id="" default="yes">(none selected)</option>
+            	<option id="approximately">approximately</option>
+            	<option id="exactly">exactly</option>
+            	<option id="olderThan">older than</option>
+                <option id="youngerThan">younger than</option>
+            </options>
+        </field>
+        <field id="ageUnit" seperate_ui_container="true">
+            <selector>object-description-age-unit</selector>
+            <options>
+                <option id="">(none selected)</option>
+                <option id="days">days</option>
+                <option id="months">months</option>
+                <option id="weeks">weeks</option>
+                <option id="years">years</option>
+            </options>
+        </field>
+        <repeat id="styles">
+            <field id="style" ui-search="repeatable">
+                <selector>object-description-style</selector>
+            </field>
+        </repeat>
+        <repeat id="colors">
+            <field id="color">
+                <selector>object-description-color</selector>
+            </field>
+        </repeat>
+        <repeat id="materialGroupList/materialGroup">
+            <!-- selector>collection-object-materialGroup</selector -->
+            <field id="material" ui-search="repeatable">
+                <selector>object-description-material</selector>
+            </field>
+            <field id="materialComponent">
+                <selector>object-description-material-component</selector>
+            </field>
+            <field id="materialComponentNote">
+                <selector>object-description-material-component-note</selector>
+            </field>
+            <field id="materialName">
+                <selector>object-description-material-name</selector>
+            	<!-- SHOULD BE CONTROLLED BY AN AUTOCOMPLETING AUTHORITY  ####  MTB NOTE #### -->
+            </field>
+            <field id="materialSource">
+                <selector>object-description-material-source</selector>
+            </field>
+        </repeat>
+        <field id="physicalDescription">
+            <selector>object-description-physical-description</selector>
+        </field>
+        <repeat id="objectComponentGroupList/objectComponentGroup">
+            <!-- selector>collection-object-objectComponentGroup</selector -->
+            <field id="objectComponentName" ui-search="repeatable" seperate_ui_container="true">
+                <selector>object-description-object-component-name</selector>
+                <!-- SHOULD BE CONTROLLED BY AN AUTOCOMPLETING AUTHORITY  ####  MTB NOTE #### -->
+                <!-- <options> -->
+                    <!-- <option id="">(none selected)</option> -->
+                    <!-- <option id="blade">blade</option> -->
+                    <!-- <option id="buttonhole">buttonhole</option> -->
+                    <!-- <option id="handle">handle</option> -->
+                    <!-- <option id="sleeve">sleeve</option> -->
+                <!-- </options> -->
+            </field>
+            <field id="objectComponentInformation">
+                <selector>object-description-object-component-information</selector>
+            </field>
+        </repeat>
+        <repeat id="technicalAttributeGroupList/technicalAttributeGroup">
+            <!-- selector>collection-object-technicalAttributeGroup</selector -->
+            <field id="technicalAttribute" ui-search="repeatable" seperate_ui_container="true">
+                <selector>object-description-technical-attribute</selector>
+                <options>
+                    <option id="">(none selected)</option>
+                    <!--<option id="magneticTapeType">magnetic tape type</option>-->
+                    <option id="recordSpeed">recording speed</option>
+                </options>
+            </field>
+            <field id="technicalAttributeMeasurement" seperate_ui_container="true">
+                <selector>object-description-technical-attribute-measurement</selector>
+                <options>
+                    <option id="">(none selected)</option>
+                    <!--<option id="metal">metal</option>-->
+                	<option id="33">33</option>
+                	<option id="45">45</option>
+                	<option id="78">78</option>
+                </options>
+            </field>
+            <field id="technicalAttributeMeasurementUnit" seperate_ui_container="true">
+                <selector>object-description-technical-attribute-unit</selector>
+                <options>
+                    <option id="">(none selected)</option>
+                    <option id="rpm">rpm</option>
+                </options>
+            </field>
+        </repeat>
+		<field id="dimension" ui-type="groupfield/dimension/selfrenderer"  ui-func="cspace.dimension"  ></field>
+
+        <section id="contentInformation">
+            <field id="contentDescription">
+                <selector>object-description-content-description</selector>
+            </field>
+            <repeat id="contentLanguages">
+                <field id="contentLanguage" autocomplete="vocab-languages" ui-type="enum">
+					<enum has-blank="true">
+						<default>urn:cspace:pahma.cspace.berkeley.edu:vocabularies:name(languages):item:name(eng)'English'</default>
+						<blank-value>(none selected)</blank-value>
+					</enum>
+                    <selector>object-description-content-language</selector>
+                </field>
+            </repeat>
+            <repeat id="contentActivities">
+                <field id="contentActivity">
+                    <selector>object-description-content-activity</selector>
+                </field>
+            </repeat>
+            <repeat id="contentConcepts">
+                <!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+                <field id="contentConcept">
+                    <selector>object-description-content-concept</selector>
+                </field>
+            </repeat>
+            <field id="contentDate" ui-search="repeatable" ui-type="groupfield/structureddate" primarykey="contentDate.dateDisplayDate" ui-func="cspace.structuredDate"  >
+                <services-tag>contentDateGroup</services-tag>
+                <selector>object-description-content-date</selector>
+            </field>
+			<!--	
+            <field id="objectContentDate" ui-search="repeatable" ui-type="groupfield/structureddate" primarykey="objectContentDate.dateDisplayDate" ui-func="cspace.structuredDate"  >
+            	<services-tag>objectContentDateGroup</services-tag>
+            </field>
+				-->
+            <repeat id="contentPositions">
+                <field id="contentPosition" seperate_ui_container="true">
+                    <selector>object-description-content-position</selector>
+                    <options>
+                        <option id="">(none selected)</option>
+                        <option id="back">back</option>
+                        <option id="base">base</option>
+                        <option id="bottom">bottom</option>
+                        <option id="front">front</option>
+                        <option id="inside">inside</option>
+                        <option id="left">left</option>
+                        <option id="obverse">obverse</option>
+                        <option id="outside">outside</option>
+                        <option id="recto">recto</option>
+                        <option id="reverse">reverse</option>
+                        <option id="right">right</option>
+                        <option id="rim">rim</option>
+                        <option id="top">top</option>
+                        <option id="verso">verso</option>
+                    </options>
+                </field>
+            </repeat>
+            <repeat id="contentObjectGroupList/contentObjectGroup">
+                <!-- selector>collection-object-contentObjectGroup</selector -->
+                <field id="contentObject">
+                    <selector>object-description-content-object</selector>
+                </field>
+                <field id="contentObjectType" seperate_ui_container="true">
+                    <selector>object-description-content-object-type</selector>
+                    <options>
+                        <option id="">(none selected)</option>
+                        <option id="animal">animal</option>
+                        <option id="artwork">artwork</option>
+                    	<option id="book">book</option>
+                        <option id="bone">bone</option>
+                    	<option id="burial">burial</option>
+                    	<option id="building">building</option>
+                        <option id="clothing">clothing</option>
+                        <option id="container">container</option>
+                        <option id="document">document</option>
+                        <option id="furniture">furniture</option>
+                    	<option id="food">food</option>
+                    	<option id="game">game</option>
+                        <option id="jewelry">jewelry</option>
+                        <option id="musicalInstrument">musical instrument</option>
+                        <option id="plant">plant</option>
+                        <option id="rawMaterial">raw material</option>
+                        <option id="regalia">regalia</option>
+                        <option id="ritualObject">ritual object</option>
+                    	<option id="textile">textile</option>
+                        <option id="tool">tool</option>
+                    	<option id="vehicle">vehicle</option>
+                    	<option id="watercraft">watercraft</option>
+                    	<option id="weapon">weapon</option>
+                    </options>
+                </field>
+            </repeat>
+            <repeat id="contentPeoples">
+                <field id="contentPeople">
+                    <selector>object-description-content-people</selector>
+                </field>
+            </repeat>
+            <repeat id="contentPersons">
+                <field id="contentPerson" autocomplete="person-person">
+                    <selector>object-description-content-person</selector>
+                </field>
+            </repeat>
+            <!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+            <repeat id="contentPlaces">
+                <field id="contentPlace" >
+                    <selector>object-description-content-place</selector>
+                </field>
+            </repeat>
+            <repeat id="contentScripts">
+                <field id="contentScript" seperate_ui_container="true">
+                    <selector>object-description-content-script</selector>
+                    <options>
+                        <option id="">(none selected)</option>
+                        <option id="beneventanScript">Beneventan script</option>
+                        <option id="blackletter">blackletter</option>
+                        <option id="carolingianMiniscule">Carolingian miniscule</option>
+                        <option id="chanceryHand">chancery hand</option>
+                        <option id="courtHand">court hand</option>
+                        <option id="germanicMiniscule">Germanic miniscule</option>
+                        <option id="gothicScript">Gothic script</option>
+                        <option id="unspecifiedHandwriting">handwriting (unspecified)</option>
+                		<option id="humanistMiniscule">humanist miniscule</option>
+                        <option id="insularScript">insular script</option>
+                        <option id="libraryHand">library hand</option>
+                        <option id="merovingianScript">Merovingian script</option>
+                        <option id="palmerMethod">Palmer method</option>
+                        <option id="romanCursive">Roman cursive</option>
+                        <option id="roundHand">round hand</option>
+                        <option id="uncialScript">uncial script</option>
+                        <option id="secretaryHand">secretary hand</option>
+                        <option id="rusticCapitals">rustic capitals</option>
+                        <option id="spencerianMethod">Spencerian method</option>
+                        <option id="squareCapitals">square capitals</option>
+                        <option id="visigothicScript">Visigothic script</option>
+                    </options>
+                </field>
+            </repeat>
+            <repeat id="contentOrganizations">
+                <field id="contentOrganization" autocomplete="organization-organization">
+                    <selector>object-description-content-organization</selector>
+                </field>
+            </repeat>
+            <repeat id="contentEventNameGroupList/contentEventNameGroup">
+                <!--<selector>csc-collection-object-contentEventNameGroup</selector>-->
+                <field id="contentEventName">
+                    <selector>object-description-content-event-name</selector>
+                </field>
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                <field id="contentEventNameType">
+                    <selector>object-description-content-event-name-type</selector>
+            		<options>
+                		<option id="" default="yes">(none selected)</option>
+                		<option id="ceremony">ceremony</option>
+                		<option id="classVisit">class visit</option>
+            			<!--<option id="courtesyVisit">courtesy visit</option>--> <!-- WHAT IS THIS? -->
+            			<option id="dance">dance</option>
+            			<option id="exhibit">exhibit</option>
+            			<option id="healingDoctoring">healing/doctoring</option>
+            			<option id="lecture">lecture</option>
+                		<option id="memberEvent">member event</option>
+                		<option id="nagpraConsultation">NAGPRA consultation</option>
+                		<option id="reception">reception</option>
+                		<option id="researchVisit">research visit</option>
+                		<option id="tour">tour</option>
+                		<option id="tribalVisit">tribal visit</option>
+            		</options>
+                </field>
+            </repeat>
+            <repeat id="contentOtherGroupList/contentOtherGroup">
+                <!-- selector>collection-object-contentObjectGroup</selector -->
+                <field id="contentOther">
+                    <selector>object-description-content-other</selector>
+                </field>
+                <field id="contentOtherType">
+                    <selector>object-description-content-other-type</selector>
+                </field>
+            </repeat>
+            <field id="contentNote">
+                <selector>object-description-content-note</selector>
+            </field>
+        </section>
+        <section id="textualInscriptionInformation">
+            <repeat id="textualInscriptionGroupList/textualInscriptionGroup">
+	            <field id="inscriptionContent">
+	                <selector>object-description-inscription-content</selector>
+	            </field>
+	            <field id="inscriptionContentInscriber" autocomplete="person-person,organization-organization">
+	                <selector>object-description-inscription-content-inscriber</selector>
+	            </field>
+	            <field id="inscriptionContentLanguage" autocomplete="vocab-languages" ui-type="enum">
+					<enum has-blank="true">
+						<default>urn:cspace:pahma.cspace.berkeley.edu:vocabularies:name(languages):item:name(eng)'English'</default>
+						<blank-value>(none selected)</blank-value>
+					</enum>
+	                <selector>object-description-inscription-content-language</selector>
+	            </field>
+	            <field id="inscriptionContentDate" ui-type="date">
+	                <selector>object-description-inscription-content-date</selector>
+	            </field>
+	            <field id="inscriptionContentPosition" seperate_ui_container="true">
+	                <selector>object-description-inscription-content-position</selector>
+	                <options>
+	                    <option id="">(none selected)</option>
+	                    <option id="back">back</option>
+	                    <option id="base">base</option>
+	                    <option id="bottom">bottom</option>
+	                    <option id="front">front</option>
+	                    <option id="inside">inside</option>
+	                    <option id="left">left</option>
+	                    <option id="obverse">obverse</option>
+	                    <option id="outside">outside</option>
+	                    <option id="recto">recto</option>
+	                    <option id="reverse">reverse</option>
+	                    <option id="right">right</option>
+	                    <option id="rim">rim</option>
+	                    <option id="top">top</option>
+	                    <option id="verso">verso</option>
+	                </options>
+	            </field>
+	            <field id="inscriptionContentScript" seperate_ui_container="true">
+	                <selector>object-description-inscription-content-script</selector>
+	                <options>
+	                	<option id="">(none selected)</option>
+	                	<option id="beneventanScript">Beneventan script</option>
+	                	<option id="blackletter">blackletter</option>
+	                	<option id="carolingianMiniscule">Carolingian miniscule</option>
+	                	<option id="chanceryHand">chancery hand</option>
+	                	<option id="courtHand">court hand</option>
+	                	<option id="germanicMiniscule">Germanic miniscule</option>
+	                	<option id="gothicScript">Gothic script</option>
+	                	<option id="unspecifiedHandwriting">handwriting (unspecified)</option>
+	                	<option id="humanistMiniscule">humanist miniscule</option>
+	                	<option id="insularScript">insular script</option>
+	                	<option id="libraryHand">library hand</option>
+	                	<option id="merovingianScript">Merovingian script</option>
+	                	<option id="palmerMethod">Palmer method</option>
+	                	<option id="romanCursive">Roman cursive</option>
+	                	<option id="roundHand">round hand</option>
+	                	<option id="uncialScript">uncial script</option>
+	                	<option id="secretaryHand">secretary hand</option>
+	                	<option id="rusticCapitals">rustic capitals</option>
+	                	<option id="spencerianMethod">Spencerian method</option>
+	                	<option id="squareCapitals">square capitals</option>
+	                	<option id="visigothicScript">Visigothic script</option>
+	                </options>
+	            </field>
+	            <field id="inscriptionContentType" seperate_ui_container="true">
+	                <selector>object-description-inscription-content-type</selector>
+	                <options>
+	                    <option id="">(none selected)</option>
+	                    <option id="abecedarium">abecedarium</option>
+	                    <option id="brand">brand</option>
+	                	<option id="decoration">decoration</option>
+	                	<!--<option id="embossment">embossment</option>--> <!-- REPETITIVE, GIVEN EMBOSSING AS AN INSCRIPTION METHOD -->
+	                    <option id="epitaph">epitaph</option>
+	                    <option id="estateStamp">estate stamp</option>
+	                    <option id="exLibris">ex libris</option>
+	                	<option id="graffiti">graffiti</option>
+	                	<option id="inlaid">inlaid</option>
+	                    <option id="label">label</option>
+	                    <option id="makersMark">maker's mark</option>
+	                    <option id="mementoMori">memento mori</option>
+	                    <option id="monumentalInscription">monumental inscription</option>
+	                	<option id="ostracon">ostracon</option>
+	                	<option id="tattoo">tattoo</option>
+	                </options>
+	            </field>
+	            <field id="inscriptionContentMethod">
+	                <selector>object-description-inscription-content-method</selector>
+	            	<options>
+	            		<option id="">(none selected)</option>
+	            		<option id="panAndInk">pen and ink</option>
+	            		<option id="embossing">embossing</option>
+	            		<option id="engraving">engraving</option>
+	            		<option id="pyrography">pyrography</option>
+	            		<option id="painting">painting</option>
+	            	</options>
+	            </field>
+	            <field id="inscriptionContentInterpretation">
+	                <selector>object-description-inscription-content-interpretation</selector>
+	            </field>
+	            <field id="inscriptionContentTranslation">
+	                <selector>object-description-inscription-content-translation</selector>
+	            </field>
+	            <field id="inscriptionContentTransliteration">
+	                <selector>object-description-inscription-content-transliteration</selector>
+	            </field>
+			</repeat>
+        </section>
+        <section id="nonTextualInscriptionInformation">
+            <repeat id="nonTextualInscriptionGroupList/nonTextualInscriptionGroup">
+	            <field id="inscriptionDescription">
+	                <selector>object-description-inscription-description</selector>
+	            </field>
+	            <field id="inscriptionDescriptionInscriber" ui-search="repeatable" autocomplete="person-person,organization-organization">
+	                <selector>object-description-inscription-description-inscriber</selector>
+	            </field>
+	        	<field id="inscriptionDescriptionDate" ui-type="date">
+	                <selector>object-description-inscription-description-date</selector>
+	            </field>
+	            <field id="inscriptionDescriptionPosition" seperate_ui_container="true">
+	                <selector>object-description-inscription-description-position</selector>
+	                <options>
+	                    <option id="">(none selected)</option>
+	                    <option id="back">back</option>
+	                    <option id="base">base</option>
+	                    <option id="bottom">bottom</option>
+	                    <option id="front">front</option>
+	                    <option id="inside">inside</option>
+	                    <option id="left">left</option>
+	                    <option id="obverse">obverse</option>
+	                    <option id="outside">outside</option>
+	                    <option id="recto">recto</option>
+	                    <option id="reverse">reverse</option>
+	                    <option id="right">right</option>
+	                    <option id="rim">rim</option>
+	                    <option id="top">top</option>
+	                    <option id="verso">verso</option>
+	                </options>
+	            </field>
+	            <field id="inscriptionDescriptionType" seperate_ui_container="true">
+	                <selector>object-description-inscription-description-type</selector>
+	                <options>
+	                	<option id="">(none selected)</option>
+	                	<!--<option id="abecedarium">abecedarium</option>--> <!-- TEXTUAL, SO EXCLUDE -->
+	                	<option id="brand">brand</option>
+	                	<option id="decoration">decoration</option>
+	                	<!--<option id="embossment">embossment</option>--> <!-- REPETITIVE, GIVEN EMBOSSING AS AN INSCRIPTION METHOD -->
+	                	<option id="epitaph">epitaph</option>
+	                	<option id="estateStamp">estate stamp</option>
+	                	<option id="exLibris">ex libris</option>
+	                	<option id="graffiti">graffiti</option>
+	                	<option id="incisedMark">incised mark</option>
+	                	<option id="label">label</option>
+	                	<option id="makersMark">maker's mark</option>
+	                	<option id="mementoMori">memento mori</option>
+	                	<option id="monumentalInscription">monumental inscription</option>
+	                	<option id="ostracon">ostracon</option>
+	                	<option id="tattoo">tattoo</option>
+	                </options>
+	            </field>
+	            <field id="inscriptionDescriptionMethod" ui-search="repeatable">
+	                <selector>object-description-inscription-description-method</selector>
+	            	<options>
+	            		<option id="">(none selected)</option>
+	            		<option id="panAndInk">pen and ink</option>
+	            		<option id="embossing">embossing</option>
+	            		<option id="engraving">engraving</option>
+	            		<option id="pyrography">pyrography</option>
+	            		<option id="painting">painting</option>
+	            	</options>
+	            </field>
+	            <field id="inscriptionDescriptionInterpretation">
+	                <selector>object-description-inscription-description-interpretation</selector>
+	            </field>
+			</repeat>
+        </section>
+    </section>
+	<section id="objectProductionInformation">
+        <repeat id="objectProductionDateGroupList/objectProductionDateGroup">
+            <group id="objectProductionDate" ui-type="groupfield/structureddate" primarykey="dateDisplayDate" ui-func="cspace.structuredDate"></group>
+		</repeat>
+		<repeat id="techniqueGroupList/techniqueGroup">
+            <!-- selector>csc-collection-object-techniqueGroup</selector -->
+            <field id="technique" ui-search="repeatable">
+                <selector>object-production-technique</selector>
+            </field>
+            <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+            <field id="techniqueType">
+                <selector>object-production-technique-type</selector>
+            	<options>
+                	<option id="" default="yes">(none selected)</option>
+                	<option id="automated">automated</option>
+                	<option id="handCrafted">hand-crafted</option>
+            	</options>
+            </field>
+        </repeat>
+        <repeat id="objectProductionPlaceGroupList/objectProductionPlaceGroup">
+            <!-- selector>collection-object-objectProductionPlaceGroup</selector -->
+            <!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+            <field id="objectProductionPlace" ui-search="repeatable">
+                <selector>object-production-place</selector>
+            </field>
+            <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+            <field id="objectProductionPlaceRole">
+                <selector>object-production-place-role</selector>
+            	<options>
+                	<option id="" default="yes">(none selected)</option>
+                	<option id="assembledAt">assembled at/in</option>
+            		<option id="built">built at/in</option>
+            		<option id="manufactured">manufactured at/in</option>
+            		<option id="materialsFrom">material originated from</option>
+            		<option id="minted">minted at/in</option>
+            	</options>
+            </field>
+        </repeat>
+        <repeat id="objectProductionReasons">
+            <field id="objectProductionReason" datatype="largetext">
+                <selector>object-production-reason</selector>
+            </field>
+        </repeat>
+        <repeat id="objectProductionPeopleGroupList/objectProductionPeopleGroup">
+            <!-- selector>object-production-objectProductionPeopleGroup</selector -->
+            <field id="objectProductionPeople" ui-search="repeatable">
+                <selector>object-production-people</selector>
+            </field>
+            <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+            <field id="objectProductionPeopleRole">
+                <selector>object-production-people-role</selector>
+            	<options>
+                	<option id="" default="yes">(none selected)</option>
+            		<option id="designedAfter">designed after</option>
+            		<option id="traditionalMakers">traditional makers</option>
+            	</options>
+            </field>
+        </repeat>
+        <repeat id="objectProductionPersonGroupList/objectProductionPersonGroup">
+            <!-- selector>object-production-objectProductionPersonGroup</selector -->
+            <field id="objectProductionPerson" ui-search="repeatable" autocomplete="person-person">
+                <selector>object-production-person</selector>
+            </field>
+            <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+            <field id="objectProductionPersonRole">
+            	<selector>collection-object-objectProductionPersonRole</selector>
+            	<options>
+                	<option id="" default="yes">(none selected)</option>
+					<option id="accompanist">accompanist</option>
+					<option id="artist">artist</option>
+            		<option id="blesser">blesser</option>
+            		<option id="carver">carver</option>
+                	<option id="demonstrator">demonstrator</option>
+                	<option id="designer">designer</option>
+                	<option id="documenter">documenter</option>
+            		<option id="illustrator">illustrator</option>
+					<option id="maker">maker</option>
+                	<option id="materialSupplier">material supplier</option>
+            		<option id="narrator">narrator</option>
+            		<option id="painter">painter</option>
+					<option id="performer">performer</option>
+					<option id="photographer">photographer</option>
+					<option id="recorder">recorder</option>
+            		<option id="ruler">ruler</option> <!-- For coins: who decreed that the coins would be minted? -->
+            		<option id="scribe">scribe</option>
+            		<option id="singer">singer</option>
+            		<option id="translator">translator</option>
+            		<option id="writer">writer</option>
+            	</options>
+            </field>
+        </repeat>
+        <repeat id="objectProductionOrganizationGroupList/objectProductionOrganizationGroup">
+            <!-- selector>collection-object-objectProductionOrganizationGroup</selector -->
+            <field id="objectProductionOrganization" ui-search="repeatable" autocomplete="organization-organization">
+                <selector>object-production-organization</selector>
+            </field>
+            <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+            <field id="objectProductionOrganizationRole">
+            	<selector>collection-object-objectProductionOrganizationRole</selector>
+            	<options>
+                	<option id="" default="yes">(none selected)</option>
+					<option id="maker">maker</option>
+					<option id="manufacturer">manufacturer</option>
+					<option id="performer">performer</option>
+					<option id="photographer">photographer</option>
+                	<option id="supplier">supplier</option>
+            	</options>
+            </field>
+        </repeat>
+        <field id="objectProductionNote">
+            <selector>object-production-note</selector>
+        </field>
+    </section>
+    <section id="objectHistoryAssociationInformation">
+        <field id="objectHistoryNote">
+            <selector>object-history-association-object-history-note</selector>
+        </field>
+        <repeat id="usageGroupList/usageGroup">
+            <field id="usage"/>
+            <field id="usageNote"/>
+        </repeat>
+    	    	
+    	<!-- COMMON SCHEMA OWNERSHIP FIELDS (below) TEMPORARILY REPLACED WITH CUSTOM FIELDS (domain-collectionobject.xml)
+        <repeat id="owners">
+            <field id="owner" autocomplete="person-person,organization-organization">
+                <selector>object-history-association-owner</selector>
+            </field>
+        </repeat>
+        <repeat id="ownershipDateGroupList/ownershipDateGroup">
+            <group id="ownershipDate" ui-type="groupfield/structureddate" primarykey="dateDisplayDate" ui-func="cspace.structuredDate"  ></group>
+        </repeat>
+    	
+        <field id="ownershipAccess" seperate_ui_container="true">
+            <selector>object-history-association-access</selector>
+            <options>
+                <option id="">(none selected)</option>
+                <option id="limited">limited</option>
+                <option id="open">open</option>
+                <option id="restricted">restricted</option>
+            </options>
+        </field>
+        <field id="ownershipCategory" seperate_ui_container="true">
+            <selector>object-history-association-category</selector>
+            <options>
+                <option id="">(none selected)</option>
+                <option id="company">company</option>
+                <option id="public">public</option>
+                <option id="private">private</option>
+            </options>
+        </field>
+        <field id="ownershipPlace">
+            <selector>object-history-association-ownership-place</selector>
+        </field>
+        <field id="ownershipExchangeMethod" seperate_ui_container="true">
+            <selector>object-history-association-exchange-method</selector>
+            <options>
+                <option id="">(none selected)</option>
+                <option id="bequest">bequest</option>
+                <option id="exchange">exchange</option>
+                <option id="gift">gift</option>
+                <option id="purchase">purchase</option>
+                <option id="transfer">transfer</option>
+            </options>
+        </field>
+        <field id="ownershipExchangeNote">
+            <selector>object-history-association-exchange-note</selector>
+        </field>
+        <field id="ownershipExchangePriceCurrency" autocomplete="vocab-currency" ui-type="enum">
+            <enum>
+                <default>usd</default>
+            </enum>
+            <selector>object-history-association-denomination</selector>
+        </field>
+        <field id="ownershipExchangePriceValue" ui-type="validated" datatype="float">
+            <selector>object-history-association-exchange-price-value</selector>
+        </field>
+		-->
+        
+    	<section id="associationInformation">
+            <repeat id="assocActivityGroupList/assocActivityGroup">
+                <!-- selector>collection-object-assocActivityGroup</selector -->
+                <field id="assocActivity"></field>
+                <field id="assocActivityType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocActivityType</selector>
+            		<options>
+                		<option id="" default="yes">(none selected)</option>
+                		<option id="played">played</option>
+                		<option id="recorded">recorded</option>
+                		<option id="sung">sung</option>
+                		<option id="used">used</option>
+                		<option id="viewed">viewed</option>
+                		<option id="worn">worn</option>
+                		<option id="unknown">unknown</option>
+                	</options>
+            	</field>
+                <field id="assocActivityNote"></field>
+            </repeat>
+            <repeat id="assocObjectGroupList/assocObjectGroup">
+            	<!-- selector>collection-object-assocObjectGroup</selector --> <!-- ADDED BY PAHMA 2011-08; COMMENTED OUT TO MATCH OTHER GROUP SELECTORS -->
+                <field id="assocObject"></field>
+                <field id="assocObjectType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocObjectType</selector>
+            		<options>
+                		<option id="" default="yes">(none selected)</option>
+                		<option id="adhering">adhering</option>
+                		<option id="associatedWith">associated with</option>
+                		<option id="embedded">embedded</option>
+                		<option id="foundNear">found near</option>
+                	</options>
+            	</field>
+                <field id="assocObjectNote"></field>
+            </repeat>
+            <repeat id="assocConceptGroupList/assocConceptGroup">
+                <!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+                <field id="assocConcept"></field>
+                <field id="assocConceptType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocConceptType</selector>
+            		<options>
+                		<option id="" default="yes">(none selected)</option>
+                		<option id="causedBy">caused by</option>
+                		<option id="dependsOn">depends on</option>
+                		<option id="effectOf">effect of</option>
+                		<option id="exampleOf">example of</option>
+                		<option id="influencedBy">influenced by</option>
+                		<option id="inspiredBy">inspired by</option>
+                		<option id="partOf">part of</option>
+                		<option id="relatedTo">related to</option>
+                		<option id="reminiscentOf">reminiscent of</option>
+                		<option id="sameAs">same as</option>
+                		<option id="sameClassAs">same class as</option>
+                		<option id="similarTo">similar to</option>
+            		</options>
+            	</field>
+                <field id="assocConceptNote"></field>
+            </repeat>
+        	<repeat id="assocCulturalContextGroupList/assocCulturalContextGroup"> <!-- Associated cultural affinity -->
+                <field id="assocCulturalContext"></field>
+                <field id="assocCulturalContextType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocCulturalContextType</selector>
+            		<options>
+                		<option id="" default="yes">(none selected)</option>
+                		<option id="descendedFrom">descended from</option>
+            			<option id="exampleOf">example of</option>
+            			<option id="inspiredBy">inspired by</option>
+            			<option id="relatedTo">related to</option>
+            			<option id="similarTo">typologically similar to</option>
+            			<option id="identicalTo">typologically identical to</option>
+            			<option id="influencedBy">influenced by</option>
+            			<option id="reminiscentOf">reminiscent of</option>
+                	</options>
+            	</field>
+                <field id="assocCulturalContextNote"></field>
+            </repeat>
+        	<repeat id="assocOrganizationGroupList/assocOrganizationGroup"> <!-- Associated organization -->
+                <field id="assocOrganization" autocomplete="organization-organization"></field>
+                <!-- CSPACE-2927: This new 'type' field may need to provide terms from a controlled -->
+                <!-- vocabulary; needs functional clarification from Megan, et al. -->
+                <field id="assocOrganizationType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocOrganizationType</selector>
+            		<options>
+            			<option id="" default="yes">(none selected)</option>
+						<option id="donor">donor</option>
+            			<option id="endorser">endorser</option>
+            			<option id="landowner">landowner</option>
+						<option id="seller">seller</option>
+                		<option id="sponsor">sponsor</option>
+                		<option id="user">user</option>
+                	</options>
+            	</field>
+                <field id="assocOrganizationNote"></field>
+            </repeat>
+            <repeat id="assocPeopleGroupList/assocPeopleGroup"> <!-- Associated cultural group -->
+                <field id="assocPeople"></field>
+                <field id="assocPeopleType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocPeopleType</selector>
+            		<options>
+            			<option id="" default="yes">(none selected)</option>
+            			<option id="gatheredCollectedBy">gathered/collected by</option>
+                		<option id="inspiredBy">inspired by</option>
+            			<option id="nagpraCulturalAffiliation">NAGPRA cultural affiliation</option>
+                		<option id="traditionalMakers">traditional makers</option>
+            			<option id="inTheStyleOf">in the style of</option>
+            			<option id="attributedMakers">made by (attributed)</option>
+            			<option id="madeBy">made by</option>
+            			<option id="traditionallyMadeBy">traditionally made by</option>
+            			<option id="usedButNotMadeBy">used, but not made, by</option>
+            			<option id="usedButNotMadeByAttributed">used, but not made, by (attributed)</option>
+                	</options>
+            	</field>
+                <field id="assocPeopleNote"></field>
+            </repeat>
+        	<repeat id="assocPersonGroupList/assocPersonGroup"> <!-- Associated person -->
+                <field id="assocPerson" autocomplete="person-person"></field>
+                <field id="assocPersonType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocPersonType</selector>
+            		<options>
+                		<option id="" default="yes">(none selected)</option>
+						<option id="dealer">dealer</option>
+						<option id="donor">donor</option>
+						<option id="in memoriam">in memoriam</option>
+						<option id="in-urned">in-urned</option>
+						<option id="informant">informant</option>
+						<option id="inspector">inspector</option>
+						<option id="patron">patron</option>
+						<option id="photograph requestor">photograph requestor</option>
+						<option id="seller">seller</option>
+						<option id="transferree">transferree</option>
+						<option id="transferrer">transferrer</option>
+            		</options>
+            	</field>
+                <field id="assocPersonNote"></field>
+            </repeat>
+        	<repeat id="assocPlaceGroupList/assocPlaceGroup"> <!-- Associated place -->
+            	<!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+                <field id="assocPlace"></field>
+                <field id="assocPlaceType">
+                <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                    <selector>collection-object-assocPlaceType</selector>
+            		<options>
+                		<option id="" default="yes">(none selected)</option>
+            			<option id="auctioned">auctioned in/at</option>
+            			<!--<option id="blessingLocation">blessed at</option>
+            			<option id="consecration">consecrated at</option>-->
+            			<option id="excavated">excavated at</option>
+            			<option id="found">found at</option>
+            			<option id="nativeTo">native to</option>
+            			<option id="purchased">purchased in/at</option>
+            			<option id="recovered">recovered from</option>
+                		<option id="quarried">quarried from</option>
+                		<option id="used">used in/at</option>
+                	</options>
+            	</field>
+                <field id="assocPlaceNote"></field>
+        	</repeat>
+            <!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+            <field id="assocEventName"></field>
+            <field id="assocEventNameType">
+            <!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                <selector>collection-object-assocEventNameType</selector>
+            	<options>
+                	<option id="" default="yes">(none selected)</option>
+                	<option id="ceremony">ceremony</option>
+                	<option id="classVisit">class visit</option>
+                	<option id="courtesyVisit">courtesy visit</option>
+                	<option id="dance">dance</option>
+                	<option id="exhibit">exhibit</option>
+                	<option id="lecture">lecture</option>
+                	<option id="memberEvent">member event</option>
+                	<option id="nagpraConsultation">NAGPRA consultation</option>
+                	<option id="reception">reception</option>
+                	<option id="researchVisit">research visit</option>
+                	<option id="tour">tour</option>
+                	<option id="tribalVisit">tribal visit</option>
+                </options>
+            </field>
+            <repeat id="assocEventOrganizations">
+                <field id="assocEventOrganization" autocomplete="organization-organization">
+                    <selector>object-history-association-event-organization</selector>
+                </field>
+            </repeat>
+            <repeat id="assocEventPeoples">
+                <field id="assocEventPeople">
+                    <selector>object-history-association-event-people</selector>
+                </field>
+            </repeat>
+            <repeat id="assocEventPersons">
+                <field id="assocEventPerson" autocomplete="person-person">
+                    <selector>object-history-association-event-person</selector>
+                </field>
+            </repeat>
+            <repeat id="assocEventPlaces">
+            	<!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+                <field id="assocEventPlace">
+                    <selector>object-history-association-event-place</selector>
+                </field>
+            </repeat>
+            <field id="assocEventNote"></field>
+            <repeat id="assocDateGroupList/assocDateGroup">
+                <selector>object-history-association-assocDateGroup</selector>
+                <field id="assocDate" ui-type="date">
+                    <!-- Experimenting with explicitly naming the selector to get container behavior working -->
+                    <selector>object-history-association-assocDate</selector>
+                </field>
+                <field id="assocDateType">
+                	<!--################# CUSTOMIZED THIS FIELD TO BE CONTROLLED LIST (MTB NOTE) ################## -->
+                	<selector>collection-object-assocDateType</selector>
+                	<options>
+                		<option id="" default="yes">(none selected)</option>
+<!--                	<option id="discovered">discovered</option>
+                		<option id="found">found</option>
+                		<option id="demonstrated">demonstrated</option>
+                		<option id="used">used</option>
+                		<option id="worn">worn</option>
+-->
+						<option id="conservation date">conservation date</option>
+						<option id="date missing">date missing</option>
+						<option id="date of analysis">date of analysis</option>
+						<option id="date photographed">date photographed</option>
+						<option id="date received">date received</option>
+						<option id="date used">date used</option>
+						<option id="deaccession date">deaccession date</option>
+						<option id="destruction date">destruction date</option>
+						<option id="immured">immured</option>
+						<option id="material date">material date</option>
+						<option id="minting">minting</option>
+						<option id="mounted">mounted</option>
+						<option id="partial deaccession/loss/destruc">partial deaccession/loss/destruc</option>
+						<option id="patent date">patent date</option>
+						<option id="published">published</option>
+						<option id="recatalogued date">recatalogued date</option>
+						<option id="ruler date">ruler date</option>
+                	</options>
+                </field>
+                <field id="assocDateNote"></field>
+            </repeat>
+        </section>
+    </section>
+    <!--<section id="objectOwnerContributionInformation">
+        <field id="ownersPersonalExperience">
+            <selector>object-owner-experience</selector>
+        </field>
+        <field id="ownersPersonalResponse">
+            <selector>object-owner-response</selector>
+        </field>
+        <repeat id="ownersReferences">
+            <field id="ownersReference" datatype="largetext">
+                <selector>object-owner-reference</selector>
+            </field>
+        </repeat>
+        <field id="ownersContributionNote">
+            <selector>object-owner-contribution-note</selector>
+        </field>
+    </section>-->
+    <!--<section id="objectViewerContributionInformation">
+        <field id="viewersRole">
+            <selector>object-viewer-role</selector>
+        </field>
+        <field id="viewersPersonalExperience">
+            <selector>object-viewer-experience</selector>
+        </field>
+        <field id="viewersPersonalResponse">
+            <selector>object-viewer-response</selector>
+        </field>
+        <repeat id="viewersReferences">
+            <field id="viewersReference" datatype="largetext">
+                <selector>object-viewer-reference</selector>
+            </field>
+        </repeat>
+        <field id="viewersContributionNote">
+            <selector>object-viewer-contribution-note</selector>
+        </field>
+    </section>-->
+    <!-- CSPACE-3501: reference and catalog number combined into a repeatable group; catalog number renamed reference note -->
+    <section id="referenceInformation">
+        <repeat id="referenceGroupList/referenceGroup">
+            <field id="reference"></field>
+            <field id="referenceNote"></field>
+        </repeat>
+    </section>
+    <section id="objectCollectionInformation">
+    	<field id="fieldCollectionDate" ui-type="date"></field> <!-- Object collection date -->
+        <repeat id="fieldCollectionMethods">
+        	<field id="fieldCollectionMethod" autocomplete="vocab-collectionmethod" ui-type="enum">
+				<enum has-blank="true">
+					<blank-value>(none selected)</blank-value>
+				</enum>
+			</field>
+        </repeat>
+        <field id="fieldCollectionNote"></field>
+        <field id="fieldCollectionNumber"></field>
+        <!-- ################# FIELD SHOULD BE CONTROLLED BY AUTHORITY (MTB NOTE) ################## -->
+        <field id="fieldCollectionPlace"></field>
+        <repeat id="fieldCollectionSources">
+            <field id="fieldCollectionSource" autocomplete="person-person"></field>
+        </repeat>
+        <repeat id="fieldCollectors">
+            <field id="fieldCollector" autocomplete="person-person,organization-organization"></field>
+        </repeat>
+        <repeat id="fieldColEventNames">
+            <field id="fieldColEventName" ui-search="repeatable"></field>
+        </repeat>
+    </section>
+    <!-- ununsed -->
+    <!--<section >
+        <field id="dateAssociation">
+            <selector>date-information-date-association</selector>
+        </field>
+        <field id="dateText">
+            <selector>date-information-date-text</selector>
+        </field>
+        <field id="dateLatestCertainty">
+            <selector>date-information-date-latest-certainty</selector>
+        </field>
+        <field id="dateEarliestSingleCertainty">
+            <selector>date-information-date-earliest-single-certainty</selector>
+        </field>
+        <field id="dateLatestQualifier">
+            <selector>date-information-date-latest-qualifier</selector>
+        </field>
+        <field id="dateEarliestSingleQualifier">
+            <selector>date-information-date-earliest-single-qualifier</selector>
+        </field>
+        <field id="dateEarliestSingle" ui-type="date">
+            <selector>date-information-date-earliest-single-date</selector>
+        </field>
+        <field id="dateLatest" ui-type="date">
+            <selector>date-information-date-latest-date</selector>
+        </field>
+        <field id="datePeriod">
+            <selector>date-information-date-period</selector>
+        </field>
+    </section>-->
+</record>
