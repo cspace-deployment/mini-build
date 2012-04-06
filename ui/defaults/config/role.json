@@ -1,0 +1,36 @@
+{
+    "pageBuilder": {
+        "options": {
+            "pageType": "role",
+            "selectors": {
+                "role": ".csc-roles-roleAdmin" 
+            },
+            "components": {
+                "role": {
+                    "type": "cspace.adminRoles",
+                    "options": {
+                        "uispec": "{pageBuilder}.options.uispec"
+                    }
+                },
+                "header": {
+                    "type": "cspace.header",
+                    "options": {
+                        "schema": "{pageBuilder}.schema",
+                        "permissions": "{pageBuilder}.permissions"
+                    }
+                }
+            }
+        }
+    },
+    "pageBuilderIO": {
+        "options": {
+            "schema": [
+                "recordlist",
+                "recordtypes",
+                "namespaces",
+                "role"
+            ],
+            "recordType": "role"
+        }
+    }
+}

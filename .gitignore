@@ -1,0 +1,16 @@
+.DS_Store
+*~
+*.swp
+*.class
+**/example-tenants/*
+**/target/*
+.svn
+*.avaj
+*.lmx
+*.save
+*.bak
+*.orig
+*.o
+*.so
+*.a
+*.jar

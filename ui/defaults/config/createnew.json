@@ -1,0 +1,35 @@
+{
+    "pageBuilder": {
+        "options": {
+            "selectors": {
+                "createNew": ".csc-createNew-main" 
+            },
+            "components": {
+                "pivotSearch": {
+                    "type": "cspace.searchBox",
+                    "options": {
+                        "strings": {
+                            "recordTypeSelectLabel": "Record Type" 
+                        },
+                        "selfRender": true,
+                        "related": "all",
+                        "permission": "list"
+                    } 
+                },
+                "createNew": {
+                    "type": "cspace.createNew",
+                    "options": {
+                        "permissions": "{pageBuilder}.permissions" 
+                    } 
+                },
+                "header": {
+                    "type": "cspace.header",
+                    "options": {
+                        "schema": "{pageBuilder}.schema",
+                        "permissions": "{pageBuilder}.permissions" 
+                    } 
+                } 
+            } 
+        }
+    }
+}

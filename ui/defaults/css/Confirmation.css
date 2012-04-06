@@ -1,0 +1,114 @@
+/*
+Copyright 2010
+
+Licensed under the Educational Community License (ECL), Version 2.0. 
+You may not use this file except in compliance with this License.
+
+You may obtain a copy of the ECL 2.0 License at
+https://source.collectionspace.org/collection-space/LICENSE.txt
+*/
+
+.ui-dialog {
+	width:450px !important;
+	*width:auto;
+}
+.ui-dialog.cs-search-dialog {
+	min-width:800px !important;
+}
+.ui-dialog-titlebar {
+    -moz-border-radius:6px 6px 0 0; 
+	-webkit-border-radius:6px 6px 0 0;
+}
+.cs-confirmationDialog {
+	color: #6E6E6E;
+	font-size:14px;
+	line-height:20px;
+	background-color: white;
+	width:100%;
+	position:absolute;
+	*position:relative;
+	z-index:99999;
+	border:0px solid #CECECE;
+	padding:0 10px 10px 10px;
+    -moz-border-radius: 0 0 6px 6px; 
+	-webkit-border-radius: 0 0 6px 6px;
+}
+.cs-confirmationDialog .label {float:left; /*padding-left:10px;*/ font-size:12px;}
+
+
+.add-more input{height:17px;}
+.csc-confirmationDialog-inner {
+	/*padding:20px 20px 20px 20px;*/
+}
+.csc-confirmationDialog-inner .search-box {padding:10px 0; width:100%; float:left;}
+
+.csc-confirmationDialog-inner {}
+.csc-confirmationDialog-inner .add-more {margin-top:0px;}
+.csc-confirmationDialog-inner .add-more .button.add, .csc-confirmationDialog-inner .add-more .button.add:hover {
+	/*background-color:#94BC80;*/ color:#fff;}
+
+.csc-recordTypeSelecter-procedures {float:left;}
+
+.csc-search-results {width:100%;}
+
+.ui-icon-closethick {
+	background-color:#fff;
+	color:#6B8DA7;
+	/*position:absolute;
+	top:3px;
+	right:20px;*/
+}
+a.ui-dialog-titlebar-close {
+	float:right;
+	width:30px;
+	height:15px;
+	margin:-6px -3px 0 0;
+}
+.ui-dialog-titlebar {
+	background-color:#fff;
+	padding:10px 10px 20px 10px;
+	cursor:move;
+	margin-top:20px;
+	min-width:250px;
+	width:100%;
+	/*position:relative;*/
+}
+
+.ui-dialog-content {
+
+}
+.csc-confirmationDialog-text{
+	padding-bottom:2px;
+}
+.csc-confirmationDialog-buttonrow {
+	padding:30px 0 0 0;
+}
+.cs-confirmationDialogButton {
+	border:none !important;
+}
+.ui-dialog-title {
+	color:#6E6E6E;
+	font-size:18px;
+	font-weight:bold;
+	*float:left;
+}
+a, a:hover {text-decoration:none;}
+
+.cs-dialog-closeBtn {
+    position:absolute;
+    right:-20px;
+    top:-72px;
+    width:auto;
+    cursor:pointer;
+}
+.add-related-steps {height:74px; background-color: #EBEBEB; margin-bottom:10px; padding-left:10px;}
+.cs-related-steps {height:74px; background: url('../images/linkRecords-or.png') center center no-repeat #EBEBEB; padding-left:10px;}
+
+
+#search-box, #create-box {padding:18px 0 0 0; margin:0;}
+#relationship-box {padding:17px 0 0 0;}
+#search-box .header, #create-box .header, #relationship-box .header {color:#5A5A5A; font-size:12px; padding:0 0 0px 0;}
+#search-box .content, #create-box .content, #relationship-box .content {padding:0;}
+#search-box .select-recordtype {padding-top:6px;}
+
+#relationship-box {padding:17px 0 0 0;}

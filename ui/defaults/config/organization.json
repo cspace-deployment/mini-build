@@ -1,0 +1,72 @@
+{
+    "pageBuilder": {
+        "options": {
+            "pageType": "organization",
+            "selectors": {
+                "recordEditor": ".csc-organizationAuthority-template"
+            },
+            "components": {
+                "recordEditor": {
+                    "type":  "cspace.recordEditor",
+                    "options": {
+                        "selectors": {
+                            "identificationNumber": ".csc-organizationAuthority-displayName" 
+                        },
+                        "strings": {
+                            "identificationNumberRequired": "Please specify a Display Name" 
+                        },
+                        "applier": "{pageBuilder}.applier",
+                        "uispec": "{pageBuilder}.options.uispec.recordEditor",
+                        "model": "{pageBuilder}.model"
+                    }
+                },
+                "titleBar": {
+                    "type": "cspace.titleBar",
+                    "options": {
+                        "fields": [
+                            "fields.displayName"
+                        ]
+                    }
+                },
+                "header": {
+                    "type": "cspace.header",
+                    "options": {
+                        "schema": "{pageBuilder}.schema",
+                        "permissions": "{pageBuilder}.permissions"
+                    }
+                },
+                "tabs": {
+                    "type": "cspace.tabs"
+                },
+                "sidebar": {
+                    "type": "cspace.sidebar"
+                }
+            }
+        }
+    },
+    "pageBuilderIO": {
+        "options": {
+            "recordType": "organization",
+            "schema": [
+                "recordlist",
+                "recordtypes",
+                "namespaces",
+                "organization"
+            ],
+            "pageSpec": {
+                "recordEditor": {
+                    "href": "%readonlypages/OrganizationTemplate.html",
+                    "templateSelector": ".csc-organizationAuthority-template",
+                    "targetSelector": ".csc-record-edit-container" 
+                }
+            },
+            "components": {
+                "dataContext": {
+                    "options": {
+                        "baseUrl": "../../../chain/vocabularies"
+                    }
+                }
+            }
+        }
+    }
+}
