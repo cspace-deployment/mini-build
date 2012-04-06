@@ -1,0 +1,63 @@
+{
+    "pageBuilder": {
+        "options": {
+            "pageType": "propagation",
+            "selectors": {
+                "recordEditor": ".csc-propagation-template"
+            },
+            "components": {
+                "recordEditor": {
+                    "type":  "cspace.recordEditor",
+                    "options": {
+                        "selectors": {
+                            "identificationNumber": ".csc-propagation-propType" 
+                        },
+                        "applier": "{pageBuilder}.applier",
+                        "uispec": "{pageBuilder}.options.uispec.recordEditor",
+                        "model": "{pageBuilder}.model"
+                    }
+                },
+                "titleBar": {
+                    "type": "cspace.titleBar",
+                    "options": {
+                        "fields": [
+                            "fields.currentLocation",
+                            "fields.locationDate" 
+                        ]
+                    }
+                },
+                "header": {
+                    "type": "cspace.header",
+                    "options": {
+                        "schema": "{pageBuilder}.schema",
+                        "permissions": "{pageBuilder}.permissions"
+                    }
+                },
+                "tabs": {
+                    "type": "cspace.tabs"
+                },
+                "sidebar": {
+                    "type": "cspace.sidebar"
+                }
+            }
+        }
+    },
+    "pageBuilderIO": {
+        "options": {
+            "recordType": "propagation",
+             "schema": [
+                "recordlist",
+                "recordtypes",
+                "namespaces",
+                "propagation"
+            ],
+            "pageSpec": {
+                "recordEditor": {
+                    "href": "pages/PropagationTemplate.html",
+                    "templateSelector": ".csc-propagation-template",
+                    "targetSelector": ".csc-record-edit-container" 
+                }
+            }
+        }
+    }
+}

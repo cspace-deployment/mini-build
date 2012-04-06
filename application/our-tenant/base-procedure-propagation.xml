@@ -1,0 +1,170 @@
+
+<record id="propagation" in-findedit="yes" type="record,procedure">
+    <services-url>propagations</services-url>
+    <web-url>propagation</web-url>
+    <tab-url>propagation-tab</tab-url>
+    <services-tenant-singular>Propagation</services-tenant-singular>
+    <services-list-path>abstract-common-list/list-item</services-list-path>
+    <services-record-path>propagations_common:http://collectionspace.org/services/propagation,propagations_common</services-record-path>
+    <services-record-path id="collectionspace_core">collectionspace_core:http://collectionspace.org/collectionspace_core/,collectionspace_core</services-record-path>
+    <hassoftdelete>true</hassoftdelete>
+    <structures>
+        <structure id="search">
+            <view>
+                <label-section id="messagekeys" show="true"></label-section>
+            </view>
+        </structure>
+        <structure id="screen">
+            <view>
+                <label-section id="messagekeys" show="true"></label-section>
+            </view>
+        </structure>
+        <structure id="tab">
+            <view>
+                <titlebar show="false"></titlebar>
+                <sidebar show="false"></sidebar>
+                <edit-section id="details" show="true"></edit-section>
+                <list-section id="list" show="false"></list-section>
+                <label-section id="messagekeys" show="true"></label-section>
+            </view>
+            <repeat id="list" asSibling="true">
+                <selector>recordList-row:</selector>
+                <field id="summary" ui-type="list">
+                    <selector>related-summary</selector>
+                </field>
+                <field id="number" ui-type="list">
+                    <selector>related-number</selector>
+                </field>
+            </repeat>
+        </structure>
+    </structures>
+	
+	<include src="domain-procedure-propagation.xml" />
+	
+    <row-selector>.csc-recordList-row:</row-selector>
+    <section>
+        <field id="tenantID" section="collectionspace_core" attributes="GET"></field>
+        <field id="createdAt" section="collectionspace_core" attributes="GET"></field>
+        <field id="createdBy" section="collectionspace_core" attributes="GET"></field>
+        <field id="updatedBy" ui-search="repeatable" section="collectionspace_core" attributes="GET"></field>
+        <field id="updatedAt" ui-search="range" ui-type="date" section="collectionspace_core" attributes="GET" mini="search,list,relate"></field>
+    </section>
+	
+	<section id="propagationInformation">
+		<field id="propId" mini="number,search,list,relate,terms"></field>
+		<field id="propDateGroup" ui-type="groupfield/structureddate" primarykey="propDateGroup.dateDisplayDate" ui-func="cspace.structuredDate">
+			<services-tag>propDateGroup</services-tag>
+			<selector>propagation-propDateGroup</selector>
+		</field>
+		<field id="propType" mini="summary,search,list,relate,terms">
+			<options>
+				<option id="" default="yes">Please select a value</option>
+				<option id="bareRoot">bare root</option>
+				<option id="bulb">bulb</option>
+				<option id="bulbScales">bulb scales</option>
+				<option id="bulblets">bulblets</option>
+				<option id="bulbs">bulbs</option>
+				<option id="corm">corm</option>
+				<option id="corms">corms</option>
+				<option id="cutting">cutting</option>
+				<option id="division">division</option>
+				<option id="grafted">grafted</option>
+				<option id="livingPlant">living plant</option>
+				<option id="rootedCuttings">rooted cuttings</option>
+				<option id="rootedPieces">rooted pieces</option>
+				<option id="seed">seed</option>
+				<option id="seedling">seedling</option>
+				<option id="seedlings">seedlings</option>
+				<option id="spores">spores</option>
+				<option id="tissueCulture">tissue culture</option>
+				<option id="transplant">transplant</option>
+				<option id="tuber">tuber</option>
+				<option id="unknown">unknown</option>
+			</options>
+		</field>
+		<field id="reasonForProp" ui-search="repeatable" in-title="yes" mini="search,list,relate,terms">
+			<title-selector>titleBar-reasonForProp</title-selector>
+		</field> <!--TEXTFIELD OR LIST? -->
+		<field id="numStarted"></field>
+		<field id="extraSeeds">
+			<options>
+				<option id="" default="yes">Please select a value</option>
+				<option id="yes">yes</option>
+				<option id="no">no</option>
+			</options> 
+		</field>
+		<field id="propComments"></field>
+        <field id="propagationReferenceNumber" ui-search="repeatable" chooser="yes" in-title="no" seperate_ui_container="true">
+			<!-- mini="number,search,list,relate,terms" -->
+            <options>
+                <option id="propagation" sample="MV2010.001">Propagation</option>
+            </options>
+        </field>
+
+		
+		<repeat id="activityGroupList/activityGroup">
+			<!-- <field id="activityDateGroup" ui-type="groupfield/structureddate" primarykey="activityDateGroup.dateDisplayDate" ui-func="cspace.structuredDate">
+				<services-tag>activityDateGroup</services-tag>
+				<selector>propagation-activityDateGroup</selector>
+			</field> -->
+            <field id="activityOrder"></field>
+            <field id="activityType">
+            	<options>
+					<option id="" default="yes">Please select a value</option>
+					<option id="appliedTreatment">applied treatment</option>
+					<option id="changedLocation">changed location</option>
+					<option id="changedMedium">changed medium</option>
+					<option id="changedPot">changed pot</option>
+					<option id="checkedPot">checked pot</option>
+					<option id="coldStrat">cold strat</option>
+					<option id="cuttingTaken">cutting taken</option>
+					<option id="dampedOff">damped off</option>
+					<option id="deaccessioned">deaccessioned</option>
+					<option id="dead">dead</option>
+					<option id="discarded">discarded</option>
+					<option id="distributed">distributed</option>
+					<option id="divided">divided</option>
+					<option id="moved">moved</option>
+					<option id="plantSale">plant sale</option>
+					<option id="plantedOut">planted out</option>
+					<option id="potted">potted</option>
+					<option id="pretreat">pretreat</option>
+					<option id="repotted">repotted</option>
+					<option id="results">results</option>
+					<option id="returnedToNursery">returned to nursery</option>
+					<option id="sow">sow</option>
+					<option id="started">started</option>
+					<option id="surplus">surplus</option>
+				</options>
+            </field>
+			<field id="medium"></field>
+			<field id="activityComments"></field>
+			<field id="activityPropaguleCount"></field>
+			<field id="successRate"></field>
+			<field id="potType"></field>
+			<field id="potSize"></field>
+			<field id="germinationDate" ui-type="date"></field>
+			<field id="activityDate" ui-type="date"></field>
+			<!-- <field id="activityDateGroup"></field> -->
+			
+			
+			<repeat id="treatmentGroupList/treatmentGroup">
+				<field id="treatmentOrder"></field>
+				<field id="treatmentComments"></field>
+				<field id="concentration"></field>
+				<field id="treatmentType"></field>
+				<field id="treatmentPropaguleCount"></field>
+				<field id="treatmentDate" ui-type="date"></field>
+				<!-- <field id="treatmentDateGroup" ui-type="groupfield/structureddate" primarykey="treatmentDateGroup.dateDisplayDate" ui-func="cspace.structuredDate">
+					<services-tag>treatmentDateGroup</services-tag>
+					<selector>propagation-treatmentDateGroup</selector>
+				</field> -->
+				<!-- <field id="treatmentDateGroup"></field> -->
+			</repeat>
+        </repeat>
+
+	</section>
+	
+</record>
+
+		

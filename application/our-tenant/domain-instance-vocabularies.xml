@@ -1,0 +1,53 @@
+<instances>
+	<instance id="vocab-annotationtype">
+		<web-url>annotationtype</web-url>
+		<title-ref>annotationtype</title-ref>
+		<title>Annotation Type</title>
+		<options>
+			<option id="anatomy">Anatomy</option>
+			<option id="annotationHistory">Annotation history</option>
+			<option id="associatedSpecies">Associated species</option>
+			<option id="bioticEnvironmentInactive">Biotic environment - inactive 7/93</option>
+			<option id="bioticInteractions">Biotic interactions</option>
+			<option id="color">Color</option>
+			<option id="commonName">Common name</option>
+			<option id="cytology">Cytology</option>
+			<option id="dataInPacket">Data in packet</option>
+			<option id="embryology">Embryology</option>
+			<option id="ethnobotany">Ethnobotany</option>
+			<option id="expedition">Expedition</option>
+			<option id="fruitRemoval">Fruit removal</option>
+			<option id="genbankCode">Genbank code</option>
+			<option id="habitat">Habitat</option>
+			<option id="horticulture">Horticulture</option>
+			<option id="illustration">Illustration</option>
+			<option id="imageMade">Image made</option>
+			<option id="insectDamage">Insect damage</option>
+			<option id="macromorphology">Macromorphology</option>
+			<option id="map">Map</option>
+			<option id="materialRemoved">Material removed</option>
+			<option id="micromorphology">Micromorphology</option>
+			<option id="nomenclature">Nomenclature</option>
+			<option id="none">None</option>
+			<option id="nucleicAcids">Nucleic acids</option>
+			<option id="numberCollision">Number collision</option>
+			<option id="odor">Odor</option>
+			<option id="other">Other</option>
+			<option id="otherLabelNumbers">Other label numbers</option>
+			<option id="phenology">Phenology</option>
+			<option id="photograph">Photograph</option>
+			<option id="physicalEnviroment">Physical enviroment</option>
+			<option id="physicalEnvironment">Physical environment</option>
+			<option id="physicalEnvironmentInactive">Physical environment - inactive 7/93</option>
+			<option id="populationBiology">Population biology</option>
+			<option id="publication">Publication</option>
+			<option id="referenceUsedForDetermination">Reference used for determination</option>
+			<option id="reproductiveBiology">Reproductive biology</option>
+			<option id="secondaryProductChemistry">Secondary product chemistry</option>
+			<option id="sem">SEM (Scanning Electron Micrograph)</option>
+			<option id="type">Type</option>
+			<option id="ucBotanicalGarden">U.C. Botanical Garden</option>
+			<option id="vegetationTypeMapProject">Vegetation Type Map Project</option>
+		</options>
+	</instance>
+</instances>

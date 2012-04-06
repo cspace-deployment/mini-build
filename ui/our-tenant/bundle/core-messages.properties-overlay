@@ -1,0 +1,172 @@
+# Added for botgarden tenant
+media-originalMediaOptions: height=%height,width=%width,scrollbars=%scrollbars
+
+# Schema extensions to Cataloging record
+collection-object-taxonLabel: Name
+collection-object-qualifierLabel: Qualifier
+collection-object-identByLabel: By
+collection-object-identDateLabel: Date
+collection-object-institutionLabel: Institution
+collection-object-identKindLabel: Kind
+
+# Inadvertently shares field name and label
+# with another entry below
+collection-object-referenceLabel: Reference
+collection-object-refPageLabel: Page
+collection-object-notesLabel: Notes
+
+#collection-object-identificationInformationLabel: Object Identification Information
+collection-object-fieldCollectionInformationLabel: Field Collection Information
+collection-object-fieldCollectionDateLabel: Field collection date
+collection-object-fieldLocVerbatimLabel: Field collection location verbatim
+collection-object-fieldCollectorLabel: Field collection collector
+collection-object-fieldLocLatDecimalLabel: Field location latitude
+collection-object-fieldLocLongDecimalLabel: Field location longitude
+collection-object-fieldCollectionNumberLabel: Field collection number
+collection-object-fieldLocGeodeticDatumLabel: Geodetic datum
+collection-object-fieldLocCoordinateSystemLabel: Coordinate system
+collection-object-fieldCollectionMethodLabel: Field collection method
+collection-object-fieldLocCountyLabel: Field location county
+collection-object-fieldLocCountryLabel: Field location country
+collection-object-fieldLocStateLabel: Field location state
+collection-object-fieldCollectionNoteLabel: Habitat information
+collection-object-fieldCollectionSourceLabel: Field collection source
+collection-object-fieldLocHigherGeographyLabel: Field location higher geography
+collection-object-fieldColEventNameLabel: Field collection event name
+collection-object-fieldLocDepthLabel: Depth
+collection-object-fieldLocElevationLabel: Elevation
+collection-object-fieldLocElevationLabel: Elevation
+collection-object-fieldAssociatedTaxaLabel: Associated taxa
+
+
+# From Type Specimen fieldgroup
+collection-object-typeSpecimenGroupLabel: Type Specimen
+collection-object-typeSpecimenKindLabel: Kind of Type
+collection-object-typeSpecimenReferenceLabel: Reference
+collection-object-typeSpecimenRefPageLabel: Page
+collection-object-typeSpecimenNotesLabel: Notes
+
+# Taxon record
+taxon: Taxon
+
+#Login
+login-current-info: 
+login-login: admin@botgarden.cspace.berkeley.edu
+login-rologin: reader@botgarden.cspace.berkeley.edu
+
+#Records:
+cataloging-number: Accession number
+
+#Create New Page:
+cataloging: Accession
+catalogingCategory: Accession Records
+movement: Plant Location
+location: Garden Location
+
+
+#media
+media-scientificTaxonomyLabel: Scientific name
+media-handwrittenLabel: Handwritten label
+media-postToPublicLabel: Post to public
+media-identificationNumberLabel: Accession number
+
+#movement
+movement-locationMovementInformationLabel: Plant Location and Movement
+movement-currentLocationLabel: Plant Location
+movement-currentLocationHeaderLabel: Current Plant Location
+movement-number: Location Date
+
+#location
+location-displayNameLabel: Garden Location Name
+
+#cataloging
+collection-object-objectNumberLabel: Accession Number
+collection-object-otherNumberLabel: Other Number
+collection-object-otherNumberGroupLabel: Other Number
+collection-object-taxonomicIdentGroupLabel: Determination History
+collection-object-labelHeaderLabel: Label Header
+collection-object-labelFooterLabel: Label Footer
+collection-object-numberOfObjectsLabel: Number of Sheets
+collection-object-handwrittenLabel: Handwritten label
+collection-object-postToPublicLabel: Post to public
+collection-object-botgardenDeadFlagLabel: Dead flag
+
+collection-object-elevationLabel: Elevation
+collection-object-elevationMinLabel: Minimum
+collection-object-elevationMaxLabel: Maximum
+collection-object-elevationUnitLabel: Unit
+collection-object-elevationQualifierLabel: Qualifier
+collection-object-elevationNoteLabel: Note
+
+collection-object-depthLabel: Depth
+collection-object-depthMinLabel: Minimum
+collection-object-depthMaxLabel: Maximum
+collection-object-depthUnitLabel: Unit
+collection-object-depthQualifierLabel: Qualifier
+collection-object-depthNoteLabel: Note
+
+collection-object-associatedTaxaGroupLabel: Associated Taxa
+collection-object-commonNameLabel: Common Name
+collection-object-interactionLabel: Interaction
+
+collection-object-annotationGroupLabel: Annotations
+collection-object-annotationTypeLabel: Type
+collection-object-annotationNoteLabel: Note
+collection-object-annotationDateLabel: Date
+collection-object-annotationAuthorLabel: Author
+
+propagation: Propagation
+propagation-number: Current Location
+
+#propagation
+propagation-propIdLabel: Propagation Id
+propagation-activityDateLabel: Activity Date
+propagation-treatmentDateLabel: Treatment Date
+propagation-extraSeedsLabel: Extra Seeds
+activityGroup-treatmentGroupLabel: Treatments
+propagation-propDateGroupLabel: Propagation Date
+propagation-activityDateGroupLabel: Activity Date
+propagation-treatmentDateGroupLabel: Treatment Date
+propagation-propagationNoteLabel: Note
+propagation-propagationReferenceNumberLabel: Reference Number
+propagation-locationPropagationInformationLabel: Propagation
+propagation-propagationInformationLabel: Propagation Information
+propagation-propTypeLabel: Propagation Type
+propagation-reasonForPropLabel: Reason for Propagation
+propagation-numStartedLabel: Number Started
+propagation-propCommentsLabel: Comments
+propagation-activityGroupLabel: Propagation Activities
+propagation-activityOrderLabel: Order
+propagation-activityTypeLabel: Type
+propagation-mediumLabel: Medium
+propagation-activityCommentsLabel: Comments
+propagation-activityPropaguleCountLabel: Propagule Count
+propagation-successRateLabel: Success Rate
+propagation-potTypeLabel: Pot Type
+propagation-potSizeLabel: Pot Size
+propagation-germinationDateLabel: Germination/Rooting Date
+propagation-treatmentOrderLabel: Order
+propagation-treatmentTypeLabel: Type
+propagation-treatmentCommentsLabel: Notes
+propagation-concentrationLabel: Concentration
+propagation-treatmentPropaguleCountLabel: Propagule Count
+
+propagation-currentLocationLabel: Current Location
+propagation-currentLocationMISSINGLabel: Current Location
+propagation-locationDateLabel: Location Date
+propagation-locationDateStartLabel: Earliest
+propagation-locationDateEndLabel: Latest
+propagation-plannedRemovalDateLabel: Planned removal date
+propagation-plannedRemovalDateStartLabel: Earliest
+propagation-plannedRemovalDateEndLabel: Latest
+propagation-removalDateLabel: Removal date
+propagation-removalDateStartLabel: Earliest
+propagation-removalDateEndLabel: Latest
+propagation-updatedAtLabel: 
+propagation-tenantIDLabel: 
+propagation-createdAtLabel: 
+propagation-updatedAtLabel: Modified Date
+propagation-updatedAtStartLabel: Earliest
+propagation-updatedAtEndLabel: Latest
+propagation-editNameLabel: Record Modified By
+propagation-identificationNumberRequired: Please specify a Reference Number
