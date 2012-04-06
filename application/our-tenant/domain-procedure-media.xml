@@ -1,0 +1,23 @@
+<root>
+	<services-record-path id="essig">media_essig:http://collectionspace.org/services/media/local/essig,media_essig</services-record-path>
+
+	<section id="mediaInformationExtensions">
+		<field id="handwritten" section="essig">
+			<options>
+				<option id="" default="yes">Please select a value</option>
+				<option id="yes">Yes</option>
+				<option id="no">No</option>
+				<option id="unknown">Unknown</option>
+			</options>
+		</field>
+		<field id="postToPublic" section="essig">
+			<options>
+				<option id="no" default="yes">No</option>
+				<option id="yes">Yes</option>
+			</options>
+		</field>
+		<field id="scientificTaxonomy" in-title="yes" mini="summary,search,list,relate" section="essig" autocomplete="taxon-taxon">
+			<title-selector>titleBar-media-scientificTaxonomy</title-selector>
+		</field>
+	</section>
+</root>
