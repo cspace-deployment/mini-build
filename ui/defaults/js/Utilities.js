@@ -140,6 +140,12 @@ fluid.registerNamespace("cspace.util");
         gradeNames: ["fluid.littleComponent"],
         vars: {
             tenant: "../../../tenant",
+            tenantname: {
+                expander: {
+                    type: "fluid.deferredInvokeCall",
+                    func: "cspace.util.extractTenant"
+                }
+            },
             chain: "../../../chain",
             webapp: "..",
             test: "../../../../test"
@@ -172,6 +178,31 @@ fluid.registerNamespace("cspace.util");
                 type: "fluid.deferredInvokeCall",
                 func: "cspace.util.urlBuilder",
                 args: urls
+            }
+        };
+    };
+    
+    cspace.util.lookupMessage = function (messageBase, key) {
+        return messageBase[key] || fluid.stringTemplate("[String for key: %key is missing. Please, add it to messageBundle.]", {key: key});
+    };
+    
+    cspace.util.stringBuilder = function (strings, options) {
+        var that = fluid.initLittleComponent("cspace.util.stringBuilder", options);
+        if (typeof strings === "string") {
+            return fluid.stringTemplate(strings, that.options.vars);
+        } 
+        fluid.each(strings, function (string, key) {
+            strings[key] = fluid.stringTemplate(string, that.options.vars);
+        });
+        return strings;
+    };
+    
+    cspace.componentStringBuilder = function (strings, options) {
+        return {
+            expander: {
+                type: "fluid.deferredInvokeCall",
+                func: "cspace.util.stringBuilder",
+                args: [strings, options]
             }
         };
     };
@@ -260,8 +291,11 @@ fluid.registerNamespace("cspace.util");
                 contentType: "application/json; charset=UTF-8",
                 dataType: "json",
                 success: function (data) {
-                    if (that.options.responseParser) {
-                        data = that.options.responseParser(data, directModel);
+                    var responseParser = that.options.responseParser;
+                    if (responseParser) {
+                        data = typeof responseParser === "string" ?
+                            fluid.invokeGlobalFunction(responseParser, [data, directModel]) :
+                            responseParser(data, directModel);
                     }
                     callback(data);
                 },
@@ -339,8 +373,7 @@ fluid.registerNamespace("cspace.util");
     
     cspace.util.getLoginURL = function (options) {
         var that = fluid.initLittleComponent("cspace.util.getLoginURL", options);
-        var url = that.options.urlRenderer(that.options.url);
-        return fluid.stringTemplate(url, {tenantname: cspace.util.extractTenant()});
+        return that.options.urlRenderer(that.options.url);
     };
     
     fluid.defaults("cspace.util.getLoginURL", {
@@ -363,7 +396,7 @@ fluid.registerNamespace("cspace.util");
     };
     
     fluid.defaults("cspace.util.getDefaultSchemaURL", {
-        url: "%chain/%recordType/uischema",
+        url: "%tenant/%tenantname/%recordType/uischema",
         urlRenderer: {
             expander: {
                 type: "fluid.deferredInvokeCall",
@@ -381,7 +414,7 @@ fluid.registerNamespace("cspace.util");
     };
     
     fluid.defaults("cspace.util.getUISpecURL", {
-        url: "%chain/%pageType/uispec",
+        url: "%tenant/%tenantname/%pageType/uispec",
         urlRenderer: {
             expander: {
                 type: "fluid.deferredInvokeCall",
@@ -1103,6 +1136,7 @@ fluid.registerNamespace("cspace.util");
         that.procedures = that.getRecordTypes("recordtypes.procedures");
         that.vocabularies = that.getRecordTypes("recordtypes.vocabularies");
         that.cataloging = that.getRecordTypes("recordtypes.cataloging");
+        that.administration = that.getRecordTypes("recordtypes.administration");
         that.nonVocabularies = that.cataloging.concat(that.procedures);
     };
     

@@ -47,12 +47,12 @@
     
     <target name="deploy-to-config"
         description="Copies tenant-specific application customizations to the deployment location"
-        depends="deploy-tenant-config, deploy-tenant-host-config">
+        depends="deploy-tenant-config-master, make-tenant-folder, deploy-tenant-host-config, deploy-tenant-config-files">
     </target>
     
     <!-- Copies and renames *-tenant.xml -->
-    <target name="deploy-tenant-config"
-        description="Copies tenant-specific application configuration settings to the deployment location"
+    <target name="deploy-tenant-config-master"
+        description="Copies the tenant-specific application configuration settings master file to the deployment location"
         if="${application.config.path.exists}"
         depends="update-config-with-tenant">
         <!-- Copy the placeholder tenant config, changing its name -->
@@ -64,42 +64,44 @@
             <globmapper from="${sample.tenant.name.short}-tenant.xml"
                 to="cspace-config-${our.tenant.name.short}.xml" />
         </copy>
-        <!-- Copy any other tenant config files in this directory as well, -->
-        <!-- applying a new filename prefix -->
-        <copy todir="${application.config.path}">
-            <fileset dir="${application.our.tenant}"
-                includes="**/*-tenant.xml"
-                excludes="**/${sample.tenant.name.short}-tenant.xml" />
-            <globmapper from="*-tenant.xml"
-                to="cspace-config-*.xml" />
-       </copy>
     </target>
-
-    <!-- Copies and renames *-local-settings.xml -->
+    
+    <!-- Makes a tenant folder -->
+    <target name="make-tenant-folder"
+        description="Makes a tenant folder in the deployment location"
+        if="${application.config.path.exists}">
+        <property name="tenant.config.path" value="${application.config.path}/tenants/${our.tenant.name.short}" />
+        <mkdir dir="${tenant.config.path}" />
+    </target>
+    
+    <!-- Copies *-settings.xml -->
     <target name="deploy-tenant-host-config"
         description="Copies tenant-specific, host-related application configuration settings (hosts, ports, URLs, etc. relevant to this tenant) to the deployment location"
         if="${application.config.path.exists}"
         depends="update-tenant-id, update-host-config-with-domain, update-host-config-with-tenant">
-        <copy todir="${application.config.path}">
+        <copy todir="${tenant.config.path}">
             <fileset dir="${application.our.tenant}" 
-                includes="${sample.tenant.name.short}-${application.local.settings.suffix}" />
-            <globmapper from="${sample.tenant.name.short}-${application.local.settings.suffix}"
-                to="${our.tenant.name.short}-${application.local.settings.suffix}" />
+                includes="**/*${application.settings.suffix}" />
         </copy>
-        <!-- Copy any other host-related configuration files in this directory as well, without renaming them during copying. -->
-        <copy todir="${application.config.path}">
-            <fileset dir="${application.our.tenant}" 
-                includes="**/*-${application.local.settings.suffix}" 
-                excludes="**/${sample.tenant.name.short}-${application.local.settings.suffix}" />
+    </target>
+    
+    <!-- Copy any other tenant config files to the config folder for this tenant -->
+    <target name="deploy-tenant-config-files"
+        description="Copies any other tenant-specific configuration files to the tenant folder in the deployment location"
+        if="${application.config.path.exists}">
+        <copy todir="${tenant.config.path}">
+            <fileset dir="${application.our.tenant}"
+                includes="**/*"
+                excludes="**/*-tenant.xml, **/${application.settings.suffix}" />
         </copy>
     </target>
 
-    <!-- Inserts customized tenant name in the 'include' reference to a local-settings.xml file in *-tenant.xml -->
+    <!-- Inserts customized tenant name in the 'tenantname' reference in *-tenant.xml -->
     <target name="update-config-with-tenant"
         description="Updates tenant-specific application configuration settings to reflect the customized tenant name">
         <replaceregexp
-            match="include src=(.*),settings.xml"
-            replace="include src=&quot;${our.tenant.name.short}-${application.local.settings.suffix},settings.xml">
+            match="&lt;cspace-config tenantname=&quot;(.*)&quot;"
+            replace="&lt;cspace-config tenantname=&quot;${our.tenant.name.short}&quot;">
             <fileset dir="${application.our.tenant}" includes="**/*-tenant.xml" />
         </replaceregexp>
     </target>
@@ -111,7 +113,7 @@
             match="&lt;tenant&gt;(.*)&lt;/tenant&gt;"
             replace="&lt;tenant&gt;${our.tenant.id}&lt;/tenant&gt;">
             <fileset dir="${application.our.tenant}" 
-                includes="**/${sample.tenant.name.short}-${application.local.settings.suffix}" />
+                includes="**/${application.local.settings.suffix}" />
         </replaceregexp>
    </target>
     
@@ -123,7 +125,7 @@
             replace="${our.tenant.domain}"
             flags="g">
             <fileset dir="${application.our.tenant}" 
-                includes="**/${sample.tenant.name.short}-${application.local.settings.suffix}" />
+                includes="**/${application.local.settings.suffix}" />
         </replaceregexp>
     </target>
 
@@ -135,7 +137,7 @@
             replace="${our.tenant.name.short}"
             flags="g">
             <fileset dir="${application.our.tenant}" 
-                includes="**/${sample.tenant.name.short}-${application.local.settings.suffix}" />
+                includes="**/${application.local.settings.suffix}" />
         </replaceregexp>
     </target>
     
