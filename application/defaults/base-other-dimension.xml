@@ -1,6 +1,7 @@
 
 
             <record id="dimension" in-recordlist="no">
+            	<include src="domain-other-dimension.xml" />
                 <hassoftdelete>true</hassoftdelete>
                 <section>
                     <field id="dimension">

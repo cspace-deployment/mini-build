@@ -1,0 +1,150 @@
+<record id="structureddate" in-recordlist="no" separate-record="false">
+	<!-- Commenting out, because there is no defaults/domain-other-structureddate.xml, which causes an exception. -->
+	<!-- <include src="domain-other-structureddate.xml" /> --> 
+    <section>
+        <field id="dateNote">
+            <selector>dateNote</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateAssociation">
+            <selector>dateAssociation</selector>
+            <preselector></preselector>
+        </field>
+        <field id="datePeriod">
+            <selector>datePeriod</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateDisplayDate">
+            <selector>dateDisplayDate</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateEarliestSingleYear" ui-type="validated" datatype="integer">
+            <selector>dateEarliestSingleYear</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateEarliestSingleMonth" ui-type="validated" datatype="integer">
+            <selector>dateEarliestSingleMonth</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateEarliestSingleDay" ui-type="validated" datatype="integer">
+            <selector>dateEarliestSingleDay</selector>
+            <preselector></preselector>
+        </field>
+    	<field id="dateEarliestSingleEra"> <!-- REMOVED autocomplete="vocab-dateera" ui-type="enum" -->
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+        	<options>
+        		<option id="ce" default="yes">AD/CE</option>
+        		<option id="bce">BC/BCE</option>
+        		<option id="bp">BP</option>
+        		<option id="none">&#160;</option>
+        	</options>
+			-->
+        	<selector>dateEarliestSingleEra</selector>
+            <preselector></preselector>
+        </field>
+    	<field id="dateEarliestSingleCertainty"> <!-- REMOVED autocomplete="vocab-dateCertainty" ui-type="enum" -->
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+        	<options>
+        		<option id="none" default="yes">&#160;</option>
+        		<option id="circa">circa</option>
+        		<option id="exactly">exactly</option>
+        		<option id="atLeast">at least</option>
+        		<option id="lessThan">less than</option>
+        	</options>
+			-->
+        	<selector>dateEarliestSingleCertainty</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateEarliestSingleQualifier">
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+            <options>
+            	<option id="none" default="yes">&#160;</option>
+            	<option id="plusMinus">±</option>
+                <option id="plus">+</option>
+                <option id="minus">-</option>
+            </options>
+			-->
+            <selector>dateEarliestSingleQualifier</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateEarliestSingleQualifierValue" ui-type="validated" datatype="integer">
+            <selector>dateEarliestSingleQualifierValue</selector>
+            <preselector></preselector>
+        </field>
+    	<field id="dateEarliestSingleQualifierUnit"> <!-- REMOVED autocomplete="vocab-datequalifier" ui-type="enum" -->
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+        	<options>
+        		<option id="years" default="yes">year(s)</option>
+        		<option id="month">month(s)</option>
+        		<option id="days">day(s)</option>
+        	</options>
+			-->
+        	<selector>dateEarliestSingleQualifierUnit</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateLatestYear" ui-type="validated" datatype="integer">
+            <selector>dateLatestYear</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateLatestMonth" ui-type="validated" datatype="integer">
+            <selector>dateLatestMonth</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateLatestDay" ui-type="validated" datatype="integer">
+            <selector>dateLatestDay</selector>
+            <preselector></preselector>
+        </field>
+    	<field id="dateLatestEra"> <!-- REMOVED autocomplete="vocab-dateera" ui-type="enum" -->
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+        	<options>
+        		<option id="ce" default="yes">AD/CE</option>
+        		<option id="bce">BC/BCE</option>
+        		<option id="bp">BP</option>
+        		<option id="none">&#160;</option>
+        	</options>
+			-->
+        	<selector>dateLatestEra</selector>
+            <preselector></preselector>
+        </field>
+    	<field id="dateLatestCertainty"> <!-- REMOVED autocomplete="vocab-dateCertainty" ui-type="enum" -->
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+        	<options>
+        		<option id="none" default="yes">&#160;</option>
+        		<option id="circa">circa</option>
+        		<option id="exactly">exactly</option>
+        		<option id="atLeast">at least</option>
+        		<option id="lessThan">less than</option>
+        	</options>
+			-->
+        	<selector>dateLatestCertainty</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateLatestQualifier">
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+        	<options>
+        		<option id="none" default="yes">&#160;</option>
+        		<option id="plusMinus">±</option>
+        		<option id="plus">+</option>
+        		<option id="minus">-</option>
+        	</options>
+			-->
+            <selector>dateLatestQualifier</selector>
+            <preselector></preselector>
+        </field>
+        <field id="dateLatestQualifierValue" ui-type="validated" datatype="integer">
+            <selector>dateLatestQualifierValue</selector>
+            <preselector></preselector>
+        </field>
+    	<field id="dateLatestQualifierUnit"> <!-- REMOVED autocomplete="vocab-datequalifier" ui-type="enum" -->
+			<!-- Options defined here have no effect! These are defined in StructuredDate.js.
+        	<options>
+        		<option id="years" default="yes">year(s)</option>
+        		<option id="month">month(s)</option>
+        		<option id="days">day(s)</option>
+        	</options>
+			-->
+        	<selector>dateLatestQualifierUnit</selector>
+            <preselector></preselector>
+        </field>
+    </section>
+</record>

@@ -10,6 +10,71 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
 CollectionSpace 1.8 default CSS selectors 
 */
 
+/* ---------------------------------------*/
+/* Styling of HTML elements specific to the LifeSci tenant */
+
+/* It may be appropriate to move these changes to a separate stylesheet. */
+
+/* Added selectors specific to Determination History repeating group (table) in Cataloging */
+/* to adjust width of table cells - rickj, 24may2011 */
+.determinationHistory .taxon {
+    width: 17% !important;}
+.determinationHistory .date-container {
+    width: 93px !important;}
+.determinationHistory .input-date {
+    width: 67px !important; padding:0;}
+.determinationHistory .input-select-shorter {
+    width: 90px !important;}
+.determinationHistory .input-select-longer {
+    width: 145px !important;}
+.input-numeric-tiny   {
+	width: 35px  !important;}
+/* ---------------------------------------*/
+
+/* ---------------------------------------*/
+/* Styling of HTML elements specific to the PAHMA tenant */
+
+/* It may be appropriate to move these changes to a separate stylesheet. */
+
+/* Added selectors to standardize widths of columns across groups */
+/*  MTB, 21 July 2011 */
+.pahmaCustomColumnWidth .fixedwidth90 {
+    width: 90% !important;}
+.pahmaCustomColumnWidth .fixedwidth80 {
+    width: 80% !important;}
+.pahmaCustomColumnWidth .fixedwidth40 {
+    width: 40% !important;} /* USED TO REGULARIZE COLUMNS IN OBJECT PRODUCTION INFO*/
+.pahmaCustomColumnWidth .fixedwidth30 {
+    width: 30% !important;} /* USED TO REGULARIZE COLUMNS IN OBJECT ASSOCIATIONS */
+.pahmaCustomColumnWidth .fixedwidth12 {
+    width: 12% !important;} /* USED ON COPY NUMBER AND EDITION NUMBER FIELDS */
+    
+.pahmaCustomColumnWidth .fixedfield90 {
+    width: 90% !important;}
+.pahmaCustomColumnWidth .fixedfield50 {
+    width: 50% !important;}
+.pahmaCustomColumnWidth .fixedfield25 {
+    width: 25% !important;}
+.pahmaCustomColumnWidth .fixedfield20 {
+    width: 20% !important;}
+/* I don't think this is necessary - Ray */
+/*.pahmaCustomColumnWidth .caldateall { /* Insert after label selector for calendar date in group */
+/*    width: 120px !important;} */
+.pahmaCustomColumnWidth .caldatefield { /* Insert after field selector for calendar date in group */
+    width: 101px !important;}
+.pahmaCustomColumnWidth td.fl-date-group.caldatefield { /* New for 1.12: Insert in the enclosing td of a calendar date field selector */
+	width: 119px !important;}
+/* I don't think this is necessary - Ray */
+/*.pahmaCustomColumnWidth .caldateallsm { /* Insert after label selector for calendar date in group */
+/*    width: 100px !important;}  */
+.pahmaCustomColumnWidth .caldatefieldsm { /* Insert after field selector for calendar date in group */
+    width: 81px !important;}
+.pahmaCustomColumnWidth td.fl-date-group.caldatefieldsm { /* New for 1.12: Insert in the enclosing td of a calendar date field selector */
+	width: 99px !important;}
+.pahmaTweaks .centered {
+    text-align:center;}
+/* ---------------------------------------*/
+
 /* core HTML elements*/
 html{
     font-size: 100%;} 
@@ -338,8 +403,11 @@ li .flc-pager-pageLink {
     height:auto !important;}
 #name-header-login {
     margin-top:30px;
-    background: #fff url("../images/header-logo.png") no-repeat left top;
-    width:270px; 
+    background-color: #fff;
+ 	background-image: url("../images/header-logo.png"), url("../images/header-logo-cspace.png");
+	background-repeat: no-repeat;
+	background-position: left top, right top;
+    width:100%;
     height:51px;
 }
 
@@ -562,10 +630,12 @@ table tbody.highlight tr:focus td {
 
 .info-column     {width: 100%;}
 .info-column1    {width: 100%;}
-.info-column2    {width:  49%;} 
+.info-column2    {width:  49%;}
+.info-column2-15 {width:  14%;}
 .info-column2-20 {width:  19%;}
 .info-column2-25 {width:  24%;}
 .info-column2-30 {width:  29%;}
+.info-column2-35 {width:  34%;}
 .info-column2-40 {width:  39%;}
 .info-column2-45 {width:  44%;}
 .info-column2-50 {width:  49%;}
@@ -576,6 +646,13 @@ table tbody.highlight tr:focus td {
 .info-column2-80 {width:  79%;}
 .info-column3    {width:  33%;}
 .info-column4    {width:  25%;}
+.info-column5 	 {width:  20%;}
+.info-column6 	 {width:  16.5%;}
+
+.topicframe      { /* Created by PAHMA to draw a frame around Associated Event fields */
+	padding:2px;
+	border:2px solid gray;
+	margin:0px;}
 
 .fl-container-1024   {min-width: 990px; /* a little smaller to account for vertical scrolling */}
 .fl-container-900     {width:  900px;}
@@ -670,10 +747,17 @@ table tbody.highlight tr:focus td {
     width:100%; 
     /*float:left; */
     border:none;}
+/* ########################################################### */
+/* THE FOLLOWING ADDED BY MICHAEL BLACK FOR STYLING INDEX.HTML */
+.login-list {
+	margin:1em 2em;}
+.login-list li {
+	list-style-type:circle;}
+/* ########################################################### */
 .info-pair .content.fl-date-group {
 	width: 162px;}
 td.fl-date-group {
-	width:160px;}
+	width:160px;}	
 .info-pair-date .content {
     width:auto;}
 .info-pair .content > select {
@@ -1096,6 +1180,10 @@ table.cs-admin-table td.checkbox {
     width:100%; 
     height:75px; 
     overflow:auto;}
+.content textarea-small { 
+	width:100%; 
+	height:40px; 
+	overflow:auto;}
 .input-alpha-login {
     width: 120px; 
     height:18px;}
@@ -1270,6 +1358,24 @@ input[disabled]:hover, input[disabled]:hover    {
     font-weight:bold;}
 
 .required {color:red;}
+
+.pahma-note {
+	color:#606060;
+	font-style:italic;
+	font-weight:normal;
+	font-size:x-small;}
+
+.pahma-fix {
+	color:#700000;
+	font-style:italic;
+	font-weight:normal;
+	font-size:x-small;}
+
+.pahma-change {
+	color:#6600cc;
+	font-style:italic;
+	font-weight:normal;
+	font-size:x-small;}
 
 /* id/class selector combinations to activate proper header tabs*/
 .record .header-menu-row .findedit a,
@@ -1479,7 +1585,7 @@ a.cs-searchBox-advancedSearch {
     height:inherit; 
     padding:5px 0 5px 20px; 
     width:auto;}
-.cs-togglable-expanded {
+.cs-togglable-expanded, .cs-togglable-header {
     background:transparent url('../images/toggle-less.png') no-repeat 4px 6px;}
 .cs-togglable-collapsed {
     background:transparent url('../images/toggle-more.png') no-repeat 4px 6px;	}
@@ -1978,3 +2084,15 @@ input[type=button].cs-mediaUploader-removeMedia:focus {
     background-color: #E8E8E8;
 }
 
+/* styling for scrollableTabs plugin */
+#stTabswrapper {
+	width:100% !important;}
+/*.stTabsInnerWrapper {
+	width:100% !important;
+	overflow-x:hidden;}
+.ui-tabs-nav {
+	overflow:visible !important;
+	height:auto !important;}*/
+.stNav {border:2px solid #6F9ECD; background-color:#fff; cursor:pointer; z-index:30; position:absolute; top:6px; height:15px;}
+.stPrev { -moz-border-radius: 6px 0 0 0;	-webkit-border-radius: 6px 0 0 0;}
+.stNext { -moz-border-radius: 0 6px 0 0;	-webkit-border-radius: 0 6px 0 0;}

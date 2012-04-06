@@ -1,4 +1,4 @@
-<cspace-config tenantname="core" >
+<cspace-config tenantname="pahma" >
 	
     <version>11</version>
     <include src="local-settings.xml,settings.xml" strip-root="yes"/>
@@ -8,7 +8,7 @@
     <include src="base-schemas.xml" />
 
         <records >
-            <enum-blank>Please select a value</enum-blank>
+            <enum-blank>(none selected)</enum-blank>
 			
     		<include src="base-collectionobject.xml" />
 			
@@ -26,8 +26,7 @@
     		<include src="base-authority-location.xml"/>
     		<include src="base-authority-organization.xml"/>
     		<include src="base-authority-person.xml"/>
-                <!-- Commented out to disable Taxon for the 'core' tenant per CSPACE-4466 -->
-    		<!-- include src="base-authority-taxon.xml"/ -->
+    		<include src="base-authority-taxon.xml"/>
 			
     		<include src="base-vocabularies.xml"/>
 			

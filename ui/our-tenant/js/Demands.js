@@ -94,6 +94,7 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
             funcName: "cspace.recordList.selectNavigateVocab",
             args: ["{recordList}.model", "{recordList}.options", "{recordList}.options.urls.navigateLocal", "{permissionsResolver}", "{recordList}.dom"]
         });
+        
         // Report Producer
         fluid.demands("cspace.reportProducer.reportTypesSource", ["cspace.reportProducer", "cspace.localData"], {
             funcName: "cspace.reportProducer.testReportTypesSource",
@@ -1173,6 +1174,9 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
         }); 
         fluid.demands("movement", "cspace.myCollectionSpace", {
             container: "{myCollectionSpace}.dom.movement"
+        });
+        fluid.demands("nagpraclaim", "cspace.myCollectionSpace", {
+            container: "{myCollectionSpace}.dom.nagpraclaim"
         });
         fluid.demands("objectexit", "cspace.myCollectionSpace", {
             container: "{myCollectionSpace}.dom.objectexit"

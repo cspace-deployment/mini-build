@@ -1,6 +1,7 @@
 
 
             <record id="structureddate" in-recordlist="no" separate-record="false">
+            	<include src="domain-other-structureddate.xml" />
                 <section>
                     <field id="dateNote">
                         <selector>dateNote</selector>
