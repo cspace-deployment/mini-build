@@ -1,0 +1,676 @@
+<div class="csc-intake-template csc-listEditor-details">
+    <div class="csc-intake">
+        <!--Cataloging specific sub-menu-->
+        <div id="secondary-nav">
+            <div id="secondary-nav-menu-sub">
+                <div class="button-row">
+                    <input type="button" class="csc-save saveButton primary" />
+                    <input type="button" class="csc-delete deleteButton primary" />
+                    <input type="button" class="csc-cancel cancelButton" />
+                    <a style="display:none;" class="csc-goto gotoButton"></a>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-stamp"> </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+
+        <!-- outer-border block -->
+        <div class="intake-outer-border" id="intake-record">
+            <!-- Each section of Intake is broken down into information-blocks.
+                                          This corresponds to Information groups within Spectrum's Object Entry prodedure. -->
+            <div class="fl-container-flex fl-fix information-group">
+                <div class="info-column">
+                    <div class="csc-recordEditor-header fl-container-flex header toggle csc-intake-objectEntryInformation-label"></div> 
+                    <div class="csc-recordEditor-togglable fl-container-flex fl-fix content main">
+
+                        <!--Leslie Experimenting with Rows-->
+                        <!-- Line #1 -->
+                        <div class="info-column"> <!-- Order number, Order type, Order status, Order date, Date needed, Requestor, Image source, Order items, Number of assessions, Order note-->
+                            <div class="info-column2-50 fl-force-left">
+                                <div class="info-pair">
+                                    <div class="header">
+                                        <span class="label csc-intake-entryNumber-label"/> <!--Order number-->
+                                        <span class="required">*</span>
+                                    </div>
+                                    <div class="content csc-intake-entry-number-container"> 
+                                        <input type="text"
+                                            class="input-alpha csc-intake-entry-number pattern-chooser-input"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="info-column2-50 fl-force-right">
+                                <div class="info-column2-50 fl-force-left">
+                                    <div class="info-pair-select">
+                                        <div class="header">
+                                            <div class="label csc-intake-entryReason-label"/> <!-- Object type -->
+                                        </div>
+                                        <div class="content">
+                                            <table>
+                                                <tbody>
+                                                  <tr class="csc-intake-entry-reason-row">
+                                                  <td class="table-unselected"/>
+                                                  <td>
+                                                  <select
+                                                  class="csc-intake-entry-reason input-select">
+                                                  <option value="">Options not loaded</option>
+                                                  </select>
+                                                  </td>
+                                                  </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="info-column2-50 fl-force-right">
+                                    <div class="info-pair-select">
+                                        <div class="header">
+                                            <div class="label csc-intake-orderStatus-label"><!--Order status--></div>
+                                        </div>
+                                        <div class="content">
+                                            <select class="input-select csc-intake-order-status">
+                                                <option value="">Options not loaded</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+                        <!--Line #2-->
+                        <div class="info-column fl-force-left">
+                            <div class="info-column2-50 fl-force-left">
+                                <div class="info-column2-45 fl-force-left">
+                                    <div class="info-pair">
+                                        <div class="header">
+                                            <div class="label csc-intake-entryDate-label"/> <!--Order date-->
+                                        </div>
+                                        <div class="content">
+                                            <input type="text" class="csc-intake-entry-date"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="info-column2-45 fl-force-right">
+                                    <div class="info-pair">
+                                        <div class="header">
+                                            <div class="label csc-intake-returnDate-label"></div> <!--Date needed-->
+                                        </div>
+                                        <div class="content">
+                                            <input type="text" class="csc-intake-returnDate"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-column2-50 fl-force-right">
+                                <div class="info-pair">
+                                    <div class="header">
+                                        <div class="label csc-intake-depositor-label"/> <!--Requestor-->
+                                    </div>
+                                    <div class="content">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <td class="csc-intake-depositor-label"></td> <!--Requestor subtitle-->
+                                                    <td class="csc-intake-depositorsRequirements-label"></td> <!-- Requestor requirements subtitle-->
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                      <input type="text"
+                                                      class="input-autocomplete csc-intake-depositor"/>
+                                                    </td>
+                                                    <td>
+                                                      <input type="text"
+                                                      class="input-alpha-table csc-intake-depositor-requirements"
+                                                      />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+
+                        <!--Line #3-->
+                        <div class="info-column">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label csc-intake-imageSource-label"/> <!-- Image source -->
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-image-source"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+                        <!--Line #4-->
+                        <div class="info-column fl-force-left">
+                            <div class="info-column2-70 fl-force-left">
+                                <!-- cloning and modifying Determination History repeatable group from UCJEPS_branch CatalogingTemplate.html -->
+                                <div class="info-pair">
+                                    <div class="header">
+                                        <div class="label csc-intake-orderItemsGroup-label"/>
+                                        <!--
+                                                            <div class="addrow">
+                                                            <img src="../images/btnAddRow.png" alt="add a row" title="click to add an additional row" height=13 width=31 />
+                                                            </div>
+                                                        -->
+                                        <div class="clear"/>
+                                    </div>
+                                    <div class="content">
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <td class="csc-intake-source-label"></td>
+                                                    <td class="csc-intake-sourceDetail-label"></td>
+                                                    <td class="csc-intake-itemType-label"></td>
+                                                    <td class="csc-intake-specialInstructions-label"></td>
+                                                </tr>
+                                            </thead>
+
+                                            <!-- The following selectors are not yet defined in default.xml; fields not defined in services yet, either. -->
+
+                                            <tbody>
+                                                <tr class="csc-intake-orderItemsGroup orderItems">
+                                                    <td class="flc-inlineEdit-text">
+                                                      <!-- can add distinguishing css selectors if necessary for controlling cell width -->
+                                                      <input type="text"
+                                                      class="csc-intake-orderItems-source editableText"
+                                                      />
+                                                    </td>
+                                                    <td class="flc-inlineEdit-text">
+                                                      <input type="text"
+                                                      class="csc-intake-orderItems-source-detail"/>
+                                                    </td>
+                                                    <td>
+                                                      <select
+                                                      class="csc-intake-orderItems-item-type input-select-shorter">
+                                                      <option value="">Options not loaded</option>
+                                                      </select>
+
+                                                    </td>
+                                                    <td class="flc-inlineEdit-text">
+                                                      <input type="text"
+                                                      class="csc-intake-orderItems-special-instructions"
+                                                      />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="info-column2-25 fl-force-right">
+                                <div class="info-pair">
+                                    <div class="header">
+                                        <div class="label csc-intake-numberAccessions-label"/> <!-- Number of accessions -->
+                                    </div>
+                                    <div class="content">
+                                        <input type="text" class="csc-intake-number-accessions"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+                        <!--Line #5-->
+                        <div class="info-column fl-force-left">
+                            <div class="info-column fl-force-left">
+                                <div class="info-pair">
+                                    <div class="header">
+                                        <div class="label csc-intake-entryNote-label"/> <!-- Order note -->
+                                    </div>
+                                    <div class="content">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <!--<td class="table-unselected"></td>-->
+                                                    <td>
+                                                      <textarea rows="4" cols="30"
+                                                      class="input-textarea csc-intake-entry-note"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+                    </div>
+                    <!--<div class="clear"/>-->
+                </div>
+            </div>
+            
+            <!--Leslie's Collapsing Info Groups-->
+            
+            <div class="fl-container-flex fl-fix information-group">
+                <div class="info-column">
+                    <div class="csc-recordEditor-header fl-container-flex header toggle csc-intake-objectCollectionInformation-label cs-togglable-collapsed" tabindex="0"></div> <!--Object Collection Information-->
+                    <div class="csc-recordEditor-togglable fl-container-flex fl-fix content main" style="display:none;">
+                        
+                        <!-- Left-side column -->
+                        <div class="info-column2-50 fl-force-left">
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label csc-intake-fieldCollectionDate-label"></div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-fieldCollectionDate"/>
+                                </div>
+                            </div>
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Field collection method</div>
+                                </div>
+                                <div class="content">
+                                    <select class="input-select csc-intake-fieldCollectionMethod">
+                                        <option value="">Options not loaded</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Field collection note</div>
+                                </div>
+                                <div class="content">
+                                    <textarea rows="4" cols="30"
+                                        class="input-textarea csc-intake-fieldCollectionNote"/>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Field collection number</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text"
+                                        class="input-alpha csc-intake-fieldCollectionNumber"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Left-side column -->
+                        <div class="info-column2-50 fl-force-right">
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Field collection place</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text"
+                                        class="input-alpha csc-intake-fieldCollectionPlace"/>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Field collection source</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-fieldCollectionSource"/>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Field collector</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-fieldCollector"/>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Field collection event name</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text"
+                                        class="input-alpha csc-intake-field-collection-event-name"/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="clear"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="fl-container-flex fl-fix information-group">
+                <div class="info-column">
+                    <div class="csc-recordEditor-header fl-container-flex header toggle csc-intake-valuationInformation-label cs-togglable-collapsed" tabindex="0"></div> <!--Valuation-->
+                    <div class="csc-recordEditor-togglable fl-container-flex fl-fix content main" style="display:none;">
+                        <!-- Left-side column -->
+                        <div class="info-column2-50 fl-force-left">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Valuer</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="input-autocomplete csc-intake-valuer"
+                                        name="intake-valuer"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-column2-50 fl-force-right">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Reference Number</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <!--<td class="table-unselected"></td>-->
+                                                <td>
+                                                  <input type="text"
+                                                  class="input-alpha csc-intake-valuation-reference-number"
+                                                  />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fl-container-flex fl-fix information-group">
+                <div class="info-column">
+                    <div class="csc-recordEditor-header fl-container-flex header toggle csc-intake-insuranceInformation-label cs-togglable-collapsed" tabindex="0"></div> <!--Insurace-->
+                    <div class="csc-recordEditor-togglable cs-togglable-collapsed fl-container-flex fl-fix content main" style="display:none;">
+
+                        <!-- Left-side column -->
+                        <div class="info-column2-50 fl-force-left">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Insurer</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-insurer"/>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Policy Number</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <!--<td class="table-unselected"></td>-->
+                                                <td>
+                                                  <input type="text"
+                                                  class="input-alpha csc-intake-insurance-policy-number"
+                                                  />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label csc-intake-insuranceRenewalDate-label"/>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-insuranceRenewalDate"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Right-side column -->
+                        <div class="info-column2-50 fl-force-right">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Reference Number</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <!--<td class="table-unselected"></td>-->
+                                                <td>
+                                                  <input type="text"
+                                                  class="input-alpha csc-intake-insurance-reference-number"
+                                                  />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Insurance Note</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <!--<td class="table-unselected"></td>-->
+                                                <td>
+                                                  <textarea rows="4" cols="30"
+                                                  class="input-textarea csc-intake-insurance-note"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"/>
+
+            <div class="fl-container-flex fl-fix information-group">
+                <div class="info-column">
+                    <div class="csc-recordEditor-header fl-container-flex header toggle csc-intake-locationInformation-label cs-togglable-collapsed" tabindex="0"></div> <!--Location-->
+                    <div class="csc-recordEditor-togglable cs-togglable-collapsed fl-container-flex fl-fix content main" style="display:none;">
+                        <!-- Left-side column -->
+                        <div class="info-column fl-force-left">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Current Location</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <td>Current Location</td>
+                                                <td>Current Location Fitness</td>
+                                                <td>Current Location Note</td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr class="csc-intake-currentLocationGroup">
+                                                <td>
+                                                  <input type="text"
+                                                  class="input-alpha-table csc-intake-current-location"
+                                                  />
+                                                </td>
+                                                <td>
+                                                  <select
+                                                  class="input-select csc-intake-current-location-fitness">
+                                                  <option value="">Options not loaded</option>
+                                                  </select>
+                                                </td>
+                                                <td>
+                                                  <input type="text"
+                                                  class="input-alpha-table csc-intake-current-location-note"
+                                                  />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clear"/>
+
+                        <!-- Left-side column -->
+                        <div class="info-column2-50 fl-force-left">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label csc-intake-locationDate-label"></div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-locationDate"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-column2-50 fl-force-right">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Normal Location</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <!--<td class="table-unselected"></td>-->
+                                                <td>
+                                                  <input type="text"
+                                                  class="input-alpha csc-intake-normal-location"/>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clear"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="fl-container-flex fl-fix information-group">
+                <div class="info-column">
+                    <div class="csc-recordEditor-header fl-container-flex header toggle csc-intake-conditionInformation-label cs-togglable-collapsed" tabindex="0"></div> <!--Location-->
+                    <div class="csc-recordEditor-togglable cs-togglable-collapsed fl-container-flex fl-fix content main" style="display:none;">
+                        <!-- Left-side column -->
+                        <div class="info-column2-50 fl-force-left">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Condition Check Method</div>
+                                </div>
+                                <div class="content">
+                                    <select class="input-select csc-intake-conditionCheckMethod">
+                                        <option value="">Options not loaded</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Condition Check Reason</div>
+                                </div>
+                                <div class="content">
+                                    <select class="input-select csc-intake-conditionCheckReason">
+                                        <option value="">Options not loaded</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Condition Check Assessor</div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-conditionCheckerOrAssessor"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-column2-50 fl-force-right">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label csc-intake-conditionCheckDate-label"></div>
+                                </div>
+                                <div class="content">
+                                    <input type="text" class="csc-intake-condition-check-date"/>
+                                </div>
+                            </div>
+
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Condition Check Reference Number</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <!--<td class="table-unselected"></td>-->
+                                                <td>
+                                                  <input type="text"
+                                                  class="input-alpha csc-intake-condition-check-reference-number"
+                                                  />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="clear"/>
+
+                        <div class="info-column fl-force-left">
+                            <div class="info-pair">
+                                <div class="header">
+                                    <div class="label">Condition Check Note</div>
+                                </div>
+                                <div class="content">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <!--<td class="table-unselected"></td>-->
+                                                <td>
+                                                  <textarea rows="4" cols="30"
+                                                  class="input-textarea csc-intake-condition-check-note"
+                                                  />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="clear"/>
+
+        </div>
+        <!-- end outer border-->
+
+        <!-- Button container -->
+        <div class="fl-container-flex button-row">
+            <input type="button" class="csc-save saveButton primary"/>
+            <input type="button" class="csc-delete deleteButton primary"/>
+            <input type="button" class="csc-cancel cancelButton"/>
+            <div class="clear"/>
+        </div>
+    </div>
+</div>

@@ -862,19 +862,12 @@ fluid.registerNamespace("cspace.util");
         that.container[that.container[0] === document.body ? "append" : "after"](that.indicator);
         
         that.container.resize(that.update);
-        var body = document.body;
-        var domSubtreeModifiedListner = function (event) {
+        document.body.addEventListener("DOMSubtreeModified", function (event) {
             if ($(event.target).hasClass(that.options.styles.loading)) {
                 return;
             }
             that.update();
-        };
-        if (body.addEventListener) {
-            body.addEventListener("DOMSubtreeModified", domSubtreeModifiedListner, false);
-        }
-        else if (body.attachEvent) {
-            body.attachEvent("onDOMSubtreeModified", domSubtreeModifiedListner);
-        }
+        }, false);
     };
     
     cspace.util.loadingIndicator.preInitFunction = function (that) {

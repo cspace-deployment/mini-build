@@ -31,14 +31,4 @@
         <ant antfile="services/build.xml" target="deploy" inheritAll="false"/>
     </target>
 
-    <target name="reload"
-            depends="reload-application"
-            description="Reload per-tenant customizations on the running CollectionSpace server.">
-    </target>
-
-    <target name="reload-application"
-            description="Reload application per-tenant customizations on the running CollectionSpace server.">
-        <ant antfile="application/build.xml" target="reload" inheritAll="false"/>
-    </target>
-
 </project>

@@ -1,7 +1,7 @@
 <!--  XXX autocomplete needs renaming to something like authority -->
 <collection-space>
     <version>10</version>
-    <include src="local-settings.xml,settings.xml" strip-root="yes"/>
+    <include src="havrc-local-settings.xml,settings.xml" strip-root="yes"/>
     <spec>
         <relationships>
             <relation id="broaderContext">
@@ -49,13 +49,14 @@
         <records >
             <enum-blank>Please select a value</enum-blank>
 			
-			
             <record id="collection-object" in-findedit="yes">
                 <services-url>collectionobjects</services-url>
                 <services-tenant-singular>CollectionObject</services-tenant-singular>
                 <services-list-path>collectionobjects-common-list/collection-object-list-item</services-list-path>
                 <services-record-path id="common">collectionobjects_common:http://collectionspace.org/services/collectionobject,collectionobjects_common</services-record-path>
                 <services-record-path id="collectionspace_core">collectionspace_core:http://collectionspace.org/collectionspace_core/,collectionspace_core</services-record-path>
+                <services-record-path id="naturalhistory">collectionobjects_naturalhistory:http://collectionspace.org/services/collectionobject/domain/naturalhistory,collectionobjects_naturalhistory</services-record-path>
+                <services-record-path id="havrc">collectionobjects_havrc:http://collectionspace.org/services/collectionobject/local/havrc,collectionobjects_havrc</services-record-path>
                 <web-url>cataloging</web-url>
                 <tab-url>cataloging-tab</tab-url>
                 <number-selector>.csc-entry-number</number-selector>
@@ -121,9 +122,11 @@
                             <selector>object-identification-other-number-type</selector>
                             <options>
                                 <option id="">Please select a value</option>
+                                <option id="formerRepository">Former repository</option>
                                 <option id="lender">Lender</option>
                                 <option id="obsolete">Obsolete</option>
                                 <option id="previous">Previous</option>
+                                <option id="repository">Repository</option>
                                 <option id="serial">Serial</option>
                                 <option id="unknown">Unknown</option>
                             </options>
@@ -148,6 +151,9 @@
                             </options>
                         </field>
                     </repeat>
+                    <field id="repository" section="havrc">
+                        <selector>object-identification-repository</selector>
+                    </field>
                     <field id="collection" seperate_ui_container="true">
                         <selector>object-identification-collection</selector>
                         <options>
@@ -162,7 +168,7 @@
                         <selector>object-identification-record-status</selector>
                         <options>
                             <option id="approved">Approved</option>
-                            <option id="in-process">In process</option>
+                            <option id="in-process">In progress</option>
                             <option id="new" default="yes">New</option>
                             <option id="temporary">Temporary</option>
                         </options>
@@ -991,10 +997,6 @@
                         <selector>date-information-date-period</selector>
                     </field>
                     <!--  natural history -->
-                    <!--  ID's probably can't use -'s , :( XXX -->
-                    <field id="nhString" section="naturalhistory">
-                        <services-tag>nh-string</services-tag>
-                    </field>
                 </section>
             </record>
 
@@ -1120,6 +1122,7 @@
                 <services-tenant-singular>Intake</services-tenant-singular>
                 <services-list-path>intakes-common-list/intake-list-item</services-list-path>
                 <services-record-path>intakes_common:http://collectionspace.org/services/intake,intakes_common</services-record-path>
+                <services-record-path id="havrc">intakes_havrc:http://collectionspace.org/services/intake/local/havrc,intakes_havrc</services-record-path>
                 <services-record-path id="collectionspace_core">collectionspace_core:http://collectionspace.org/collectionspace_core/,collectionspace_core</services-record-path>
                 <hassoftdelete>true</hassoftdelete>
                 <structures>
@@ -1169,19 +1172,39 @@
                     <field id="entryReason" seperate_ui_container="true">
                         <selector>intake-entry-reason</selector>
                         <options>
-                            <option id="" default="yes">Please select a value</option>
-                            <option id="enquiry">Enquiry</option>
-                            <option id="consideration">Consideration</option>
-                            <option id="commission">Commission</option>
-                            <option id="loan">Loan</option>
+                            <option id="" default="yes">Value not selected</option>
+                            <option id="collection">Collection</option>
+                            <option id="personal">Personal</option>
+                            <option id="collectionpersonal">Collection + Personal</option>
                         </options>
                     </field>
+
+                    <field id="imageSource" section="havrc">
+                      <selector>intake-image-source</selector>
+                    </field>
+
+                    <field id="orderStatus" section="havrc">
+                      <selector>intake-order-status</selector>
+                      <options>
+                        <option id="" default="yes">Value not selected</option>
+                        <option id="new">New</option>
+                        <option id="readyforphotographing">Ready for photographing</option>
+                        <option id="photographed">Photographed</option>
+                        <option id="cataloged">Cataloged</option>
+                        <option id="completed">Completed</option>
+                      </options>
+                    </field>
+
+                    <field id="numberAccessions" section="havrc">
+                      <selector>intake-number-accessions</selector>
+                    </field>
+
                     <repeat id="entryMethods">
                         <selector>intake-entryMethod</selector>
                         <field id="entryMethod" autocomplete="vocab-entrymethod" ui-type="enum"></field>
                     </repeat>
                     <field id="returnDate" ui-type="date">
-                        <container-selector>intake-returnDate-container</container-selector>
+                        <!--<container-selector>intake-returnDate-container</container-selector>-->
                     </field>
                     <field id="currentOwner" in-title="yes" mini="summary,search,list,relate" autocomplete="person-person,organization-organization">
                         <selector>intake-current-owner</selector>
@@ -1198,10 +1221,28 @@
                     <field id="packingNote">
                         <selector>intake-packing-note</selector>
                     </field>
+                    <repeat id="orderItemsGroupList/orderItemsGroup" section="havrc">
+                      <field id="source" section="havrc">
+                        <selector>intake-orderItems-source</selector>
+                      </field>
+                      <field id="sourceDetail" section="havrc">
+                        <selector>intake-orderItems-source-detail</selector>
+                      </field>
+                      <field id="itemType" section="havrc" seperate_ui_container="true"><!--Equivalent to Order Type for each item in order -->
+                        <selector>intake-orderItems-item-type</selector>
+                            <options>
+                                <option id="" default="yes">Value not selected</option>
+                                <option id="collection">Collection</option>
+                                <option id="personal">Personal</option>
+                            </options>
+                      </field>
+                      <field id="specialInstructions" section="havrc">
+                        <selector>intake-orderItems-special-instructions</selector>
+                      </field>
+                    </repeat>
                 </section>
                 <section id="objectCollectionInformation">
                     <field id="fieldCollectionDate" ui-type="date">
-                        <container-selector>intake-fieldCollectionDate-container</container-selector>
                     </field>
                     <repeat id="fieldCollectionMethods">
                         <field id="fieldCollectionMethod" autocomplete="vocab-collectionmethod" ui-type="enum"></field>
@@ -1236,7 +1277,6 @@
                         <selector>intake-insurance-policy-number</selector>
                     </field>
                     <field id="insuranceRenewalDate" ui-type="date">
-                        <selector>intake-insurance-renewal-date</selector>
                     </field>
                     <field id="insuranceReferenceNumber">
                         <selector>intake-insurance-reference-number</selector>
@@ -1259,7 +1299,6 @@
                         </field>
                     </repeat>
                     <field id="locationDate" ui-type="date">
-                        <selector>intake-location-date</selector>
                     </field>
                     <!--  <field id="normalLocation" autocomplete="location-location, place-place"> -->
                     <field id="normalLocation">
@@ -1740,7 +1779,6 @@
                 <services-record-path id="collectionspace_core">collectionspace_core:http://collectionspace.org/collectionspace_core/,collectionspace_core</services-record-path>
                 <services-url>locationauthorities</services-url>
                 <authority-vocab-type>LocationAuthority</authority-vocab-type>
-                <authorization-view>false</authorization-view>
                 <urn-syntax>urn:cspace:org.collectionspace.demo:locationauthority:{vocab}:location:{entry}'{display}'</urn-syntax>
                 <hassoftdelete>true</hassoftdelete>
                 <structures>
@@ -1795,14 +1833,16 @@
                 </section>
             </record>
 
-            <record id="taxon"  type="authority,compute-displayname" in-recordlist="no" in-findedit="no">
+            <record id="taxon"  type="authority,compute-displayname" in-recordlist="yes" in-findedit="yes">
                 <!-- No terms-used yet as the only authority autocomplete field currently present in this record type -->
                 <!-- is within a nested complexType and can't be retrieved -->
                 <terms-used>false</terms-used>
                 <web-url>taxon</web-url>
                 <!-- singular names are used throughout except for this authority's service URL path component, per CSPACE-3322 -->
-                <services-tenant-plural>Taxonomyauthority</services-tenant-plural>
-                <services-tenant-singular>Taxonomyauthority</services-tenant-singular>
+                <services-tenant-auth-singular>Taxonomyauthority</services-tenant-auth-singular>
+                <services-tenant-auth-plural>Taxonomyauthorities</services-tenant-auth-plural>
+                <services-tenant-singular>Taxon</services-tenant-singular>
+                <services-tenant-plural>Taxon</services-tenant-plural>
                 <services-instances-path>taxonomyauthority_common:http://collectionspace.org/services/taxonomy,taxonomyauthority-common-list/taxonomyauthority-list-item</services-instances-path>
                 <services-single-instance-path>taxonomyauthority_common:http://collectionspace.org/services/taxonomy,taxonomyauthority_common</services-single-instance-path>
                 <services-list-path>http://collectionspace.org/services/taxonomy,taxon-common-list/taxon_list_item</services-list-path>
@@ -1812,6 +1852,7 @@
                 <authority-vocab-type>TaxonomyAuthority</authority-vocab-type>
                 <authorization-view>false</authorization-view>
                 <urn-syntax>urn:cspace:org.collectionspace.demo:taxonomyauthority:{vocab}:taxon:{entry}'{display}'</urn-syntax>
+                <vocab-syntax>urn:cspace:name</vocab-syntax>
                 <hassoftdelete>true</hassoftdelete>
                 <structures>
                     <structure id="screen">
@@ -2831,6 +2872,7 @@
             <record id="media" in-findedit="yes" type="procedure,record">
                 <services-record-path>media_common:http://collectionspace.org/services/media,media_common</services-record-path>
                 <services-record-path id="collectionspace_core">collectionspace_core:http://collectionspace.org/collectionspace_core/,collectionspace_core</services-record-path>
+                <services-record-path id="havrc">media_havrc:http://collectionspace.org/services/media/local/havrc,media_havrc</services-record-path>
                 <services-list-path>abstract-common-list/list-item</services-list-path>
 
                 <hassoftdelete>true</hassoftdelete>
@@ -2967,27 +3009,46 @@
                         <services-tag>typeList</services-tag>
                         <field id="type">
                             <options>
-                                <option id="" default="yes">Please select a value</option>
                                 <option id="dataset" >Dataset</option>
                                 <option id="document" >Document</option>
-                                <option id="moving_image" >Moving Image</option>
-                                <option id="still_image" >Still Image</option>
+                                <option id="moving_image" >Moving image</option>
+                                <option id="still_image" default="yes" >Still image</option>
                                 <option id="sound" >Sound</option>
                             </options>
                         </field>
                     </repeat>
                     <field id="coverage"></field>
-                    <repeat id="dates">
-                        <services-tag>dateList</services-tag>
-                        <field id="date" ui-type="date"></field>
-                    </repeat>
+                    <!-- Addded for HAVRC -->
+                    <field id="viewDate" section="havrc" ui-type="groupfield/structureddate" primarykey="viewDate.dateDisplayDate" ui-func="cspace.structuredDate"  >
+                        <services-tag>viewDateGroup</services-tag>
+                        <selector>media-viewDate</selector>
+                    </field>
+                    <!-- Removed for HAVRC; replaced by viewDate structured date -->
+                    <!--<repeat id="dates">-->
+                        <!--<services-tag>dateList</services-tag>-->
+                        <!--<field id="date" ui-type="date"></field>-->
+                    <!--</repeat>-->
                     <field id="source"></field>
+                    <!-- Added for HAVRC -->
+                    <field id="sourceDetail" section="havrc">
+                        <selector>media-sourceDetail</selector>
+                    </field>
                     <repeat id="subjects">
                         <services-tag>subjectList</services-tag>
                         <field id="subject"></field>
                     </repeat>
                     <field id="rightsHolder" autocomplete="person-person,organization-organization"></field>
                     <field id="description"></field>
+                    <!-- Added for HAVRC -->
+                    <field id="imageViewType" section="havrc">
+                        <!--<selector>media-imageViewType</selector>-->
+                        <options>
+                            <option id="" default="yes">Value not selected</option>
+                            <option id="general" >General view</option>
+                            <option id="partial" >Partial view</option>
+                            <option id="multiple" >Multiple views</option>
+                        </options>
+                    </field>
                 </section>
                 <!-- not used in ui yet -->
                 <section>
