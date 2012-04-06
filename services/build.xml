@@ -22,12 +22,7 @@
         description="Identify whether the tenant bindings deployment location exists">
         <available type="dir" file="${services.tenant.bindings.path}"
             property="services.tenant.bindings.path.exists" />
-    </target>
-    
-    <target name="deploy-to-config"
-        description="Copies tenant-specific application customizations to the deployment location"
-        depends="deploy-tenant-bindings">
-    </target>
+    </target>    
     
     <target name="deploy-tenant-bindings"
         description="Copies tenant-specific services bindings settings to the deployment location"

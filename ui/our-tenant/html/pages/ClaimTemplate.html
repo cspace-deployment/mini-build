@@ -1,0 +1,523 @@
+<div class="csc-nagpraclaim-template csc-listEditor-details">
+    <div class="csc-nagpraclaim">
+        <div id="secondary-nav">
+            <div id="secondary-nav-menu-sub">
+                <div class="button-row">
+                    <input type="button" class="csc-save saveButton primary" />
+                    <input type="button" class="csc-delete deleteButton primary" />
+                    <input type="button" class="csc-cancel cancelButton" />
+                    <a style="display:none;" class="csc-goto gotoButton"></a>
+                    <div class="clear"></div>
+                </div>
+                <div class="time-stamp"> </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        
+        <div class="nagpraclaim-outer-border" id="nagpraclaim-record">
+            <div class="fl-container-flex fl-fix information-group">
+                <div class="info-column">  
+                	<div class="fl-container-flex fl-fix information-group">
+                		<div class="info-column">
+	                		<div class="csc-recordEditor-header fl-container-flex header toggle csc-nagpraclaim-claimInformation-label"></div>
+		                    <div class="csc-recordEditor-togglable fl-container-flex fl-fix content main" >
+		                    	<div class="info-column pahmaCustomColumnWidth">
+		                    		<div class="info-column">
+		                    			<div class="info-column fl-force-left"> <!-- Claim number, Claim name -->
+		                    				<div class="info-column2-50 fl-force-left"> <!-- Claim number -->
+		                    					<div class="info-pair">
+		                    						<span class="label csc-nagpraclaim-nagpraClaimNumber-label"></span><span class="required">*</span>
+		                    						<div class="content csc-nagpraclaim-nagpraClaimNumber-container"> 
+		                    							<input type="text" class="csc-nagpraclaim-nagpraClaimNumber pattern-chooser-input" />
+		                    						</div>
+		                    					</div>
+		                    				</div>
+		                    				<div class="info-column2-50 fl-force-left"> <!-- Claim name -->
+	                    						<div class="info-pair"> 
+	                    							<div class="header">
+	                    								<div class="label csc-nagpraclaim-nagpraClaimName-label"></div>
+	                    							</div>
+	                    							<div class="content">
+	                    								<input type="text" class="input-alpha csc-nagpraclaim-nagpraClaimName" />
+	                    							</div>
+	                    						</div>
+	                    					</div>
+		                    			</div>
+		                    			<div class="clear"></div>
+		                    			<div class="info-column fl-force-left"> <!-- Alternate claim names/numbers, Claimants -->
+		                    				<div class="info-column2-50 fl-force-left"> <!-- Alternate claim names and numbers -->
+		                    					<div class="info-pair">
+		                    						<div class="header">
+		                    							<div class="label csc-nagpraclaim-nagpraClaimAltNameGroup-label"></div>
+		                    						</div>
+		                    						<div class="content">
+		                    							<table>
+		                    								<thead>
+		                    									<tr>
+		                    										<td class="csc-nagpraclaim-nagpraClaimAltName-label"></td>
+		                    										<td class="csc-nagpraclaim-nagpraClaimAltNote-label"></td>
+		                    									</tr>
+		                    								</thead>
+		                    								<tbody>
+		                    									<tr class="csc-nagpraclaim-nagpraClaimAltNameGroup">
+		                    										<td><input type="text" class="csc-nagpraclaim-nagpraClaimAltName" /></td>
+		                    										<td><input type="text" class="csc-nagpraclaim-nagpraClaimAltNote" /></td>
+		                    									</tr>
+		                    								</tbody>
+		                    							</table>
+		                    						</div>
+		                    					</div>
+		                    				</div>
+		                    				<div class="info-column2-50 fl-force-right"> <!-- Claimants  (Filed by, Filed on behalf of, claimant note) -->
+		                    					<div class="info-pair">
+		                    						<div class="header">
+		                    							<div class="label csc-nagpraclaim-nagpraClaimClaimantGroup-label"></div>
+		                    						</div>
+		                    						<div class="content">
+		                    							<table>
+		                    								<thead>
+		                    									<tr>
+		                    										<td class="csc-nagpraclaim-filedBy-label"></td>
+		                    										<td class="csc-nagpraclaim-filedOnBehalfOf-label"></td>
+		                    										<td class="csc-nagpraclaim-claimantNote-label"></td>
+		                    									</tr>
+		                    								</thead>
+		                    								<tbody>
+		                    									<tr class="csc-nagpraclaim-nagpraClaimClaimantGroup">
+		                    										<td><input type="text" class="csc-nagpraclaim-filedBy" /></td>
+		                    										<td><input type="text" class="csc-nagpraclaim-filedOnBehalfOf" /></td>
+		                    										<td><input type="text" class="csc-nagpraclaim-claimantNote" /></td>
+		                    									</tr>
+		                    								</tbody>
+		                    							</table>
+		                    						</div>
+		                    					</div>
+		                    				</div>
+		                    			</div>
+		                    			<div class="clear"></div>
+		                    			<div class="info-column fl-force-left"> <!-- Claim type, Claim filed date, Notes on claim -->
+		                    				<div class="info-column2-50 fl-force-left"> <!-- Claim type -->
+		                    					<div class="info-pair-select">
+		                    						<div class="header">
+		                    							<div class="label csc-nagpraclaim-nagpraClaimType-label"></div>
+		                    						</div>
+		                    						<div class="content">
+		                    							<select class="csc-nagpraclaim-nagpraClaimType input-select"><option value="">Options not loaded</option></select>
+		                    						</div>                                              
+		                    					</div>
+		                    				</div>
+		                    				<div class="clear"></div>
+		                    				<div class="info-column2-50 fl-force-left"> <!-- Claim filed date -->
+		                    					<div class="info-pair">
+		                    						<div class="header">
+		                    							<div class="label csc-nagpraclaim-nagpraClaimReceivedGroup-label"></div>
+		                    						</div>
+		                    						<div class="content">
+		                    							<table>
+		                    								<thead>
+		                    									<tr>
+		                    										<td class="csc-nagpraclaim-nagpraClaimReceivedDate-label"></td>
+		                    										<td class="csc-nagpraclaim-nagpraClaimReceivedNote-label"></td>
+		                    									</tr>
+		                    								</thead>
+		                    								<tbody>
+		                    									<tr class="csc-nagpraclaim-nagpraClaimReceivedGroup pahmaCustomColumnWidth">
+		                    										<td class="caldateall"><input type="text" class="csc-nagpraclaim-nagpraClaimReceivedDate caldatefield" /></td>
+		                    										<td><input type="text" class="csc-nagpraclaim-nagpraClaimReceivedNote" /></td>
+		                    									</tr>
+		                    								</tbody>
+		                    							</table>
+		                    						</div>
+		                    					</div>
+		                    				</div>
+		                    				<div class="info-column2-50 fl-force-right"> <!-- Notes on claim -->
+		                    					<div class="info-pair">
+		                    						<div class="header">
+		                    							<div class="label csc-nagpraclaim-nagpraClaimNote-label"></div>
+		                    						</div>
+		                    						<div class="content">
+		                    							<textarea rows="4" cols="30" class="input-textarea csc-nagpraclaim-nagpraClaimNote"></textarea>
+		                    						</div>
+		                    					</div>
+		                    				</div>
+		                    			</div>
+		                    			<div class="clear"></div>
+		                    		</div>
+		                    	</div>
+		                    	<div class="clear"></div>
+		                    </div>
+                		</div>
+                	</div>
+                	
+                	<div class="fl-container-flex fl-fix information-group">
+	                	<div class="csc-recordEditor-header fl-container-flex header toggle csc-nagpraclaim-claimAssociationInformation-label"></div>
+	                	<div class="csc-recordEditor-togglable fl-container-flex fl-fix content main" >
+	                		<div class="info-column pahmaCustomColumnWidth">
+	                			<div class="info-column">
+	                				<div class="info-column2-50 fl-force-left"> <!-- Inventory involved -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-nagpraClaimInventoryInvolvedGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-inventoryInvolvedName-label"></td>
+	                										<td class="csc-nagpraclaim-inventoryInvolvedNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-nagpraClaimInventoryInvolvedGroup">
+	                										<td><select class="csc-nagpraclaim-inventoryInvolvedName input-select"><option value="">Options not loaded</option></select></td>
+	                										<td><input type="text" class="csc-nagpraclaim-inventoryInvolvedNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                				<div class="info-column2-50 fl-force-right"> <!-- Sites involved -->
+                						<div class="info-pair">
+                							<div class="header">
+                								<div class="label csc-nagpraclaim-nagpraClaimSiteInvolvedGroup-label"></div>
+                							</div>
+                							<div class="content">
+                								<table>
+                									<thead>
+                										<tr>
+                											<td class="csc-nagpraclaim-claimSiteInvolvedName-label"></td>
+                											<td class="csc-nagpraclaim-claimSiteInvolvedNote-label"></td>
+                										</tr>
+                									</thead>
+                									<tbody>
+                										<tr class="csc-nagpraclaim-nagpraClaimSiteInvolvedGroup">
+                											<td><input type="text" class="csc-nagpraclaim-claimSiteInvolvedName" /></td>
+                											<td><input type="text" class="csc-nagpraclaim-claimSiteInvolvedNote" /></td>
+                										</tr>
+                									</tbody>
+                								</table>
+                							</div>
+                						</div>
+                					</div>
+	                			</div>
+	                			<div class="clear"></div>
+	                			<div class="info-column">
+	                				<div class="info-column2-50 fl-force-left"> <!-- Other cultural groups involved -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-nagpraClaimGroupInvolvedGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-groupInvolvedName-label"></td>
+	                										<td class="csc-nagpraclaim-groupInvolvedNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-nagpraClaimGroupInvolvedGroup">
+	                										<td><input type="text" class="csc-nagpraclaim-groupInvolvedName" /></td>
+	                										<td><input type="text" class="csc-nagpraclaim-groupInvolvedNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                				<div class="info-column2-50 fl-force-right"> <!-- Time periods involved --> <!-- STRUCTURED DATE NEEDED -->
+	                						<div class="info-pair">
+	                							<div class="header">
+	                								<div class="label csc-nagpraclaim-nagpraClaimPeriodInvolvedGroupGroup-label"></div>
+	                							</div>
+	                							<div class="content">
+	                								<table>
+	                									<thead>
+	                										<tr>
+	                											<td class="csc-nagpraclaim-nagpraClaimPeriodInvolvedGroup-label"></td>
+	                											<td class="csc-nagpraclaim-nagpraClaimPeriodInvolvedNote-label"></td>
+	                										</tr>
+	                									</thead>
+	                									<tbody>
+	                										<tr class="csc-nagpraclaim-nagpraClaimPeriodInvolvedGroupGroup">
+	                											<td><input type="text" class="csc-nagpraclaim-nagpraClaimPeriodInvolvedGroup" /></td> <!-- MAKE INTO STRUCTURED DATE -->
+	                											<td><input type="text" class="csc-nagpraclaim-nagpraClaimPeriodInvolvedNote" /></td>
+	                										</tr>
+	                									</tbody>
+	                								</table>
+	                							</div>
+	                						</div>
+	                					</div>
+	                			</div>
+	                			<div class="clear"></div>
+	                		</div>
+	                		<div class="clear"></div>
+	                	</div>
+                	</div>
+                	
+                	<div class="fl-container-flex fl-fix information-group">
+	                	<div class="csc-recordEditor-header fl-container-flex header toggle csc-nagpraclaim-claimProcessingInformation-label"></div>
+	                	<div class="csc-recordEditor-togglable fl-container-flex fl-fix content main" >
+	                		<div class="info-column pahmaCustomColumnWidth">
+	                			<div class="info-column">
+	                    			<div class="info-column2-50 fl-force-left"> <!-- Date of initial response to claimant(s) -->
+	                    				<div class="info-pair">
+	                    					<div class="header">
+	                    						<div class="label csc-nagpraclaim-dateOfInitialResponseGroup-label"></div>
+	                    					</div>
+	                    					<div class="content">
+	                    						<table>
+	                    							<thead>
+	                    								<tr>
+	                    									<td class="csc-nagpraclaim-initialResponseDate-label"></td>
+	                    									<td class="csc-nagpraclaim-initialResponseNote-label"></td>
+	                    								</tr>
+	                    							</thead>
+	                    							<tbody>
+	                    								<tr class="csc-nagpraclaim-dateOfInitialResponseGroup pahmaCustomColumnWidth">
+	                    									<td class="caldateall"><input type="text" class="csc-nagpraclaim-initialResponseDate caldatefield" /></td>
+	                    									<td><input type="text" class="csc-nagpraclaim-initialResponseNote" /></td>
+	                    								</tr>
+	                    							</tbody>
+	                    						</table>
+	                    					</div>
+	                    				</div>
+	                    			</div>
+	                				<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Date sent to UCB-NAGPRA committee -->
+	                    				<div class="info-pair">
+	                    					<div class="header">
+	                    						<div class="label csc-nagpraclaim-sentToLocalCommitteeGroup-label"></div>
+	                    					</div>
+	                    					<div class="content">
+	                    						<table>
+	                    							<thead>
+	                    								<tr>
+	                    									<td class="csc-nagpraclaim-sentToLocalCommitteeDate-label"></td>
+	                    									<td class="csc-nagpraclaim-sentToLocalCommitteeNote-label"></td>
+	                    								</tr>
+	                    							</thead>
+	                    							<tbody>
+	                    								<tr class="csc-nagpraclaim-sentToLocalCommitteeGroup pahmaCustomColumnWidth">
+	                    									<td class="caldateall"><input type="text" class="csc-nagpraclaim-sentToLocalCommitteeDate caldatefield" /></td>
+	                    									<td><input type="text" class="csc-nagpraclaim-sentToLocalCommitteeNote" /></td>
+	                    								</tr>
+	                    							</tbody>
+	                    						</table>
+	                    					</div>
+	                    				</div>
+	                    			</div>
+	                				<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Recommendation of UCB-NAGPRA committee -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-recommendationOfLocalCommitteeGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-recommendationOfLocalCommitteeDate-label"></td>
+	                										<td class="csc-nagpraclaim-recommendationOfLocalCommitteeNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-recommendationOfLocalCommitteeGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-recommendationOfLocalCommitteeDate caldatefield" /></td>
+	                										<td><input type="text" class="csc-nagpraclaim-recommendationOfLocalCommitteeNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                				<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Date sent to UC systemwide committee -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-sentToOversightCommitteeGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-sentToOversightCommitteeDate-label"></td>
+	                										<td class="csc-nagpraclaim-sentToOversightCommitteeNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-sentToOversightCommitteeGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-sentToOversightCommitteeDate caldatefield" /></td> <!-- NOT SHOWING UP IN MERGED SCHEMA? -->
+	                										<td><input type="text" class="csc-nagpraclaim-sentToOversightCommitteeNote" /></td> <!-- NOT SHOWING UP IN MERGED SCHEMA? -->
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                    			<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Recommendation of UC systemwide committee -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-recommendationOfOversightCommitteeGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-recommendationOfOversightCommitteeDate-label"></td>
+	                										<td class="csc-nagpraclaim-recommendationOfOversightCommitteeNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-recommendationOfOversightCommitteeGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-recommendationOfOversightCommitteeDate caldatefield" /></td>
+	                										<td><input type="text" class="csc-nagpraclaim-recommendationOfOversightCommitteeNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                				<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Date sent to national NAGPRA -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-sentToNationalNagpraGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-sentToNationalNagpraDate-label"></td>
+	                										<td class="csc-nagpraclaim-sentToNationalNagpraNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-sentToNationalNagpraGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-sentToNationalNagpraDate caldatefield" /></td>
+	                										<td><input type="text" class="csc-nagpraclaim-sentToNationalNagpraNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                    			<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Response from national NAGPRA -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-responseFromNationalNagpraGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-responseFromNationalNagpraDate-label"></td>
+	                										<td class="csc-nagpraclaim-responseFromNationalNagpraNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-responseFromNationalNagpraGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-responseFromNationalNagpraDate caldatefield" /></td>
+	                										<td><input type="text" class="csc-nagpraclaim-responseFromNationalNagpraNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                				<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Date of national NAGPRA approval -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-dateOfNationalNagpraApprovalGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-dateOfNationalNagpraApprovalDate-label"></td>
+	                										<td class="csc-nagpraclaim-dateOfNationalNagpraApprovalNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-dateOfNationalNagpraApprovalGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-dateOfNationalNagpraApprovalDate caldatefield" /></td>
+	                										<td><input type="text" class="csc-nagpraclaim-dateOfNationalNagpraApprovalNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                    			<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Begin and end dates of 30-day notice -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-dateOfThirtyDayNoticeGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-dateOfThirtyDayNoticeDate-label"></td>
+	                										<td class="csc-nagpraclaim-dateOfThirtyDayNoticeType-label"></td>
+	                										<td class="csc-nagpraclaim-dateOfThirtyDayNoticeNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-dateOfThirtyDayNoticeGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-dateOfThirtyDayNoticeDate caldatefield" /></td>
+	                										<td><select class="csc-nagpraclaim-dateOfThirtyDayNoticeType input-select"><option value="">Options not loaded</option></select></td>
+	                										<td><input type="text" class="csc-nagpraclaim-dateOfThirtyDayNoticeNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                    			<div class="clear"></div>
+	                				<div class="info-column2-50 fl-force-left"> <!-- Date of transfer to claimant(s) -->
+	                					<div class="info-pair">
+	                						<div class="header">
+	                							<div class="label csc-nagpraclaim-transferGroup-label"></div>
+	                						</div>
+	                						<div class="content">
+	                							<table>
+	                								<thead>
+	                									<tr>
+	                										<td class="csc-nagpraclaim-transferDate-label"></td>
+	                										<td class="csc-nagpraclaim-transferNote-label"></td>
+	                									</tr>
+	                								</thead>
+	                								<tbody>
+	                									<tr class="csc-nagpraclaim-transferGroup pahmaCustomColumnWidth">
+	                										<td class="caldateall"><input type="text" class="csc-nagpraclaim-transferDate caldatefield" /></td>
+	                										<td><input type="text" class="csc-nagpraclaim-transferNote" /></td>
+	                									</tr>
+	                								</tbody>
+	                							</table>
+	                						</div>
+	                					</div>
+	                				</div>
+	                    			<div class="clear"></div>
+	                    		</div>
+	                    	</div>
+	                        <div class="clear"></div>
+	                    </div>
+               		</div>
+                </div>
+            </div>
+        </div>
+                 
+        <!-- Button container -->
+        <div class="fl-container-flex button-row">
+            <input type="button" class="csc-save saveButton primary" />
+            <input type="button" class="csc-delete deleteButton primary" />
+            <input type="button" class="csc-cancel cancelButton" />
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>

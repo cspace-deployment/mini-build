@@ -807,15 +807,14 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
         fluid.demands("movement", "cspace.myCollectionSpace", {
             container: "{myCollectionSpace}.dom.movement"
         });
+        fluid.demands("nagpraclaim", "cspace.myCollectionSpace", {
+            container: "{myCollectionSpace}.dom.nagpraclaim"
+        });
         fluid.demands("objectexit", "cspace.myCollectionSpace", {
             container: "{myCollectionSpace}.dom.objectexit"
         });
         fluid.demands("media", "cspace.myCollectionSpace", {
             container: "{myCollectionSpace}.dom.media"
-        });
-        // INSERTED AS TEMPORARY FIX FOR PAHMA 8-23-2011 PRESENTATION
-        fluid.demands("nagpraclaim", "cspace.myCollectionSpace", {
-            container: "{myCollectionSpace}.dom.nagpraclaim"
         });
         fluid.demands("group", "cspace.myCollectionSpace", {
             container: "{myCollectionSpace}.dom.group"
