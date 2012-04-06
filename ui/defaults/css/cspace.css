@@ -98,6 +98,19 @@ input[type="button"].saveButton, input[type="submit"].saveButton {
 input[type="button"].saveButton:hover, input[type="submit"].saveButton:hover,
 input[type="button"].saveButton:focus, input[type="submit"].saveButton:focus {
     background-color:#48722D;}
+input[type="button"].createFromExistingButton, input[type="submit"].createFromExistingButton {
+    background-color:#73AA4F;
+    padding:0 20px; }
+input[type="button"].createFromExistingButton[disabled], input[type="submit"].createFromExistingButton[disabled] {
+    color: #CCC; 
+    background-color:#FFF;}
+input[type="button"].createFromExistingButton[disabled]:hover, input[type="submit"].createFromExistingButton[disabled]:hover,
+input[type="button"].createFromExistingButton[disabled]:focus, input[type="submit"].createFromExistingButton[disabled]:focus {
+    color:#606060
+}
+input[type="button"].createFromExistingButton:hover, input[type="submit"].createFromExistingButton:hover,
+input[type="button"].createFromExistingButton:focus, input[type="submit"].createFromExistingButton:focus {
+    background-color:#48722D;}    
 input[type="button"].cancelButton, input[type="submit"].cancelButton {
     -moz-border-radius:4px; 
     -webkit-border-radius:4px;
@@ -251,6 +264,11 @@ a.add-link:hover, a.add-link:focus {
 #all-content-login a:hover, #all-content-login a:focus   {
     color:#6699C8; 
     text-decoration:none;}
+.template .fl-container-left.fl-force-left {
+    border: 2px solid #6F9ECD;
+    background-color: #FFF;
+    padding: 10px;
+}
 .cs-header-userGroup {
     display: inline; 
     float: right; 
@@ -1335,7 +1353,7 @@ input[disabled]:hover, input[disabled]:hover    {
     -webkit-border-radius:0;
 	border-radius:0;}
 
-.saveButton, .cs-searchBox-button, .csc-header-logout, .csc-search-submit, .csc-add-related-record-button, .csc-numberPatternChooser-button, .cs-createNew-createButton, .cs-messageBar-cancel, .cs-confirmationDialogButton, .cs-user-searchButton, .cs-user-unSearchButton, .cs-searchToRelate-createButton, .cs-searchToRelate-addButton {
+.saveButton, .createFromExistingButton, .cs-searchBox-button, .csc-header-logout, .csc-search-submit, .csc-add-related-record-button, .csc-numberPatternChooser-button, .cs-createNew-createButton, .cs-createNew-createTemplateButton, .cs-messageBar-cancel, .cs-confirmationDialogButton, .cs-user-searchButton, .cs-user-unSearchButton, .cs-searchToRelate-createButton, .cs-searchToRelate-addButton, .cs-createTemplateBox-createButton {
     -moz-border-radius:4px; 
     -webkit-border-radius:4px;
 	border-radius:4px;
@@ -1351,7 +1369,8 @@ input[disabled]:hover, input[disabled]:hover    {
     color: #6E6E6E !important;}
 .cs-search-disabled input[type="checkbox"] {
     display: none;}
-.cs-createNew-createButton {
+.cs-createNew-createButton, .cs-createNew-createTemplateButton {
+    margin-left: 10px;
     float:right;}
 .cs-searchBox {
     -moz-border-radius:8px; 
@@ -1403,6 +1422,10 @@ input[disabled]:hover, input[disabled]:hover    {
 }
 .cs-searchBox .cs-searchBox-button {
     float:right;}
+a.cs-searchBox-advancedSearch {
+    color: #6F9ECD;
+    text-decoration: none;
+}
 .cs-pivot-searchBox .cs-searchBox .cs-searchBox-query {
     width:99% !important; 
     margin:8px 8px 8px 0; 
@@ -1410,7 +1433,17 @@ input[disabled]:hover, input[disabled]:hover    {
 .cs-add-related-records-dialog .cs-searchBox {
     background-color:#EBEBEB;}
 
-
+/****************************************
+ * CSS Markup for createTemplateBox widget *
+ ****************************************/
+ 
+ .cs-createTemplateBox-template {
+    width: 150px !important;
+ } 
+ 
+ .cs-createTemplateBox-createButton {
+    float:right;
+ }
 
 /* Read-only page styling selectors */
 #read-only .info-pair .content thead td , #read-only .info-pair .content table, #read-only .info-pair-date .content table, #read-only .info-pair-select table {
@@ -1815,4 +1848,132 @@ input[type=button].cs-mediaUploader-removeMedia:focus {
 .cs-termlist-usedBy {
     display: block;
     height: 19px;
+}
+
+.cs-advancedSearch-template {
+	padding-left: 20px;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step1 .cs-advancedSearch-selectRecordType {
+    margin-left: 15px;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step1-label, .cs-advancedSearch-template .cs-advancedSearch-step2-label {
+    margin-right: 10px;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step1, .cs-advancedSearch-template .cs-advancedSearch-step2 {
+	border: 1px solid #6E9FCE;
+	margin-bottom: 20px;
+	-moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    background-color: #F5F5F5;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step1-header, .cs-advancedSearch-template .cs-advancedSearch-step2-header {
+	background-color: #6E9FCE;
+    display: inline-block;
+    padding: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFF;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-header {
+    overflow:hidden; 
+    display:block;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-subheader1, .cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-subheader2 {
+    padding: 15px;
+    background-color: #E8E8E8;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-subheader1 .cs-advancedSearch-step2-subheader1-label, .cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-subheader2 .cs-advancedSearch-step2-subheader2-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #438CC9;
+    padding-right: 25px;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-subheader1 .cs-advancedSearch-step2-subheader1-note, .cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-subheader2 .cs-advancedSearch-step2-subheader2-note1, .cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-step2-subheader2 .cs-advancedSearch-step2-subheader2-note2 {
+    color: #6F9ECD;
+}
+.cs-advancedSearch-template .cs-advancedSearch-step2 .cs-advancedSearch-query {
+    display: inline;
+    width: 45%;
+    margin: 15px 5px 15px 15px;
+}
+.cs-advancedSearch-template .cs-advancedSearch-searchButton {
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    float: right;
+}
+.cs-advancedSearch-template .cs-advancedSearch-searchButton:nth-child(even) {
+    margin: 10px 0;
+}
+.cs-advancedSearch-template .cs-advancedSearch-searchButton:nth-child(odd) {
+    margin-top: -30px;
+}
+.cs-advancedSearch-template .cs-advancedSearch-searchFields {
+    padding-left: 20px;
+}
+.cs-advancedSearch-template .cs-advancedSearch-toggle {
+    background-color: #FFF;
+    color: #6E9FCE;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+    display: none;
+}
+.cs-advancedSearch-template .cs-advancedSearch-toggle:hover, .cs-advancedSearch-template .cs-advancedSearch-toggle:focus {
+    background-color: #6E9FCE;
+    color: #FFF;
+}
+
+.cs-searchTips-template {
+    margin: 0 20px;
+    color: #316285;
+    padding: 10px;
+    background-color: #FBFBDB;
+    border: 1px solid #FBEAAF;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+}
+
+.cs-searchTips-template ul {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.cs-searchTips-template li {
+    padding-bottom: 15px;
+}
+
+.cs-searchTips-template .cs-searchTips-title {
+    color: #316285;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.cs-searchTools-template {
+    margin: 10px 20px 0 20px;
+    color: #316285;
+    padding: 10px;
+    background-color: #F2F2F2;
+    border: 1px solid #B3B3B3;
+    -moz-border-radius:4px;
+    -webkit-border-radius:4px;
+}
+.cs-searchTools-template .cs-searchTools-title{
+    font-size: 14px;
+    font-weight: bold;
+}
+.cs-searchToolsBlock .cs-searchToolsBlock-title{
+    font-weight: bold;
+    display: block;
+    padding: 10px 0 0 15px;
+}
+.cs-searchToolsBlock .cs-searchToolsBlock-noItems, .cs-searchToolsBlock .cs-searchToolsBlock-item{
+    text-decoration:none;
+    display: block;
+    color: #316285;
+    padding: 5px 5px 0 15px;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+}
+.cs-searchToolsBlock .cs-searchToolsBlock-item:hover, .cs-searchToolsBlock .cs-searchToolsBlock-item:focus {
+    background-color: #E8E8E8;
 }

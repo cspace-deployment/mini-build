@@ -31,7 +31,7 @@
                     <instance id="vocab-languages">
                         <web-url>languages</web-url>
                         <title-ref>languages</title-ref>
-                        <title>My first list</title>
+                        <title>Languages</title>
                         <options>
                             <option id="eng">English</option>
                             <option id="spn">Spanish</option>
@@ -185,6 +185,16 @@
                             <option id="years">Year(s)</option>
                         </options>
                     </instance>
+                    <instance id="vocab-agequalifier">
+                        <web-url>agequalifier</web-url>
+                        <title-ref>agequalifier</title-ref>
+                        <title>Age Qualifier</title>
+                        <options>
+                            <option id="approximately">approximately</option>
+                            <option id="olderthan">older than</option>
+                            <option id="youngerthan">younger than</option>
+                        </options>
+                    </instance>
                     <instance id="vocab-dateCertainty">
                         <web-url>datecertainty</web-url>
                         <title-ref>datecertainty</title-ref>
@@ -200,7 +210,7 @@
                     </instance>
                 </instances>
                 <section>
-                    <field id="displayName" in-title="yes" display-name="yes">
+                    <field id="displayName" in-title="yes" display-name="yes" mini="summary,number,search,list,relate">
                         <selector>vocabulary-displayName</selector>
                         <title-selector>titleBar-displayName</title-selector>
                     </field>

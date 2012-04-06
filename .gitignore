@@ -2,7 +2,6 @@
 *~
 *.swp
 *.class
-**/example-tenants/*
 **/target/*
 .svn
 *.avaj

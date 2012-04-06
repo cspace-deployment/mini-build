@@ -128,6 +128,10 @@ cspace = cspace || {};
                     return false;
                 });
             });
+        } else {
+            that.container.delegate("a.link", "click", function () {
+                return false;
+            });
         }
     };
     
@@ -192,10 +196,7 @@ cspace = cspace || {};
                 funcName: "cspace.search.searchView.hideResults",
                 args: ["{searchView}.dom", "{searchView}.options.messageBar"]
             },
-            search: {
-                funcName: "cspace.search.searchView.search",
-                args: ["{arguments}.0", "{searchView}"]
-            },
+            search: "cspace.search.searchView.search",
             updateModel: {
                 funcName: "cspace.search.searchView.updateModel",
                 args: ["{searchView}.applier", "{arguments}.0"]
@@ -284,10 +285,51 @@ cspace = cspace || {};
             pageNum: "&pageNum=%pageNum",
             pageSize: "&pageSize=%pageSize",
             sort: "&sortDir=%sortDir&sortKey=%sortKey",
-            defaultUrl: "%chain/%recordType/search?query=%keywords%pageNum%pageSize%sort",
+            defaultUrl: "%tenant/%tenantname/%recordType/search?query=%keywords%pageNum%pageSize%sort",
             localUrl: "%chain/data/%recordType/search.json"
         })
     });
+    
+    cspace.search.searchView.handleAdvancedSearch = function (searchModel, that) {
+        that.options.messageBar.hide();
+        that.applier.requestChange("results", []);
+        if (!searchModel.fields) {
+            searchModel.fields = undefined;
+        }
+        that.updateModel(searchModel);
+        that.resultsPager.applier.requestChange("pageCount", 1);
+        that.resultsPager.applier.requestChange("pageIndex", 0);
+        that.resultsPager.applier.requestChange("totalRange", 0);
+        that.search();
+    };
+    
+    cspace.search.searchView.preInitAdvanced = function (that) {
+        cspace.util.preInitMergeListeners(that.options, {
+            hideResults: function () {
+                that.locate("resultsContainer").hide();
+            },
+            onAdvancedSearch: function (searchModel) {
+                that.handleAdvancedSearch(searchModel);
+            },
+            currentSearchUpdated: function (searchModel) {
+                that.updateSearch(searchModel);
+                that.handleAdvancedSearch(searchModel);
+            }
+        });
+    };
+    
+    cspace.search.searchView.updateSearch = function (currentSearch, search) {
+        var fields = fluid.copy(currentSearch.fields);
+        if (fields) {
+            delete currentSearch.fields;
+            search.options.defaultFieldsModel = fields;
+        }
+        fluid.each(currentSearch, function (value, path) {
+            search.applier.requestChange(path, value)
+        });
+        search.refreshView();
+        search.toggleControls(true);
+    };
     
     cspace.search.searchView.applyResults = function (that, data) {
         var searchModel = that.model.searchModel;
@@ -338,6 +380,45 @@ cspace = cspace || {};
         }
     };
     
+    cspace.search.searchView.advancedSearch = function (newPagerModel, that) {
+        var pagerModel = newPagerModel || that.resultsPager.model;
+        var searchModel = that.model.searchModel;
+        that.updateModel({
+            pageSize: pagerModel.pageSize,
+            pageIndex: pagerModel.pageIndex,
+            sortKey: pagerModel.sortKey,
+            sortDir: pagerModel.sortDir
+        });
+        var url = that.buildUrl();
+        that.events.onSearch.fire();
+        fluid.log("Querying url " + url);
+        fluid.fetchResources({
+            results: {
+                href: url,
+                options: {
+                    dataType: "json",
+                    data: searchModel.fields ? JSON.stringify({
+                        fields: searchModel.fields,
+                        operation: searchModel.operation
+                    }) : undefined,
+                    type: searchModel.fields ? "POST" : "GET",
+                    success: function (responseData, textStatus) {
+                        if (responseData.isError === true) {
+                            fluid.each(responseData.messages, function (message) {
+                                that.events.onError.fire("search", message.message);
+                            });
+                            return;
+                        }
+                        that.applyResults(responseData);
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        that.events.onError.fire("search", textStatus);
+                    }
+                }
+            }
+        });
+    };
+    
     cspace.search.searchView.search = function (newPagerModel, that) {
         var searchModel = that.model.searchModel;
         that.mainSearch.locate("searchQuery").val(searchModel.keywords);
@@ -384,13 +465,14 @@ cspace = cspace || {};
     };
     
     cspace.search.searchView.buildUrlDefault = function (options, urls) {
-        return fluid.stringTemplate(urls.defaultUrl, {
+        var url = fluid.stringTemplate(urls.defaultUrl, {
             recordType: options.recordType,
             keywords: options.keywords,
             pageNum: options.pageIndex ? fluid.stringTemplate(urls.pageNum, {pageNum: options.pageIndex}) : "",
             pageSize: options.pageSize ? fluid.stringTemplate(urls.pageSize, {pageSize: options.pageSize}) : "",
             sort: options.sortKey ? fluid.stringTemplate(urls.sort, {sortKey: options.sortKey, sortDir: options.sortDir || "1"}) : ""
         });
+        return url;
     };
     cspace.search.searchView.buildUrlLocal = function (options, urls) {
         return fluid.stringTemplate(urls.localUrl, {recordType: options.recordType});

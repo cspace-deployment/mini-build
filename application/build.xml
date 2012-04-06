@@ -71,6 +71,7 @@
         description="Makes a tenant folder in the deployment location"
         if="${application.config.path.exists}">
         <property name="tenant.config.path" value="${application.config.path}/tenants/${our.tenant.name.short}" />
+        <delete dir="${tenant.config.path}" quiet="true" />
         <mkdir dir="${tenant.config.path}" />
     </target>
     
