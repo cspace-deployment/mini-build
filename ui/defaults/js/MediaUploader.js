@@ -9,14 +9,17 @@ https://source.collectionspace.org/collection-space/LICENSE.txt
 */
 
 /*global cspace:true, jQuery, fluid*/
-"use strict";
 
 cspace = cspace || {};
 
 (function ($, fluid) {
-    
+    "use strict";
+
     cspace.mediaUploader = function (container, options) {
         var that = fluid.initRendererComponent("cspace.mediaUploader", container, options);
+        // This selector is for uploader loading indicator.
+        var parent = that.container.parents(that.options.selectors.parents);
+        that.parent = parent.length > 0 ? parent.eq(0) : that.container;
         fluid.initDependents(that);
         that.refreshView();
         that.bindEvents();
@@ -51,8 +54,21 @@ cspace = cspace || {};
     cspace.mediaUploader.onFileSuccess = function (that, input) {
         return function (file, responseText, xhr) {
             var response = JSON.parse(responseText);
-            that.options.applier.requestChange(that.options.elPaths.srcUri, response.file);
-            that.events.onLink.fire();
+            that.applier.requestChange(that.options.elPaths.srcUri, response.file);
+            delete response.file;
+            that.applier.requestChange(that.options.elPaths.blobs, [response]);
+            that.applier.requestChange(that.options.elPaths.blobCsid, response.csid);
+            // TODO: When the onLink event listener triggers rerender and reinstantiation of media uploader this uploader dies :(.
+            setTimeout(function () {
+                that.events.onLink.fire();
+            }, 1);
+        };
+    };
+    
+    cspace.mediaUploader.onFileError = function (that) {
+        return function (file, error, responseText, xhr) {
+            cspace.util.provideErrorCallback(that, that.options.urls.upload, "errorWriting")(error, responseText, xhr);
+            return false;
         };
     };
     
@@ -63,7 +79,7 @@ cspace = cspace || {};
                 condition: "${" + that.options.elPaths.blobCsid + "}",
                 trueTree: {
                     removeButton: {
-                        messagekey: "removeButton",
+                        messagekey: "mediaUploader-removeButton",
                         decorators: [{
                             type: "addClass",
                             classes: that.options.styles.removeButton
@@ -91,18 +107,14 @@ cspace = cspace || {};
                 }
             }],
             uploadMediaLabel: {
-                messagekey: "uploadMediaLabel"
+                messagekey: "mediaUploader-uploadMediaLabel"
             },
             linkMediaLabel: {
-                messagekey: "linkMediaLabel"
+                messagekey: "mediaUploader-linkMediaLabel"
             },
             uploadButton: {
+                messagekey: "mediaUploader-uploadButton",
                 decorators: [{
-                    type: "attrs",
-                    attributes: {
-                        value: that.options.strings.uploadButton
-                    } 
-                }, {
                     type: "addClass",
                     classes: that.options.styles.button
                 }]
@@ -115,12 +127,8 @@ cspace = cspace || {};
                 }]
             },
             linkButton: {
+                messagekey: "mediaUploader-linkButton",
                 decorators: [{
-                    type: "attrs",
-                    attributes: {
-                        value: that.options.strings.linkButton
-                    } 
-                }, {
                     type: "addClass",
                     classes: that.options.styles.button
                 }, {
@@ -149,7 +157,11 @@ cspace = cspace || {};
     cspace.mediaUploader.removeMedia = function (that) {
         that.confirmation.open("cspace.confirmation.deleteDialog", undefined, {
             model: {
-                messages: ["primaryMessage", "secondaryMessage"]
+                messages: ["mediaUploader-dialog-removePrimaryMessage", "mediaUploader-dialog-removeSecondaryMessage"],
+                messagekeys: {
+                    actText: "mediaUploader-dialog-removeActText",
+                    actAlt: "mediaUploader-dialog-removeActAlt"
+                }
             },
             listeners: {
                 onClose: function (userAction) {
@@ -159,17 +171,13 @@ cspace = cspace || {};
                     }
                 }
             },
-            strings: {
-                primaryMessage: that.options.strings.confirmationPrimaryMessage,
-                secondaryMessage: that.options.strings.confirmationSecondaryMessage,
-                actText: that.options.strings.confirmationActText,
-                actAlt: that.options.strings.confirmationActAlt
-            }
+            parentBundle: that.options.parentBundle
         });
     };
     
     fluid.defaults("cspace.mediaUploader", {
         gradeNames: "fluid.rendererComponent",
+        parentBundle: "{globalBundle}",
         invokers: {
             bindEvents: {
                 funcName: "cspace.mediaUploader.bindEvents",
@@ -190,11 +198,14 @@ cspace = cspace || {};
             removeMedia: {
                 funcName: "cspace.mediaUploader.removeMedia",
                 args: "{mediaUploader}"
-            }
+            },
+            displayErrorMessage: "cspace.util.displayErrorMessage",
+            lookupMessage: "cspace.util.lookupMessage"
         },
         elPaths: {
             blobCsid: "fields.blobCsid",
-            srcUri: "fields.srcUri"
+            srcUri: "fields.srcUri",
+            blobs: "fields.blobs"
         },
         mergePolicy: {
             model: "preserve",
@@ -209,20 +220,11 @@ cspace = cspace || {};
             fileUploader: ".csc-mediaUploader-fileUploaderContainer",
             uploadMediaLabel: ".csc-mediaUploader-uploadMedia-label",
             linkMediaLabel: ".csc-mediaUploader-linkMedia-label",
-            uploader: ".csc-mediaUploader"
+            uploader: ".csc-mediaUploader",
+            parents: ".content.main"
         },
-        selectorsToIgnore: ["fileUploader", "uploadInput"],
-        strings: {
-            uploadButton: "+ Upload",
-            linkButton: "Link",
-            removeButton: "Remove this media",
-            uploadMediaLabel: "Upload Media",
-            linkMediaLabel: "Link To External Media",
-            confirmationPrimaryMessage: "Remove media from this record?",
-            confirmationSecondaryMessage: "This action can not be undone. Any changes on the media handling record will also be saved automatically.",
-            confirmationActText: "Remove",
-            confirmationActAlt: "remove media"
-        },
+        selectorsToIgnore: ["fileUploader", "uploadInput", "parents"],
+        strings: {},
         styles: {
             button: "cs-mediaUploader-button",
             hidden: "hidden",
@@ -235,6 +237,21 @@ cspace = cspace || {};
         },
         produceTree: cspace.mediaUploader.produceTree,
         components: {
+            loadingIndicator: {
+                type: "cspace.util.loadingIndicator",
+                container: "{mediaUploader}.parent",
+                options: {
+                    hideOn: [
+                        "{fileUploader}.events.onFileSuccess",
+                        "{fileUploader}.events.onFileError"
+                    ],
+                    events: {
+                        showOn: "{fileUploader}.events.onUploadStart"
+                    }
+                },
+                createOnEvent: "afterRender",
+                priority: "last"
+            },
             uploaderContext: {
                 type: "fluid.progressiveChecker",
                 options: {
@@ -283,6 +300,13 @@ cspace = cspace || {};
                                 type: "fluid.deferredInvokeCall",
                                 func: "cspace.mediaUploader.onFileSuccess",
                                 args: ["{mediaUploader}", "{mediaUploader}.dom.uploadInput"]
+                            }
+                        },
+                        onFileError: {
+                            expander: {
+                                type: "fluid.deferredInvokeCall",
+                                func: "cspace.mediaUploader.onFileError",
+                                args: "{mediaUploader}"
                             }
                         }
                     }

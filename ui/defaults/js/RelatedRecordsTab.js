@@ -45,14 +45,16 @@ cspace = cspace || {};
                         onClose: function (userAction) {
                             if (userAction === "act") {
                                 that.listEditor.events.afterListUpdate.addListener(function () {
+                                    that.listEditor.events.afterListUpdate.removeListener("afterListUpdate");
                                     callback();
-                                }, undefined, undefined, "last");
+                                }, "afterListUpdate", undefined, "last");
                                 that.listEditor.details.requestSave();
                             } else if (userAction === "proceed") {
                                 callback();
                             }
                         }
-                    }
+                    },
+                    parentBundle: that.options.parentBundle
                 });
                 return false;
             }
@@ -114,9 +116,10 @@ cspace = cspace || {};
                     }
                 }
             },
-            strings: {
-                primaryMessage: recordEditor.options.strings.deletePrimaryMessage
-            }
+            model: {
+                messages: [ "tab-re-deletePrimaryMessage" ]
+            },
+            parentBundle: that.options.parentBundle
         });
     };
     
@@ -149,8 +152,8 @@ cspace = cspace || {};
                     related: "{relatedRecordsTab}.related",
                     model: "{relatedRecordsTab}.model",
                     applier: "{relatedRecordsTab}.applier",
-                    strings: {
-                        addButton: "Add record"
+                    messagekeys: {
+                        addButton: "relatedRecordsTab-addButton"
                     }
                 }
             },

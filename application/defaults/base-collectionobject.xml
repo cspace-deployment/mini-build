@@ -42,7 +42,7 @@
                     </structure>
                 </structures>
 				
-				<include src="domain-collectionobject.xml" />
+				<include src="domain-collectionobject.xml"  strip-root="yes"/>
 				
 				
                 <section>
@@ -278,10 +278,13 @@
                     <field id="editionNumber" ui-search="repeatable">
                         <selector>object-description-edition-number</selector>
                     </field>
-                    <field id="age">
+                    <field id="age" ui-type="validated" datatype="integer">
                         <selector>object-description-age</selector>
                     </field>
-                    <field id="ageQualifier">
+                    <field id="ageQualifier" autocomplete="vocab-agequalifier" ui-type="enum">
+                        <enum>
+                            <blank-value>Please select a value</blank-value>
+                        </enum>
                         <selector>object-description-age-qualifier</selector>
                     </field>
                     <field id="ageUnit" seperate_ui_container="true">
@@ -421,7 +424,7 @@
                                 <option id="stories">stories</option>
                             </options>
                         </field>
-                        <field id="value">
+                        <field id="value" ui-type="validated" datatype="float">
                             <selector>object-description-dimension-value</selector>
                         </field>
                         <field id="valueDate" ui-type="date">
@@ -780,7 +783,7 @@
                         </enum>
                         <selector>object-history-association-denomination</selector>
                     </field>
-                    <field id="ownershipExchangePriceValue">
+                    <field id="ownershipExchangePriceValue" ui-type="validated" datatype="float">
                         <selector>object-history-association-exchange-price-value</selector>
                     </field>
                     <section id="associationInformation">

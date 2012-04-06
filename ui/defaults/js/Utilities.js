@@ -284,7 +284,7 @@ fluid.registerNamespace("cspace.util");
             return replaced;
         }
 
-        that.makeAjaxOpts = function (model, directModel, callback, type) {
+        that.makeAjaxOpts = function (model, directModel, callback, type, errorCallback) {
             var togo = {
                 type: type,
                 url: resolveUrl(directModel),
@@ -302,6 +302,9 @@ fluid.registerNamespace("cspace.util");
                 error: function (xhr, textStatus, errorThrown) {
                     fluid.log("Data fetch error for url " + togo.url + " - textStatus: " + textStatus);
                     fluid.log("ErrorThrown: " + errorThrown);
+                    if (errorCallback) {
+                        errorCallback(xhr, textStatus, errorThrown);
+                    }
                 }
             };
             if (model) {
@@ -310,19 +313,28 @@ fluid.registerNamespace("cspace.util");
             return togo;
         };
 
-        that.get = function (directModel, callback) {
-            var ajaxOpts = that.makeAjaxOpts(null, directModel, callback, "GET");
+        that.get = function (directModel, callback, errorCallback) {
+            var ajaxOpts = that.makeAjaxOpts(null, directModel, callback, "GET", errorCallback);
             wrapper(function () {
                 $.ajax(ajaxOpts);
             });
         };
         if (that.options.writeable) {
-            that.put = function (model, directModel, callback) {
-                var ajaxOpts = that.makeAjaxOpts(model, directModel, callback, "POST");
+            that.put = function (model, directModel, callback, errorCallback) {
+                var ajaxOpts = that.makeAjaxOpts(model, directModel, callback, "POST", errorCallback);
                 $.ajax(ajaxOpts);
             };
         }
         return that;
+    };
+    
+    cspace.util.provideErrorCallback = function (that, url, message) {
+        return function (xhr, textStatus, errorThrown) {
+            that.displayErrorMessage(fluid.stringTemplate(that.lookupMessage(message), {
+                url: url,
+                status: textStatus
+            }));
+        };
     };
 
     cspace.util.setZIndex = function () {
@@ -530,72 +542,6 @@ fluid.registerNamespace("cspace.util");
         messageResolver: "{globalBundle}",
         permission: "read"
     });
-
-    fluid.defaults("cspace.validator", {
-        gradeNames: ["autoInit", "fluid.littleComponent"],
-        finalInitFunction: "cspace.validator.finalInit",
-        schema: {},
-        recordType: ""
-    });
-
-    cspace.validator.finalInit = function (that) {
-        var schema = that.options.schema;
-        // Only validate fields.
-        schema = schema[that.options.recordType].properties.fields.properties;
-
-        var validatePrimitive = function (value, type) {
-            var parsed;
-            switch (type) {
-            case "integer":
-                parsed = parseInt(value, 10);
-                if (isNaN(parsed)) {
-                    throw "Invalid Integer";
-                }
-                return parsed;
-            case "float":
-                parsed = parseFloat(value);
-                if (isNaN(parsed)) {
-                    throw "Invalid Float";
-                }
-                return parsed;
-            default:
-                return value;
-            }
-        };
-
-        var validateImpl = function (data, schema) {
-            fluid.each(data, function (value, key) {
-                var subSchema = schema[key];
-                if (!value || !subSchema) {
-                    return;
-                }
-                var type = subSchema.type;
-                if (fluid.isPrimitive(value)) {
-                    data[key] = validatePrimitive(value, type);
-                } else if (typeof value === "object") {
-                    if (type === "array") {
-                        subSchema = subSchema.items ? fluid.transform(value, function () {
-                            return subSchema.items;
-                        }) : [];
-                    } else if (type === "object") {
-                        subSchema = subSchema.properties;
-                    }
-                    validateImpl(value, subSchema);
-                }
-            });
-        };
-
-        that.validate = function (data) {
-            var thisData = fluid.copy(data);
-            try {
-                // Only validate fields.
-                validateImpl(thisData.fields, schema);
-            } catch (e) {
-                return;
-            }
-            return thisData;
-        };
-    };
 
     // This will eventually go away once the getBeanValue strategy is used everywhere.
     cspace.util.getBeanValue = function (root, EL, schema, permManager) {
@@ -1015,20 +961,26 @@ fluid.registerNamespace("cspace.util");
     };
 
     cspace.util.globalNavigator.bindEvents = function (that) {
-        that.container.delegate(that.options.selectors.include, "click", function () {
+        that.container.delegate(that.options.selectors.include, "click", function (evt) {
+            // IF shift or ctrl is pressed - not a navigation away so no need to fire onPerformNavigation
+            if (evt.shiftKey || evt.ctrlKey || evt.metaKey) {
+                return;
+            }
             var target = $(this);
             if (target.is(that.options.selectors.exclude)) {
                 return;
             }
             that.events.onPerformNavigation.fire(function () {
-                window.location = target.attr("href");
+                // NOTE: dispatchEvent has proven to be extremely unreliable in cross
+                // browser testing. Thus we resolve to more straitforward redirect. 
+                window.location.href = target.attr("href");
             });
             return false;
         });
         that.container.delegate(that.options.selectors.forms, "submit", function () {
-            var form = $(this);
+            var target = $(this);
             that.events.onPerformNavigation.fire(function () {
-                form[0].submit();
+                target[0].submit();
             });
             return false;
         });
@@ -1069,7 +1021,10 @@ fluid.registerNamespace("cspace.util");
                 config: {
                     href: options.configURL || fluid.invoke("cspace.util.getDefaultConfigURL"),
                     options: {
-                        dataType: "json"
+                        dataType: "json",
+                        error: function (xhr, textStatus, errorThrown) {
+                            that.displayErrorMessage("Error fetching config file: " + textStatus);
+                        }
                     }
                 },
                 loginstatus: {
@@ -1077,18 +1032,25 @@ fluid.registerNamespace("cspace.util");
                     options: {
                         dataType: "json",
                         success: function (data) {
+                            if (data.isError === true) {
+                                fluid.each(data.messages, function (message) {
+                                    that.displayErrorMessage(message);
+                                });
+                                return;
+                            }
                             if (!data.login && !that.noLogin) {
                                 var currentUrl = document.location.href;
                                 var loginUrl = currentUrl.substr(0, currentUrl.lastIndexOf('/'));
                                 window.location = loginUrl;
                             }
                         },
-                        fail: function () {
-                            fluid.fail("PageBuilder was not able to retrieve login info and permissions, so failing");
+                        error: function (xhr, textStatus, errorThrown) {
+                            that.displayErrorMessage("PageBuilder was not able to retrieve login information and user permissions: " + textStatus);
                         }
                     }
                 }
             }, function (resourceSpecs) {
+                that.events.afterFetch.fire();
                 options = fluid.merge({"pageBuilder.options.model": "preserve", "pageBuilder.options.applier": "nomerge"}, {
                     pageBuilder: {
                         options: {
@@ -1108,7 +1070,7 @@ fluid.registerNamespace("cspace.util");
                 };
                 fluid.initDependent(that, newPageBuilderIOName, that.instantiator);
                 that[newPageBuilderIOName].initPageBuilder(options.pageBuilder.options);
-            });
+            }, {amalgamateClasses: that.options.amalgamateClasses});
         };
         that.init(tag, options);
         return that;
@@ -1124,10 +1086,23 @@ fluid.registerNamespace("cspace.util");
         events: {
             onFetch: null,
             pageReady: null,
-            onError: null
+            onError: null,
+            afterFetch: null
+        },
+        amalgamateClasses: [
+            "fastTemplate",
+            "fastResource"
+        ],
+        invokers: {
+            displayErrorMessage: "cspace.util.displayErrorMessage"
         },
         components: {
             instantiator: "{instantiator}",
+            globalBundle: {
+                type: "cspace.globalBundle",
+                createOnEvent: "afterFetch",
+                priority: "first"
+            },
             globalNavigator: {
                 type: "cspace.util.globalNavigator"
             },
@@ -1135,7 +1110,8 @@ fluid.registerNamespace("cspace.util");
                 type: "cspace.globalSetup.noLogin"
             },
             messageBar: {
-                type: "cspace.messageBar"
+                type: "cspace.messageBar",
+                createOnEvent: "afterFetch"
             },
             loadingIndicator: {
                 type: "cspace.util.loadingIndicator",
@@ -1152,7 +1128,14 @@ fluid.registerNamespace("cspace.util");
             }
         }
     });
-
+    
+    cspace.util.displayErrorMessage = function (messageBar, message, loadingIndicator) {
+        if (loadingIndicator) {
+            loadingIndicator.hide();
+        }
+        messageBar.show(message, Date(), true);
+    };
+    
     fluid.defaults("cspace.namespaces", {
         gradeNames: ["fluid.modelComponent", "autoInit"],
         mergePolicy: {
@@ -1423,4 +1406,118 @@ fluid.registerNamespace("cspace.util");
         perms: ["create", "update"]
     });
 
+    cspace.util.validateNumber = function (number, type) {
+        if (number === null) {
+            return false;
+        }
+        if (!number) {
+            return true;
+        }
+        if(typeof number !== "string" || number.constructor !== String) {
+            return false;
+        }
+        var isNumber = !isNaN(new Number(number));
+        if (!isNumber) {
+            return false;
+        }
+        if (type === "integer") {
+            return number.indexOf(".") < 0;
+        }
+        if (type === "float") {
+            return number.split(".").length <= 2;
+        }
+        return true;
+    };
+
+    cspace.util.validate = function (value, type, messageBar, message) {
+        var valid = cspace.util.validateNumber(value, type);
+        if (!valid && messageBar) {
+            messageBar.show(message, null, true);
+        }
+        return valid;
+    };
+    
+    fluid.defaults("cspace.validator", {
+        gradeNames: ["autoInit", "fluid.littleComponent"],
+        finalInitFunction: "cspace.validator.finalInit",
+        schema: {},
+        recordType: "",
+        invokers: {
+            lookupMessage: "cspace.util.lookupMessage",
+            validatePrimitive: {
+                funcName: "cspace.util.validate",
+                args: ["{arguments}.0", "{arguments}.1", "{messageBar}", "{arguments}.2"]
+            }
+        }
+    });
+    
+    var validateParseNumber = function (value, type, parse, validate, message) {
+        var valid = validate(value, type, message);
+        if (!valid) {
+            throw message || "Invalid Number";
+        }
+        return parse(value);
+    };
+    
+    var validatePrimitive = function (value, type, validate, message) {
+        switch (type) {
+        case "integer":
+            return validateParseNumber(value, type, parseInt, validate, message);
+        case "float":
+            return validateParseNumber(value, type, parseFloat, validate, message);
+        default:
+            return value;
+        }
+    };
+    
+    var validateImpl = function (data, schema, validate, lookupMessage, recordType) {
+        fluid.each(data, function (value, key) {
+            var subSchema = schema[key];
+            if (!value || !subSchema) {
+                return;
+            }
+            var type = subSchema.type;
+            if (fluid.isPrimitive(value)) {
+                data[key] = validatePrimitive(value, type, validate, fluid.stringTemplate(lookupMessage("invalidNumber"), {
+                    label: lookupMessage(cspace.util.getLabel(key, recordType)) + ": "
+                }));
+            } else if (typeof value === "object") {
+                if (type === "array") {
+                    subSchema = subSchema.items ? fluid.transform(value, function () {
+                        return subSchema.items;
+                    }) : [];
+                } else if (type === "object") {
+                    subSchema = subSchema.properties;
+                }
+                validateImpl(value, subSchema, validate, lookupMessage, recordType);
+            }
+        });
+    };
+
+    cspace.validator.finalInit = function (that) {
+        var schema = that.options.schema;
+        // Only validate fields.
+        schema = schema[that.options.recordType].properties.fields.properties;
+
+        that.validate = function (data) {
+            var thisData = fluid.copy(data);
+            try {
+                // Only validate fields.
+                validateImpl(thisData.fields, schema, that.validatePrimitive, that.lookupMessage, that.options.recordType);
+            } catch (e) {
+                return;
+            }
+            return thisData;
+        };
+    };
+    
+    cspace.util.getLabel = function (key, recordType) {
+        // TODO: This is a hack, since cataloging is also called collection-object in other layers.
+        var prefix = recordType === "cataloging" ? "collection-object-" : (recordType + "-");
+        return prefix + key + "Label"
+    };
+    
+    cspace.util.findLabel = function (required) {
+        return $(required).parents(".info-pair").find(".label").text();
+    };
 })(jQuery, fluid);

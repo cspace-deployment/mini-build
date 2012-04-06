@@ -60,7 +60,7 @@ cspace = cspace || {};
         var i;
         for (i = 0; i < required.length; i++) {
             if (required[i].value === "") {
-                messageBar.show(message, null, true);
+                messageBar.show(fluid.stringTemplate(message, {field: cspace.util.findLabel(required[i])}), null, true);
                 return false;
             }
         }
@@ -85,7 +85,7 @@ cspace = cspace || {};
 
     var bindEventHandlers = function (that) {
         
-        that.events.onSave.addListener(validateIdentificationNumber(that.dom, that.container, that.options.messageBar, that.options.strings.identificationNumberRequired));
+        that.events.onSave.addListener(validateIdentificationNumber(that.dom, that.container, that.options.messageBar, that.lookupMessage(fluid.stringTemplate("%recordtype-identificationNumberRequired", { recordtype: that.options.recordType }))));
         
         that.events.onSave.addListener(function () {
             return validateRequiredFields(that.dom, that.options.messageBar, that.options.strings.missingRequiredFields);
@@ -147,7 +147,8 @@ cspace = cspace || {};
                                 callback();
                             }
                         }
-                    }
+                    },
+                    parentBundle: that.options.parentBundle
                 });
                 return false;
             }
@@ -218,6 +219,14 @@ cspace = cspace || {};
             initDeferredComponents(that);
             fluid.log("RecordEditor.js renderPage end");
         };
+        that.refreshNoSave = function () {
+            fluid.log("RecordEditor.js before render");
+            that.renderer.refreshView();
+            that.options.messageBar.hide();
+            bindHandlers(that);
+            initDeferredComponents(that);
+            fluid.log("RecordEditor.js renderPage end");
+        };
 
 
         cspace.recordEditor.hasMediaAttached = function (that) {
@@ -241,13 +250,14 @@ cspace = cspace || {};
                         that.options.applier.requestChange("namespace", namespace);
                     }
                 }
-                var validatedModel = that.validator.validate(that.model);
-                if (!validatedModel) {
-                    that.options.messageBar.show(that.lookupMessage("invalidFields"), null, true);
-                    return false;
-                }
-                else {
-                    that.applier.requestChange("", validatedModel)
+                if (that.validator) {
+                    var validatedModel = that.validator.validate(that.model);
+                    if (!validatedModel) {
+                        return false;
+                    }
+                    else {
+                        that.applier.requestChange("", validatedModel)
+                    }
                 }
                 that.locate("save").prop("disabled", true);
                 if (that.model.csid) {
@@ -276,14 +286,15 @@ cspace = cspace || {};
                     }
                 }
             },
-            strings: {
-                primaryMessage: that.options.strings.deletePrimaryMessage
+            model: {
+                messages: [ "recordEditor-dialog-deletePrimaryMessage" ]
             },
-            termMap: {
-                record: that.lookupMessage(that.options.recordType),
-                media: that.hasMediaAttached(that) ? that.options.strings.deleteMessageMediaAttached : "",
-                relations: that.hasRelations(that) ? that.options.strings.deleteMessageWithRelated : ""
-            }
+            termMap: [
+                that.lookupMessage(that.options.recordType),
+                that.hasMediaAttached(that) ? that.options.strings.deleteMessageMediaAttached : "",
+                that.hasRelations(that) ? that.options.strings.deleteMessageWithRelated : ""
+            ],
+            parentBundle: that.options.parentBundle
         });
     };
     
@@ -306,11 +317,13 @@ cspace = cspace || {};
                     window.location = that.options.urls.deleteURL;
                 }
             },
-            strings: {
-                primaryMessage: fluid.stringTemplate(that.options.strings.removeSuccessfulMessage, {
-                    record: that.lookupMessage(that.options.recordType)
-                })
-            }
+            parentBundle: that.options.parentBundle,
+            model: {
+                 messages: [ "recordEditor-dialog-removeSuccessfulMessage" ]
+            },
+            termMap: [
+                that.lookupMessage(that.options.recordType)
+            ]
         });
     };
 
@@ -367,27 +380,40 @@ cspace = cspace || {};
                 }
             }
         };
-        var tree = fluid.merge(null, {
-            save: {
-                decorators: {
-                    type: "attrs",
-                    attributes: {
-                        value: that.options.strings.save
-                    }
+        var saveCancel = {
+            type: "fluid.renderer.condition",
+            condition: {
+                funcName: "cspace.permissions.resolve",
+                args: {
+                    permission: that.options.saveCancelPermission,
+                    target: that.options.recordType,
+                    resolver: that.options.resolver
                 }
             },
-            cancel: {
-                decorators: {
-                    type: "attrs",
-                    attributes: {
-                        value: that.options.strings.cancel
+            trueTree: {
+                save: {
+                    decorators: {
+                        type: "attrs",
+                        attributes: {
+                            value: that.options.strings.save
+                        }
+                    }
+                },
+                cancel: {
+                    decorators: {
+                        type: "attrs",
+                        attributes: {
+                            value: that.options.strings.cancel
+                        }
                     }
                 }
             }
-        }, that.options.uispec);
+        };
+        var tree = fluid.copy(that.options.uispec);
         tree.expander = fluid.makeArray(tree.expander); //make an expander array in case we have expanders in the uispec
         tree.expander.push(deleteButton);
         tree.expander.push(createFromExistingButton);
+        tree.expander.push(saveCancel);
         return tree;
     };
     
@@ -415,7 +441,7 @@ cspace = cspace || {};
     };
     
     cspace.recordEditor.navigateToFullImage = function (that) {
-        window.open(that.model.fields.blobs[0].imgOrig, "_blank", fluid.stringTemplate(that.options.strings.originalMediaOptions, {
+        window.open(that.model.fields.blobs[0].imgOrig, "_blank", fluid.stringTemplate(that.lookupMessage("media-originalMediaOptions"), {
             height: that.options.originalMediaDimensions.height,
             width: that.options.originalMediaDimensions.width
         }));
@@ -550,10 +576,7 @@ cspace = cspace || {};
             }
         },
         invokers: {
-            lookupMessage: {
-                funcName: "cspace.util.lookupMessage",
-                args: ["{recordEditor}.options.parentBundle.messageBase", "{arguments}.0"]
-            },
+            lookupMessage: "cspace.util.lookupMessage",
             rollback: {
                 funcName: "cspace.recordEditor.rollback",
                 args: "{recordEditor}"
@@ -582,6 +605,7 @@ cspace = cspace || {};
         },
         showDeleteButton: false,
         showCreateFromExistingButton: false,
+        saveCancelPermission: "update",
         selectors: {
             save: ".csc-save",
             cancel: ".csc-cancel",
@@ -616,12 +640,11 @@ cspace = cspace || {};
             removeRelationsFailedMessage: "Error removing related records: ",
             defaultTermIndicator: " (default)",
             noDefaultInvitation: "-- Select an item from the list --",
-            missingRequiredFields: "Some required fields are empty",
+            missingRequiredFields: "Required field is empty: %field",
             save: "Save",
             cancel: "Cancel changes",
             deleteButton: "Delete",
             createFromExistingButton: "Create new from existing",
-            deletePrimaryMessage: "Delete this %record%relations%media?",
             deleteMessageWithRelated: " and its relationships",
             deleteMessageMediaAttached: " and its attached media"
         },

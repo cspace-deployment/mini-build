@@ -31,8 +31,11 @@ cspace = cspace || {};
             checkReportButtonDisabling: {
                 funcName: "cspace.reportProducer.checkReportButtonDisabling",
                 args: ["{reportProducer}.model", "{reportProducer}.options.recordModel"]
-            }
+            },
+            displayErrorMessage: "cspace.util.displayErrorMessage",
+            lookupMessage: "cspace.util.lookupMessage"
         },
+        parentBundle: "{globalBundle}",
         components: {
             confirmation: {
                 type: "cspace.confirmation"
@@ -68,23 +71,7 @@ cspace = cspace || {};
             reportLoadingIndicatorContainer: ".csc-reportProducer-loadingIndicatorContainer"
         },
         selectorsToIgnore: ["reportLoadingIndicatorContainer"],
-        strings: {
-            reportHeader: "Run Report",
-            reportButton: "Run",
-            reportError: "Error creating report: ",
-            primaryMessage: "Are you sure you want to run this report?",
-            primaryMessageSave: "Are you sure you want to run this report for unsaved record?",
-            actText: "Run",
-            actAlt: "Run Report",
-            actTextSave: "Save and Run",
-            actAltSave: "Save Record and Run Report",
-            proceedTextSave: "Run",
-            proceedAltSave: "Run Report",
-            stopPrimaryMessage: "You are about to navigate away from this page.",
-            stopSecondaryMessage: "Do you want to stop current report?",
-            stopActText: "Stop",
-            stopActAlt: "Stop report."
-        },
+        strings: {},
         styles: {
             reportHeader: "cs-reportProducer-header",
             reportButton: "cs-reportProducer-button",
@@ -158,7 +145,7 @@ cspace = cspace || {};
             onError: function (message) {
                 that.applier.requestChange("reportInProgress", false);
                 that.reportStatus.hide();
-                that.messageBar.show(that.options.strings.reportError + message, null, true)
+                that.messageBar.show(that.lookupMessage("reporting-reportError") + message, null, true)
             },
             onStop: function (reportType) {
                 that.applier.requestChange("reportInProgress", false);
@@ -183,6 +170,18 @@ cspace = cspace || {};
         that.reportTypesSource.get({
             recordType: that.options.recordType
         }, function (data) {
+            if (!data) {
+                    that.displayErrorMessage(fluid.stringTemplate(that.lookupMessage("emptyResponse"), {
+                        url: that.reportTypesSource.options.url
+                    }));
+                    return;
+                }
+                if (data.isError === true) {
+                    fluid.each(data.messages, function (message) {
+                        that.displayErrorMessage(message);
+                    });
+                    return;
+                }
             if (data.reportlist.length > 0) {
                 that.applier.requestChange("reportnames", data.reportnames);
                 that.applier.requestChange("reportlist", data.reportlist);
@@ -191,14 +190,14 @@ cspace = cspace || {};
             that.globalNavigator.events.onPerformNavigation.addListener(function (callback) {
                 if (that.model.reportInProgress) {
                     that.confirmation.open("cspace.confirmation.deleteDialog", undefined, {
-                        strings: {
-                            primaryMessage: that.options.strings.stopPrimaryMessage,
-                            secondaryMessage: that.options.strings.stopSecondaryMessage,
-                            actText: that.options.strings.stopActText,
-                            actAlt: that.options.strings.stopActAlt
-                        },
                         model: {
-                            messages: ["primaryMessage", "secondaryMessage"]
+                            messages: ["reporting-dialog-primaryMessage", "reporting-dialog-secondaryMessage"],
+                            messagekeys: {
+                                primaryMessage: "reporting-dialog-stopPrimaryMessage",
+                                secondaryMessage: "reporting-dialog-stopSecondaryMessage",
+                                actText: "reporting-dialog-stopActText",
+                                actAlt: "reporting-dialog-stopActAlt"
+                            }
                         },
                         listeners: {
                             onClose: function (userAction) {
@@ -206,13 +205,14 @@ cspace = cspace || {};
                                     that.requestReport(true, callback);
                                 }
                             }
-                        }
+                        },
+                        parentBundle: that.options.parentBundle
                     });
                     return false;
                 }
             });
             that.events.ready.fire();
-        });
+        }, cspace.util.provideErrorCallback(that, that.reportTypesSource.options.url, "errorFetching"));
     };
     
     cspace.reportProducer.requestReport = function (model, options, events, stop, callback) {
@@ -250,24 +250,29 @@ cspace = cspace || {};
         });
     };
     
-    var openConfirmation = function (confirmation, name, strings, onClose) {
+    var openConfirmation = function (confirmation, name, model, parentBundle, onClose) {
         confirmation.open("cspace.confirmation." + name, undefined, {
-            strings: strings,
+            model: model,
             listeners: {
                 onClose: onClose
-            }
+            },
+            parentBundle: parentBundle
         });
     };
     
-    cspace.reportProducer.generateReport = function (confirmation, strings, requestReport, recordEditor) {
+    cspace.reportProducer.generateReport = function (confirmation, parentBundle, requestReport, recordEditor) {
         if (recordEditor && recordEditor.unsavedChanges) {
             openConfirmation(confirmation, "saveDialog", {
-                primaryMessage: strings.primaryMessageSave,
-                actText: strings.actTextSave,
-                actAlt: strings.actAltSave,
-                proceedText: strings.proceedTextSave,
-                proceedAlt: strings.proceedAltSave
-            }, function (userAction) {
+                messages: [ "reporting-dialog-primaryMessageSave" ],
+                messagekeys: {
+                    actText: "reporting-dialog-actTextSave",
+                    actAlt: "reporting-dialog-actAltSave",
+                    proceedText: "reporting-dialog-proceedTextSave",
+                    proceedAlt: "reporting-dialog-proceedAltSave"
+                }
+            }, 
+            parentBundle,
+            function (userAction) {
                 if (userAction === "act") {
                     recordEditor.options.dataContext.events.afterSave.addListener(function () {
                         requestReport(false);
@@ -280,10 +285,14 @@ cspace = cspace || {};
         }
         else {
             openConfirmation(confirmation, "deleteDialog", {
-                primaryMessage: strings.primaryMessage,
-                actText: strings.actText,
-                actAlt: strings.actAlt
-            }, function (userAction) {
+                messages: [ "reporting-dialog-primaryMessage" ],
+                messagekeys: {
+                    actText: "reporting-dialog-actText",
+                    actAlt: "reporting-dialog-actAlt"
+                }
+            }, 
+            parentBundle,
+            function (userAction) {
                 if (userAction === "act") {
                     requestReport(false);
                 }
@@ -303,7 +312,7 @@ cspace = cspace || {};
                 }
             },
             reportHeader: {
-                messagekey: "reportHeader",
+                messagekey: "reporting-reportHeader",
                 decorators: {"addClass": "{styles}.reportHeader"}
             },
             reportType: {
@@ -313,12 +322,8 @@ cspace = cspace || {};
                 decorators: {"addClass": "{styles}.reportType"}
             },
             reportButton: {
+                messagekey: "reporting-reportButton",
                 decorators: [{
-                    type: "attrs",
-                    attributes: {
-                        value: that.options.strings.reportButton                        
-                    }
-                }, {
                     addClass: "{styles}.reportButton"
                 }, {
                     type: "jQuery",
@@ -359,10 +364,7 @@ cspace = cspace || {};
             message: "cs-reportStatus-message", 
             stop: "cs-reportStatus-stop"
         },
-        strings: {
-            message: "Creating %reportName report...",
-            stop: "Stop" 
-        }
+        strings: { }
     });
     
     fluid.fetchResources.primeCacheFromResources("cspace.reportProducer.reportStatus");
@@ -370,17 +372,13 @@ cspace = cspace || {};
     cspace.reportProducer.reportStatus.produceTree = function (that) {
         return {
             message: {
-                messagekey: "message",
+                messagekey: "reporting-message",
                 args: {reportName: "${reportName}"},
                 decorators: {"addClass": "{styles}.message"}
             },
             stop: {
+                messagekey: "reporting-stop",
                 decorators: [{
-                    type: "attrs",
-                    attributes: {
-                        value: that.options.strings.stop                        
-                    }
-                }, {
                     "addClass": "{styles}.stop"
                 }, {
                     type: "jQuery",

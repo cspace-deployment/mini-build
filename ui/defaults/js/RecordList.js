@@ -26,14 +26,11 @@ cspace = cspace || {};
             autoBind: true
         },
         invokers: {
-			bindEvents: {
+            bindEvents: {
                 funcName: "cspace.recordList.bindEvents",
                 args: ["{recordList}"]
             },
-            lookupMessage: {
-                funcName: "cspace.util.lookupMessage",
-                args: ["{recordList}.options.parentBundle.messageBase", "{arguments}.0"]
-            },
+            lookupMessage: "cspace.util.lookupMessage",
             select: "select",
             verifyColumnOrder: {
                 funcName: "cspace.recordList.verifyColumnOrder",
@@ -45,7 +42,11 @@ cspace = cspace || {};
             }
         },
         model: {
-            selectonIndex: -1
+            selectonIndex: -1,
+            messagekeys: {
+                nothingYet: "recordList-nothingYet",
+                newRow: "recordList-newRow"
+            }
         },
         events: {
             onSelect: null
@@ -67,8 +68,6 @@ cspace = cspace || {};
         },
         repeatingSelectors: ["row", "titleColumn", "column"],
         strings: {
-            nothingYet: "No related records yet",
-            newRow: "New Record",
             numberOfItems: "%numberOfItems"
         },
         styles: {
@@ -108,32 +107,32 @@ cspace = cspace || {};
     fluid.fetchResources.primeCacheFromResources("cspace.recordList");
     
     cspace.recordList.bindEvents = function (that) {
-        fluid.activatable(that.locate("row"), function (event) {
-            var rows = that.locate("row");
-            rows.removeClass(that.options.styles.selected);
+    
+        function styleAndActivate (row, rows) {
             that.locate("newRow").hide();
-            var row = $(event.target);
             row.addClass(that.options.styles.selected);
             that.applier.requestChange("selectonIndex", rows.index(row));
             that.events.onSelect.fire();
+        }
+    
+        fluid.activatable(that.locate("row"), function (event) {
+            var rows = that.locate("row");
+            rows.removeClass(that.options.styles.selected);
+            styleAndActivate($(event.target), rows);
+            return false;
         });
+        
         fluid.selectable(that.container, {
             selectableElements: that.locate("row"),
             onLeaveContainer: function () {
                 that.locate("row").removeClass(that.options.styles.selected);
-            },
-            noBubbleListeners: false,
-            selectablesTabindex: ""
+            }
         });
+        that.container.fluid("tabbable");
 
         that.locate("row").click(function () {
             $(that.options.selectors["row"]).removeClass(that.options.styles.selected);
-            var rows = that.locate("row");
-            that.locate("newRow").hide();
-            var row = $(this);
-            row.addClass(that.options.styles.selected);
-            that.applier.requestChange("selectonIndex", rows.index(row));
-            that.events.onSelect.fire();
+            styleAndActivate($(this), that.locate("row"));
         });
     };
 
@@ -195,10 +194,10 @@ cspace = cspace || {};
                 }
             },
             newRow: {
-                messagekey: "newRow",
-                args: {
-                    recordType: that.lookupMessage(that.options.recordType)
-                },
+                messagekey: "${messagekeys.newRow}",
+                args: [
+                    that.lookupMessage(that.options.recordType)
+                ],
                 decorators: [{
                     type: "addClass",
                     classes: that.options.styles.hidden
@@ -290,7 +289,7 @@ cspace = cspace || {};
                 },
                 falseTree: {
                     nothingYet: {
-                        messagekey: "nothingYet",
+                        messagekey: "${messagekeys.nothingYet}",
                         decorators: {
                             type: "addClass",
                             classes: that.options.styles.nothingYet
@@ -325,9 +324,8 @@ cspace = cspace || {};
     fluid.defaults("cspace.recordList.thumbRenderer", {
         gradeNames: ["fluid.viewComponent", "autoInit"],
         finalInitFunction: "cspace.recordList.thumbRenderer.finalInitFunction",
-        strings: {
-            thumbnail: "This is a thumbnail for the related record."
-        },
+        strings: {},
+        parentBundle: "{globalBundle}",
         styles: {
             thumbnail: "cs-recordList-thumbnail"
         },
@@ -340,7 +338,7 @@ cspace = cspace || {};
         var segs = fluid.model.parseEL(that.options.row);
         var item = that.model[that.options.elPath][segs[segs.length - 1]];
         that.container.attr("src", item.summarylist.imgThumb || that.options.urls.icnMedia)
-            .attr("alt", that.options.strings.thumbnail)
+            .attr("alt", that.options.parentBundle.resolve("recordList-thumbnail"))
             .addClass(that.options.styles.thumbnail);
     };
     
@@ -357,7 +355,7 @@ cspace = cspace || {};
                     }, {
                         type: "attrs",
                         attributes: {
-                            alt: that.options.strings.deleteRelation
+                            alt: that.lookupMessage("tab-list-deleteRelation") 
                         }
                     }, {
                         type: "jQuery",
@@ -455,9 +453,10 @@ cspace = cspace || {};
                     }
                 }
             },
-            strings: {
-                primaryMessage: recordEditor.options.strings.deletePrimaryMessage
-            }
+            model: {
+                messages: [ "tab-re-deletePrimaryMessage" ]
+            },
+            parentBundle: recordEditor.options.parentBundle
         });
         return false;
     };

@@ -18,50 +18,45 @@ cspace = cspace || {};
     
     fluid.defaults("cspace.inputValidator", {
         gradeNames: ["fluid.viewComponent", "autoInit"],
-        parentBundle: "{globalBundle}",
-        messageBar: "{messageBar}",
-        preInitFunction: "cspace.inputValidator.preInit",
         postInitFunction: "cspace.inputValidator.postInit",
+        finalInitFunction: "cspace.inputValidator.finalInit",
         invokers: {
-            lookupMessage: {
-                funcName: "cspace.util.lookupMessage",
-                args: ["{inputValidator}.options.parentBundle.messageBase", "{arguments}.0"]
+            lookupMessage: "cspace.util.lookupMessage",
+            validate: {
+                funcName: "cspace.util.validate",
+                args: ["{arguments}.0", "{inputValidator}.options.type", "{messageBar}", "{arguments}.1"]
+            },
+            clear: {
+                funcName: "cspace.inputValidator.clear",
+                args: "{messageBar}"
             }
         },
-        type: ""
+        type: "",
+        delay: 500
     });
     
-    /**
-     * Checks if a given string is valid number or not
-     */
-    cspace.inputValidator.preInit = function (that) {
-        that.validateNumber = function (number) {
-            if(!number || (typeof number != "string" || number.constructor != String)) {
-                return false;
-            }
-            var isNumber = !isNaN(new Number(number));
-            if(isNumber) {
-                if (that.options.type === "integer") {
-                    if(number.indexOf('.') < 0) {
-                        return true;
-                    } 
-                    return false;
-                }
-                return true;
-            } else {
-                return false;
-            }
+    cspace.inputValidator.clear = function (messageBar) {
+        messageBar.hide();
+    };
+    
+    cspace.inputValidator.finalInit = function (that) {
+        var label;
+        if (that.options.label) {
+            label = that.lookupMessage(that.options.label) + ": ";
         };
+        that.invalidNumberMessage = fluid.stringTemplate(that.lookupMessage("invalidNumber"), {
+            label: label || ""
+        });
     };
 
     cspace.inputValidator.postInit = function (that) {
-        that.container.change(function () {
-            var value = that.container.val();
-            var valid = that.validateNumber(value);
-            if (!valid) {
-                that.container.val("");
-                that.options.messageBar.show(that.lookupMessage("invalidNumber"), null, true);
-            }
+        that.container.keyup(function () {
+            clearTimeout(that.outFirer);
+            that.outFirer = setTimeout(function () {
+                that.clear();
+                var value = that.container.val();
+                that.validate(value, that.invalidNumberMessage);
+            }, that.options.delay);
         });
     };
 })(jQuery, fluid);    

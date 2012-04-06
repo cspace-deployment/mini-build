@@ -62,23 +62,23 @@ cspace = cspace || {};
 
     cspace.search.makeModelFilter = function (that) {
         return function (directModel, newModel, permutation) {
-            var i;
-            var searchModel = that.model.searchModel;
+            var i, searchModel = that.model.searchModel;
+            var sortChanged = searchModel.sortDir !== newModel.sortDir || searchModel.sortKey !== newModel.sortKey;
             fluid.log("modelFilter: initialState " + searchModel.initialState + 
                 ", renderRequest " + searchModel.renderRequest);
             if (searchModel.initialState) {
                 that.applier.requestChange("searchModel.initialState", false);
                 return [];
             }
-            var dataRequired = false;
+            var dataRequired = sortChanged;
             for (i = newModel.pageSize * newModel.pageIndex; i < fluid.pager.computePageLimit(newModel); ++ i) {
                 if (!directModel[i]) {
                     dataRequired = true;
                     break;
                 }
-            } 
+            }
             if (!searchModel.renderRequest && dataRequired) {
-                if (searchModel.sortDir !== newModel.sortDir || searchModel.sortKey !== newModel.sortKey) {
+                if (sortChanged) {
                     that.applier.requestChange("results", []);
                     that.resultsPager.applier.requestChange("pageCount", 1);
                     that.resultsPager.applier.requestChange("pageIndex", 0);
@@ -112,6 +112,9 @@ cspace = cspace || {};
             // because it doesn't assure us that pager rendering is complete
             // but pager does not give us a more suitable event to listen to
             that.resultsPager.events.onModelChange.addListener(function (newModel, oldModel) {
+                $("a.link", that.container).click(function (event) {
+                    event.stopPropagation();
+                });
                 that.locate("resultsRow").click(function (event) {
                     var index = that.locate("resultsRow").index($(event.currentTarget));
                     var record = that.model.results[newModel.pageSize * newModel.pageIndex + index];
@@ -227,8 +230,10 @@ cspace = cspace || {};
             mainSearch: {
                 type: "cspace.searchBox",
                 options: {
-                    strings: {
-                        recordTypeSelectLabel: "Record Type" 
+                    model: {
+                        messagekeys: {
+                            recordTypeSelectLabel: "mainSearch-recordTypeSelectLabel" 
+                        }
                     },
                     selfRender: true,
                     related: "all",

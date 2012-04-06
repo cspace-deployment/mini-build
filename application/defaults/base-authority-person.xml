@@ -14,8 +14,6 @@
                 <services-record-path id="collectionspace_core">collectionspace_core:http://collectionspace.org/collectionspace_core/,collectionspace_core</services-record-path>
                 <services-url>personauthorities</services-url>
                 <authority-vocab-type>PersonAuthority</authority-vocab-type>
-                <urn-syntax>urn:cspace:org.collectionspace.demo:personauthority:{vocab}:person:{entry}'{display}'</urn-syntax>
-                <vocab-syntax>urn:cspace:name</vocab-syntax>
                 <hassoftdelete>true</hassoftdelete>
                 <structures>
                     <structure id="search">
@@ -44,15 +42,15 @@
                         <title-ref>person</title-ref>
                         <title>Default Person Authority</title>
                     </instance>
-                    <instance id="person-test1">
+                    <instance id="person-persontest1">
                         <web-url>persontest1</web-url>
                         <title-ref>persontest1</title-ref>
-                        <title>Test Person Authority</title>
+                        <title>Test Person Authority 1</title>
                     </instance>
-                    <instance id="person-test2">
+                    <instance id="person-persontest2">
                         <web-url>persontest2</web-url>
                         <title-ref>persontest2</title-ref>
-                        <title>Test Person Authority</title>
+                        <title>Test Person Authority 2</title>
                     </instance>
                 </instances>
                 <section>
@@ -171,11 +169,14 @@
                     </field>
                 </section>
                 <section id="contactInformation">
-                    <group id="contact" userecord="contact" ui-spec-inherit="true" exists-in-services="false"></group>
+                    <group id="contact" userecord="contact" ui-spec-inherit="false"  ui-spec-prefix="contact"  exists-in-services="false"></group>
                 </section>
                 <!-- not used in UI -->
                 <section >
-                    <field id="shortIdentifier"></field>
+                    <field id="shortIdentifier" mini="search,list,relate" attributes="GET"></field>
+                    <field id="csid" mini="search,list,relate" attributes="GET"></field>
+                    <field id="refName" mini="search,list,relate" attributes="GET"></field>
+                    <field id="uri" mini="search,list,relate" attributes="GET"></field>
                     <field id="name">
                         <selector>personAuthority-name</selector>
                     </field>

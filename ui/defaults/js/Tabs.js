@@ -21,9 +21,7 @@ cspace = cspace || {};
         mergePolicy: {
             model: "replace"
         },
-        strings: {
-            primary: "Current record"
-        },
+        strings: { },
         parentBundle: "{globalBundle}",
         model: {
             expander: {
@@ -66,7 +64,7 @@ cspace = cspace || {};
             tabList: "menu-record", // TODO: This needs to be moved to "cs-tabs-tabList" style,
             tab: "cs-tabs-tab",
             tabLink: "cs-tabs-tab-link",
-            primary: "primary", // TODO: This needs to be moved to "cs-tabs-primary" style,
+            "tablist-primary": "primary", // TODO: This needs to be moved to "cs-tabs-primary" style,
             current: "current", // TODO: This needs to be moved to "cs-tabs-current" style,
             inactive: "inactive" // TODO: This needs to be moved to "cs-tabs-inactive" style
         },
@@ -87,7 +85,7 @@ cspace = cspace || {};
         that.locate("tabList").addClass(styles.tabList);
         tabLinks.filter(":not([href])").addClass(styles.inactive);
         var primary = fluid.find(that.model.tabs, function (tab) {
-            if (tab["name"] === "primary") {
+            if (tab["name"] === "tablist-primary") {
                 return tab;
             }
         });
@@ -104,7 +102,7 @@ cspace = cspace || {};
         var urlExpander = fluid.invoke("cspace.urlExpander");
         var model = {
             tabs: [{
-                "name": "primary",
+                "name": "tablist-primary",
                 href: "#primaryTab"
             }]
         };
@@ -123,10 +121,19 @@ cspace = cspace || {};
             tabs: []
         };
         fluid.each(records, function (record) {
+            var readonly = cspace.util.resolveReadOnly({
+                permissions: options.resolver.options.permissions,
+                csid: null,
+                readOnly: null,
+                target: record
+            });
             model.tabs.push({
                 "name": record + "-tab",
                 type: record,
-                href: fluid.stringTemplate(urlExpander(options.href), {recordType: record})
+                href: fluid.stringTemplate(urlExpander(options.href), {
+                    recordType: record,
+                    readonly: readonly ? "readonly/" : ""
+                })
             });
         });
         return model;
@@ -149,7 +156,9 @@ cspace = cspace || {};
             setupTab: "cspace.tabs.setupTab",
             tabsSuccess: "cspace.tabs.tabsSuccess",
             tabsSelect: "cspace.tabs.tabsSelect",
-            tabsSelectWrapper: "cspace.tabs.tabsSelectWrapper"
+            tabsSelectWrapper: "cspace.tabs.tabsSelectWrapper",
+            displayErrorMessage: "cspace.util.displayErrorMessage",
+            lookupMessage: "cspace.util.lookupMessage"
         },
         configURLTemplate: "%webapp/config/%record-tab.json",
         selectors: {
@@ -255,7 +264,8 @@ cspace = cspace || {};
             ajaxOptions: {
                 // This is required as of jQuery UI v1.8.12
                 dataType: "html",
-                success: that.tabsSuccess
+                success: that.tabsSuccess,
+                error: cspace.util.provideErrorCallback(that, "", "errorFetching")
             },
             select: that.tabsSelectWrapper
         }).scrollabletab();

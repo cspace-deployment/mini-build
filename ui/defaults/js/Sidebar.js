@@ -19,7 +19,7 @@ cspace = cspace || {};
     fluid.registerNamespace("cspace.sidebar");
     
     var setupSideBar = function (that) {
-        that.locate("numOfTerms").text(fluid.stringTemplate(that.options.strings.numOfTerms, {
+        that.locate("numOfTerms").text(fluid.stringTemplate(that.lookupMessage("sidebar-numOfTerms"), {
             numOfTerms: that.termsUsed.calculateRecordListSize()
         }));
     }; 
@@ -81,11 +81,14 @@ cspace = cspace || {};
      */
     cspace.sidebar.produceTree = function (that) {
         return {
-            mediaHeader: {
-                messagekey: "mediaHeader"
+            media: {
+                decorators: {
+                    type: "fluid",
+                    func: "cspace.sidebar.media"
+                }
             },
             termsHeader: {
-                messagekey: "termsHeader"
+                messagekey: "sidebar-termsHeader"
             },
             expander: [{
                 repeatID: "categoryContainer",
@@ -99,42 +102,120 @@ cspace = cspace || {};
                         classes: "{categoryName}.categoryClass"
                     }]
                 }
-            }, {
+            }]
+        };
+    };
+    
+    fluid.defaults("cspace.sidebar.media", {
+        gradeNames: ["fluid.rendererComponent", "autoInit"],
+        preInitFunction: "cspace.sidebar.media.preInit",
+        finalInitFunction: "cspace.sidebar.media.finalInit",
+        produceTree: "cspace.sidebar.media.produceTree",
+        invokers: {
+            showMediaImage: {
+                funcName: "cspace.sidebar.media.showMediaImage",
+                args: "{media}.model"
+            },
+            lookupMessage: {
+                funcName: "cspace.util.lookupMessage",
+                args: ["{sidebar}.options.parentBundle.messageBase", "{arguments}.0"]
+            }
+        },
+        components: {
+            togglable: {
+                type: "cspace.util.togglable",
+                createOnEvent: "afterRender",
+                options: {
+                    selectors: {
+                        header: "{media}.options.selectors.header",
+                        togglable: "{media}.options.selectors.togglable"
+                    }
+                }
+            }
+        },
+        selectors: {
+            mediaHeader: ".csc-sidebar-mediaHeader",
+            mediaSnapshot: ".csc-media-snapshot",
+            mediumImage: ".csc-sidebar-mediumImage",
+            header: ".csc-media-header",
+            togglable: ".csc-media-togglable"
+        },
+        parentBundle: "{globalBundle}",
+        selectorsToIgnore: ["header", "togglable"],
+        styles: {
+            mediumImage: "cs-sidebar-mediumImage",
+            mediaSnapshot: "cs-media-snapshot-image"
+        },
+        strings: { }
+    });
+    
+    cspace.sidebar.media.showMediaImage = function (model) {
+        if (!model.fields) {
+            return false;
+        }
+        if (!model.fields.blobCsid) {
+            return false;
+        }
+        return !!(model.fields.blobs && model.fields.blobs.length > 0);
+    };
+    
+    cspace.sidebar.media.finalInit = function (that) {
+        that.refreshView();
+    };
+    
+    cspace.sidebar.media.preInit = function (that) {
+        that.getImageSource = function () {
+            var src = "";
+            if (!that.model.fields) {
+                return src;
+            }
+            if (!that.model.fields.blobCsid) {
+                return src;
+            }
+            if (!that.model.fields.blobs) {
+                return src;
+            }
+            if (that.model.fields.blobs.length <= 0) {
+                return src;
+            }
+            return that.model.fields.blobs[0].imgMedium;
+        };
+        that.applier.modelChanged.addListener("fields.blobCsid", function () {
+            that.refreshView();
+        });
+    };
+    
+    cspace.sidebar.media.produceTree = function (that) {
+        return {
+            mediaHeader: {
+                messagekey: "sidebar-mediaHeader"
+            },
+            expander: {
                 type: "fluid.renderer.condition",
-                condition: that.showMediumImage(),
+                condition: that.showMediaImage(),
                 trueTree: {
                     mediumImage: {
                         decorators: [{
-                            type: "addClass",
-                            classes: that.options.styles.mediumImage
+                            addClass: "{styles}.mediumImage"
                         }, {
                             type: "attrs",
                             attributes: {
-                                alt: that.options.strings.mediumImage,
-                                src: that.options.recordModel.fields && that.options.recordModel.fields.blobs && that.options.recordModel.fields.blobs.length > 0 ? 
-                                    that.options.recordModel.fields.blobs[0].imgMedium : ""
+                                alt: that.lookupMessage("sidebar-mediumImage"),
+                                src: that.getImageSource()
                             }
                         }]
                     },
                     mediaSnapshot: {
-                        decorators: [{
-                            type: "addClass",
-                            classes: that.options.styles.mediaSnapshot
-                        }]
+                        decorators: {
+                            addClass: "{styles}.mediaSnapshot"
+                        }
                     }
                 },
                 falseTree: {
                     mediaSnapshot: {}
                 }
-            }]
+            }
         };
-    };
-    
-    cspace.sidebar.showMediumImage = function (recordModel) {
-        if (!recordModel.fields) {
-            return false;
-        }
-        return !!(recordModel.fields.blobs && recordModel.fields.blobs.length > 0);
     };
     
     fluid.defaults("cspace.sidebar", {
@@ -149,7 +230,10 @@ cspace = cspace || {};
                 createOnEvent: "afterRender",
                 options: {
                     model: {
-                        items: "{sidebar}.options.recordModel.termsUsed"
+                        items: "{sidebar}.options.recordModel.termsUsed",
+                        messagekeys: {
+                            nothingYet: "sidebar-nothingYet"
+                        }
                     },
                     elPaths: {
                         items: "items"
@@ -158,8 +242,7 @@ cspace = cspace || {};
                     strings: {
                         number: "Term",
                         sourceFieldName: "Field",
-                        recordtype: "Vocabulary",
-                        nothingYet: "No Authority terms used yet"
+                        recordtype: "Vocabulary"
                     },
                     showNumberOfItems: false
                 }
@@ -198,9 +281,9 @@ cspace = cspace || {};
             }
         },
         invokers: {
-            showMediumImage: {
-                funcName: "cspace.sidebar.showMediumImage",
-                args: "{sidebar}.options.recordModel"
+            lookupMessage: {
+                funcName: "cspace.util.lookupMessage",
+                args: ["{sidebar}.options.parentBundle.messageBase", "{arguments}.0"]
             }
         },
         model: {
@@ -238,19 +321,18 @@ cspace = cspace || {};
         resolver: "{permissionsResolver}",
         recordTypeManager: "{recordTypeManager}", //used to decide whether to show RelatedRecordsLists
         selectors: {
+            media: ".csc-sidebar-media",
             numOfTerms: ".csc-num-items-terms",
-            mediaSnapshot: ".csc-media-snapshot",
-            mediumImage: ".csc-sidebar-mediumImage",
             termsUsed: ".csc-integrated-authorities",
             "categoryContainer:": ".csc-related-record", //to be repeated
             relatedCataloging: ".csc-related-cataloging",
             relatedProcedures: ".csc-related-procedures",
-            mediaHeader: ".csc-sidebar-mediaHeader",
             termsHeader: ".csc-sidebar-termsHeader",
             header: ".csc-sidebar-header",
             togglable: ".csc-sidebar-togglable",
             report: ".csc-sidebar-report"
         },
+        parentBundle: "{globalBundle}",
         selectorsToIgnore: ["report", "numOfTerms", "termsUsed", "relatedCataloging", "relatedProcedures", "header", "togglable"],
         resources: {
             template: cspace.resourceSpecExpander({
@@ -261,16 +343,7 @@ cspace = cspace || {};
                 }
             })
         },
-        strings: {
-            numOfTerms: "(%numOfTerms)",
-            mediaHeader: "Media Snapshot",
-            termsHeader: "Terms Used",
-            mediumImage: "This is medium media image."
-        },
-        styles: {
-            mediumImage: "cs-sidebar-mediumImage",
-            mediaSnapshot: "cs-media-snapshot-image"
-        }
+        strings: { }
     });
         
     fluid.fetchResources.primeCacheFromResources("cspace.sidebar");
